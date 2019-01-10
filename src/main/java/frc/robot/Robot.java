@@ -1,9 +1,16 @@
 package frc.robot;
 
 import edu.wpi.first.wpilibj.SampleRobot;
+import edu.wpi.first.wpilibj.I2C;
+import edu.wpi.first.wpilibj.I2C.Port;
 
 public class Robot extends SampleRobot {
-
+	final int addr = 84;
+	
+	Controller controller;
+	Timer timer;
+	
+	I2C pixy;
 	public Robot() {
 		
 	}
@@ -14,7 +21,10 @@ public class Robot extends SampleRobot {
 	 */
 	@Override
 	public void robotInit() {
+		controller = new Controller(0);
+		timer = new Timer();
 		
+		pixy = new I2C(I2C.Port.kOnboard, 84);
 	}
 
 	/**
@@ -31,7 +41,18 @@ public class Robot extends SampleRobot {
 	 */
 	@Override
 	public void operatorControl() {
+		byte[] ary = new byte[14];
 		
+		while (isOperatorControl() && isEnabled()) {
+			timer.update();
+			
+			pixy.read(addr, 14, ary);
+			
+			for( int i = 0; i < 14; i++ ) {
+				Dashboard.send("This thing", ary[0]);
+			}
+			System.out.println();
+		}
 	}
 
 	/**
