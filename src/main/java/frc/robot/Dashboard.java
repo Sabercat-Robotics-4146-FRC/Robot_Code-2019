@@ -1,34 +1,21 @@
 package frc.robot;
 
-import edu.wpi.first.wpilibj.networktables.NetworkTable;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 
 public class Dashboard {
-	
-	private static NetworkTable networktable;
-	
-	public static void setNetworkTable(NetworkTable n) {
-		networktable = n;
-	}
-	public static double getDouble(String name) {
-		return networktable.getDouble(name, 0);
-	}
 	public static void send(String fieldName, double value) {
-		networktable.putNumber(fieldName, value);
+		SmartDashboard.putNumber(fieldName, value);
 	}
 	
 	public static void send(String fieldName, int value) {
-		networktable.putNumber(fieldName, value);
+		SmartDashboard.putNumber(fieldName, value);
 	}
 	
 	public static void send(String fieldName, boolean value) {
-		networktable.putBoolean(fieldName, value);
-	}
-	public static void publishImage() {
-		
+		SmartDashboard.putBoolean(fieldName, value);
 	}
 
 	public static void send(String fieldName, String string) {
-		networktable.putString(fieldName, string);
-		
+		SmartDashboard.putString(fieldName, string);
 	}
 }
