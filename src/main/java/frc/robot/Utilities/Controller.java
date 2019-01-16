@@ -1,4 +1,4 @@
-package frc.robot;
+package frc.robot.Utilities;
 import edu.wpi.first.wpilibj.GenericHID.RumbleType;
 import edu.wpi.first.wpilibj.Joystick;
 //import edu.wpi.first.wpilibj.;

@@ -1,6 +1,9 @@
-package frc.robot;
+package frc.robot.Subassemblies.Pixy;
 
 import edu.wpi.first.wpilibj.I2C;
+
+// Our imports
+import frc.robot.Utilities.Dashboard;
 
 public class PixyI2C {
 	String name;
@@ -13,7 +16,7 @@ public class PixyI2C {
         this.name = "Pixy_" + id; // ID is not used anywhere and is souly for name.
         this.pixy = pixy;
         this.numSignaturesUsed = numSignaturesUsed;
-
+		
 		this.signatures = new PixyBlock[numSignaturesUsed];
 	}
 
@@ -93,7 +96,7 @@ public class PixyI2C {
 		// Assigns our packet to a temp packet, then deletes data so that we
 		// dont return old data
 		PixyBlock tempBlock = signatures[Signature - 1];
-		signatures[Signature - 1] = null;
+		signatures[Signature - 1] = null; // May want to add a zeroing method to PixyBlock and then use that.
 		return tempBlock;
 	}
 }

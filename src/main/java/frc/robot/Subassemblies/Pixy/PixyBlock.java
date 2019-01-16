@@ -1,4 +1,8 @@
-package frc.robot;
+package frc.robot.Subassemblies.Pixy;
+
+
+import frc.robot.Utilities.Dashboard;
+
 
 public class PixyBlock {
 	public int Signature;
@@ -27,7 +31,7 @@ public class PixyBlock {
 		Dashboard.send("Height", Height);
 	}
 
-	public int getX(){
-		return X;
-	}
+	// public int getCenteredX(){
+	// 	return X;
+	// }
 }

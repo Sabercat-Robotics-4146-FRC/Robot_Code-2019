@@ -1,4 +1,4 @@
-package frc.robot;
+package frc.robot.Utilities;
 
 public class Timer {
 	private long startTime = 0;
