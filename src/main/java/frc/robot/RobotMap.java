@@ -29,6 +29,8 @@ public class RobotMap {
 	// Controller Declarations
 	public static Controller driverController;
 
+	public static Timer timer;
+
 	// Motor Controller Declarations
 	public static WPI_TalonSRX leftTop;
 	public static WPI_TalonSRX leftBottom;
@@ -47,6 +49,8 @@ public class RobotMap {
 		// Controllers Initialization
 		driverController = new Controller(0);
 
+		timer = new Timer();
+
 		// Motor Controllers Initialization
 		leftTop = new WPI_TalonSRX(1);
 		leftBottom = new WPI_TalonSRX(2);
@@ -57,7 +61,7 @@ public class RobotMap {
 		rightDriveMotors = new SpeedControllerGroup(rightTop, rightBottom);
 
 		//// Sub-System Initilization ////
-		pixy = new PixyI2C("Main", new I2C(Port.kOnboard, PIXY_ADDRESS), PIXY_SIGNATURES_USED);
+		pixy = new PixyI2C("Main", new I2C(Port.kOnboard, PIXY_ADDRESS));
 
 		drive = new DifferentialDrive(leftDriveMotors, rightDriveMotors);
 		drive.setSafetyEnabled(false);

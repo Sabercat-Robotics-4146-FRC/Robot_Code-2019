@@ -10,17 +10,15 @@ public class PixyBlock {
 	public int Y;
 	public int Width;
 	public int Height;
-	
-	//public int checksumError;
     
     @Override
 	public String toString() {
-		return "" +
-	" S:" + Signature +
-	" X:" + X + 
-	" Y:" + Y +
-	" W:" + Width + 
-	" H:" + Height;
+		return
+		"\nS: " + Signature +
+		"\nX: " + X + 
+		"\nY: " + Y +
+		"\nW: " + Width + 
+		"\nH: " + Height;
 	}
 
 	public void toDashboard() {
@@ -31,7 +29,15 @@ public class PixyBlock {
 		Dashboard.send("Height", Height);
 	}
 
-	// public int getCenteredX(){
-	// 	return X;
-	// }
+	public int getSum() {
+		return  Signature + X + Y + Width + Height;
+	}
+
+	public void zero() {
+		Signature = 0;
+		X = 0;
+		Y = 0;
+		Width = 0;
+		Height = 0;
+	}
 }

@@ -34,11 +34,11 @@ public class Logger {
     public static final String FILE_NAME = ""; // Change this to write to a file.
     public static final boolean COMPETITION_MODE = false;
 
-    private static String timestamp() {
+    static String timestamp() {
         return (String)(new SimpleDateFormat("yyyy.MM.dd.HH.mm.ss").format(new Date()));
     }
     
-    private static void log(String level, String message) {
+    static void log(String level, String message) {
     	LOG_QUEUE.add("[" + level + "] " + message + " [" + timestamp() + "]");
     }
     

@@ -9,6 +9,8 @@ import edu.wpi.first.wpilibj.I2C.Port;
 import com.ctre.phoenix.motorcontrol.ControlMode;
 import com.ctre.phoenix.motorcontrol.can.TalonSRX;
 
+import frc.robot.Utilities.Logger;
+
 public class Robot extends SampleRobot {
 	public Robot() {
 		
@@ -38,15 +40,20 @@ public class Robot extends SampleRobot {
 	@Override
 	public void operatorControl() {
 		while (isOperatorControl() && isEnabled()) {
-			// RobotMap.timer.update();
+			//RobotMap.timer.update();
+			RobotMap.pixy.update();
+			
+			RobotMap.pixy.blocksToDashboard();
+			// Logger.update(RobotMap.timer.getDT());
 			// testPixy();
 			// RobotMap.drive.arcadeDrive(RobotMap.driverController.getDeadbandLeftYAxis(),
 			// 	RobotMap.driverController.getDeadbandRightXAxis());
-			if(RobotMap.driverController.getButtonA()){
-				RobotMap.leftBottom.set(ControlMode.PercentOutput, 0.3);
-			} else {
-				RobotMap.leftBottom.set(ControlMode.PercentOutput, 0.0);
-			}
+			
+			// if(RobotMap.driverController.getButtonA()){
+			// 	RobotMap.leftBottom.set(ControlMode.PercentOutput, 0.3);
+			// } else {
+			// 	RobotMap.leftBottom.set(ControlMode.PercentOutput, 0.0);
+			// }
 			
 			// This one suposidly decreases input sensitivity at lower speeds.
 			// RobotMap.drive.arcadeDrive(RobotMap.driverController.getDeadbandLeftYAxis(),
