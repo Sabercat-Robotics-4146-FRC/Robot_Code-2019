@@ -32,7 +32,7 @@ public class Logger {
     public static double DT_ACC = 0; // DT Accumulator
     public static FileOutputStream OUTPUT_STREAM;
     public static final String FILE_NAME = ""; // Change this to write to a file.
-    public static final boolean COMPETITION_MODE = false;
+    public static final boolean COMPETITION_MODE = true;
 
     static String timestamp() {
         return (String)(new SimpleDateFormat("yyyy.MM.dd.HH.mm.ss").format(new Date()));
@@ -70,7 +70,7 @@ public class Logger {
     }
     
     @SuppressWarnings("unused") // eclipse calls the file printing dead code if name is blank and underlines are annoying.
-	static void update(double dt) throws IOException { // Run this in the main operation loop.
+	public static void update(double dt) throws IOException { // Run this in the main operation loop.
     	if(LOG_QUEUE.isEmpty()) {
     		return;
     	}

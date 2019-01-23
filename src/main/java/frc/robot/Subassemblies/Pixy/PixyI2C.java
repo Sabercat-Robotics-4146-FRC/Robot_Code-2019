@@ -4,15 +4,31 @@ import edu.wpi.first.wpilibj.I2C;
 import frc.robot.RobotMap;
 // Our imports
 import frc.robot.Utilities.Dashboard;
+import frc.robot.Utilities.Logger;
+import java.util.List;
+import java.util.ArrayList;
 
 public class PixyI2C {
-	private String name;
-    private I2C pixy;
+	public enum PixyIteratorEnum{
+		LOOKING,
+		POSSIBLE_BLOCK_SYNC,
+		POSSIBLE_FRAME_SYNC,
+		SYNCED,
+	}
+	final int SYNC_FIRST_HALF = 0x55;
+	final int SYNC_SECOND_HALF = 0xaa;
 
-	private byte[] rawData;
-	private byte[] overflowRawData;
-	private PixyBlock[] blocks; // Stores PixyBlock's
-	boolean useOverflow = false;
+	PixyIteratorEnum iteratorState = PixyIteratorEnum.LOOKING;
+
+	private String name;
+	private I2C pixy;
+	
+	byte[] rawData;
+
+	private PixyBlock[] blocks; // Stores PixyBlocks. Should not go above 2.
+	private List<Integer> bytes; // Stores current assembling block.
+	private int blockIndex = 0;
+	
 	boolean hasNewBlocks = false;
 
 	public PixyI2C(String id, I2C pixy) {
@@ -20,263 +36,149 @@ public class PixyI2C {
         this.pixy = pixy;
 
 		this.blocks = new PixyBlock[2];
+		this.bytes = new ArrayList<Integer>();
 	}
 
-	// This method parses raw data from the pixy into readable integers
-	public int convert(byte upper, byte lower) {
-		return (((int) upper & 0xff) << 8) | ((int) lower & 0xff);
-	}
+	// This method turns raw data from the pixy into readable integers. // Should not be needed anymore...
+	// public int convert(byte upper, byte lower) {
+	// 	return (((int) upper & 0xff) << 8) | ((int) lower & 0xff);
+	// }
 
 	// This method converts a single byte into an int that accuratly represents it as unsigned
-	public int convertOneByte(byte bt) { // I could use this in convert.
+	public int convertOneByte(byte bt) {
 		return ((int) bt & 0xff);
 	}
 
-	public void update() { // Gets pixy data and points putInArray to where each block starts and where to put it.
-		/* This comment is no longer relevant. I found the time.
-		This is very large so that it definatly catches two blocks of pixy data. However this
-		method is most definatly flawed. The pixy could be sending 0s representing nothing/
-		no new information while getting the 64 bytes from it but then in the middle or anywhere
-		it could suddenly decide is has new information and begin sending it. This could cause
-		information to be split between two runs of read. We are fixing this by simply dropping
-		the last bytes that could cause this. The most optimal method would be to write something
-		that can wrap information from each read. But I ant got time for that rn. (Probably will
-		find some time....)*/
-		rawData = new byte[30]; // 30 for a single frame with two block (three sync words total)
+	public int combineConvertedBytes(int upper, int lower) {
+		return(upper << 8) | lower;
+	}
+
+	public void update() {
+		rawData = new byte[30];
 
 		// Reading Pixy Data
 		try {
 			pixy.readOnly(rawData, rawData.length);
 		} catch (RuntimeException e) {
-			System.out.println(name + " - " + e);
-		}
-		
-		// Testing for a bad thing that *should* never happen.
-		if (rawData.length != 30) {
-			System.out.println("Byte array length is broken in " + this.name + ", " + " length=" + rawData.length);
-			return;
+			Logger.error(name + " - Error Reading Data - " + e);
 		}
 
-		for(int i = 0; i < rawData.length - 2; i += 1) { // i dont think it should be rawData.length - 1 but maybe?(prob doesnt matter cuz its even and +=2)
-			System.out.println(String.format("0x%04X", convert(rawData[i+1], rawData[i])));
+		for(int i = 0; i < rawData.length; i++) {
+			int currentByte = convertOneByte(rawData[i]);
 
-			if(convertOneByte(rawData[i]) == 0x55 && convertOneByte(rawData[i + 1]) == 0xaa) {// Checks for first sync word.
-				// Checks for begginning of new frame represented by another sync word.
-				if(convertOneByte(rawData[i + 2]) == 0x55 && convertOneByte(rawData[i + 3]) == 0xaa) {
-					// System.out.println("Found two Sync words.");
-					i += 4; // Skips the 2 sync words representing the start of the frame.
-					putInArray(i, 0); // Puts the first recieved block in the first position.
-				} else { // Means its a new block but not a new frame.
-					// System.out.println("First Sync word was found but no follow up...");
-					i += 2; // Skips the sync word representing the start of the block.
-					putInArray(i, 1); // Puts the second recieved block in the second position.
+			if(currentByte == SYNC_FIRST_HALF) {
+				if(iteratorState != PixyIteratorEnum.SYNCED) {
+					iteratorState = PixyIteratorEnum.POSSIBLE_BLOCK_SYNC;
+				} else if(iteratorState == PixyIteratorEnum.SYNCED) {
+					iteratorState = PixyIteratorEnum.POSSIBLE_FRAME_SYNC;
+				}
+			} else if(currentByte == SYNC_SECOND_HALF) {
+				if(iteratorState == PixyIteratorEnum.POSSIBLE_BLOCK_SYNC) {
+					iteratorState = PixyIteratorEnum.SYNCED;
+					blockIndex = 1;
+				} else if(iteratorState == PixyIteratorEnum.POSSIBLE_FRAME_SYNC) {
+					iteratorState = PixyIteratorEnum.SYNCED;
+					blockIndex = 0;
+				}
+			} else {
+				if(iteratorState == PixyIteratorEnum.POSSIBLE_BLOCK_SYNC || iteratorState == PixyIteratorEnum.POSSIBLE_FRAME_SYNC) {
+					iteratorState = PixyIteratorEnum.SYNCED;
+					add(SYNC_FIRST_HALF);
+				}
+				if(iteratorState == PixyIteratorEnum.SYNCED) {
+					add(currentByte);
+					iteratorState = PixyIteratorEnum.LOOKING;
 				}
 			}
-		}
+		//	<editor-fold>
+		// 	Logger.debug("Iterating " + i);
+		// 	int currentByte = convertOneByte(rawData[i]);
+		// 	Logger.debug("current Byte: " + String.format("0x%02X", currentByte));
 
-		// This stuff here is for debugging.
-		// <editor-fold>
-		// System.out.println( "------Here------" );
-		// // System.out.println(String.format("0x%02X", rawData[1]) + " and " + String.format("0x%02X", rawData[0]) + " make" );
-		// // System.out.println(String.format("0x%04X",convert(rawData[1], rawData[0])));
-		// for( int i = 0; i < rawData.length; i += 1){
-		// 	System.out.println(String.format("0x%02X", rawData[i]));//convert(rawData[i + 1], rawData[i + 0])));
-		// 	// if( convert(rawData[i + 1], rawData[i + 0]) == 0xaa55 && convert(rawData[i + 3], rawData[i + 2]) == 0xaa55 ){
-		// 	// 	System.out.println( "Sync found at " + i );
-		// 	// }
-		// }
-
-		// if( convert(rawData[0 + 1], rawData[0 + 0]) != 0 ){
-		// 	// if( convert(rawData[0 + 1], rawData[0 + 0]) != 0xaa55 && convert(rawData[0 + 1], rawData[0 + 0]) != 43605 ){
-		// 	// 	System.out.println( convert(rawData[0 + 1], rawData[0 + 0]) );
-		// 	// } else {
-		// 	// 	System.out.println( "VVVVAAAAATTTTT" );
-		// 	// }
-		// } else {
-		// 	System.out.println( "Help me....." );
-		// }
-
-		// // Basically, this searches for the last sync word (start flag) and only checks the first
-        // // 16 bytes of the 32 byte array becasue the blocks are about 14 to 16 bytes and then
-        // // parses the next bytes accordingly.
-		// for (int i = 0; i <= 16; i++) {
-        //     int syncWord = convert(rawData[i + 1], rawData[i + 0]); // Parse first 2 bytes
-            
-        //     // Check is first 2 bytes equal a "sync word", which indicates the start of a packet of valid data
-        //     if (syncWord == 0xaa55) {
-		// 		syncWord = convert(rawData[i + 3], rawData[i + 2]); // Parse the next 2 bytes
-		// 		if (syncWord != 0xaa55) { // Shifts everything in the case that one syncword is sent
-		// 			i -= 2;
-        //         }
-                
-		// 		// This rest of this code parses the rest of the data
-        //         checksumData = convert(rawData[i + 5], rawData[i + 4]);
-        //         signatureData = convert(rawData[i + 7], rawData[i + 6]);
-                
-        //         // Breaks if the recieved block has a signature of 0 or greater than the number
-        //         // of used signatures being used.
-		// 		if (signatureData <= 0 || signatureData > numOfSignaturesUsed) {
-		// 			break;
-		// 		}
-
-        //         // Makes a PixyBlock in the signatures array under the index of the recieved
-        //         // block's signature (-1 becasue signatures start at 1 but arrays start at 0)
-        //         blocks[currentIndex] = new PixyBlock();
-                
-        //         //Sets values in the current block's array value
-        //         blocks[currentIndex].Signature = signatureData;
-		// 		blocks[currentIndex].X = convert(rawData[i + 9], rawData[i + 8]);
-		// 		blocks[currentIndex].Y = convert(rawData[i + 11], rawData[i + 10]);
-		// 		blocks[currentIndex].Width = convert(rawData[i + 13], rawData[i + 12]);
-        //         blocks[currentIndex].Height = convert(rawData[i + 15], rawData[i + 14]);
-                
-		// 		// Checks whether the data is valid using the checksum *This if block should never be entered*
-        //         if (checksumData != (blocks[currentIndex].Signature + blocks[currentIndex].X + blocks[currentIndex].Y
-        //                 + blocks[currentIndex].Width + blocks[currentIndex].Height)) {
-		// 			blocks[currentIndex] = null;
-		// 			System.out.println("CHECKSUM DATA DOES NOT CHECKOUT!!!!!!!!!!!!!!!!");
-		// 		}
-		// 		break;
-		// 	} else {
-        //         Dashboard.send(name + "Sync Word?:", syncWord);
+		// 	if(currentByte == 0x55) {
+		// 		iteratorState = PixyIteratorEnum.POSSIBLE_BLOCK_SYNC;
+		// 		Logger.debug("Possible Block Sync State");
+		// 		continue;
 		// 	}
-		// }
-		
-		// // Switches between index 0 and 1.
-		// currentIndex = currentIndex == 1 ? 0 : 1;
+		// 	if(currentByte == 0xaa && iteratorState == PixyIteratorEnum.POSSIBLE_BLOCK_SYNC) {
+		// 		Logger.debug("SYNCED State");
+		// 		iteratorState = PixyIteratorEnum.SYNCED;
+		// 		blockIndex = 1;
+		// 		bytes.clear();
+		// 		continue; // Dont want put this byte into the array...
+		// 	}
+		// 	if(currentByte != 0xaa && iteratorState == PixyIteratorEnum.POSSIBLE_BLOCK_SYNC) {
+		// 		Logger.debug("Going back to SYNCED state from Block");				
+		// 		bytes.add(0x55);
+		// 		iteratorState = PixyIteratorEnum.SYNCED;
+		// 	}
+
+		// 	if(currentByte == 0x55 && iteratorState == PixyIteratorEnum.SYNCED) {
+		// 		Logger.debug("POSSIBLE_FRAME_SYNC state");
+		// 		iteratorState = PixyIteratorEnum.POSSIBLE_FRAME_SYNC;
+		// 		continue;
+		// 	}
+		// 	if(currentByte == 0xaa && iteratorState == PixyIteratorEnum.POSSIBLE_FRAME_SYNC) {
+		// 		Logger.debug("-----------------------------\nFRAME Synced State");
+		// 		iteratorState = PixyIteratorEnum.SYNCED;
+		// 		blockIndex = 0;
+		// 		bytes.clear();
+		// 		continue; // Dont want put this byte into the array...
+		// 	}
+		// 	if(currentByte != 0xaa && iteratorState == PixyIteratorEnum.POSSIBLE_FRAME_SYNC) {
+		// 		Logger.debug("Going back to SYNCED State from FRAME");
+		// 		bytes.add(0x55);
+		// 		iteratorState = PixyIteratorEnum.SYNCED;
+		// 	}
+
+		// 	if(iteratorState == PixyIteratorEnum.SYNCED) {
+		// 		Logger.debug("Adding Current byte " + currentByte + " to bytes");
+		// 		bytes.add(currentByte);
+		// 	}
+
+
+		// 	if(bytes.size() == 12) {
+		// 		Logger.debug("bytes filled: " + bytes);
+		// 		if(iteratorState != PixyIteratorEnum.SYNCED) {
+		// 			Logger.error("Reached size 12 but not in a synced state....");
+		// 		}
+		// 		//if(iteratorState == PixyIteratorEnum.SYNCED){
+		// 		System.out.println(blockIndex);
+		// 		blocks[blockIndex] = parsePixyData(bytes);
+		// 		//}
+		// 		iteratorState = PixyIteratorEnum.LOOKING;
+		// 		bytes.clear();
+		// 	} 
 		// </editor-fold>
-	} // End of updateBlocks
-
-	// startIndex = start position of a block of information not counting the sync words.
-	// blockIndex = which position to place the new PixyBlock in.
-	private void putInArray(int startIndex, int blockIndex) {
-		// <editor-fold>
-		// Some Debug Stuff
-		// System.out.println("=======================");
-		// System.out.println(String.format("0x%02X", rawData[startIndex]));
-		// System.out.println(String.format("0x%02X", rawData[startIndex+1]));
-
-		// System.out.println(String.format("0x%02X", rawData[startIndex+2]));
-		// System.out.println(String.format("0x%02X", rawData[startIndex+3]));
-
-		// System.out.println(String.format("0x%02X", rawData[startIndex+4]));
-		// System.out.println(String.format("0x%02X", rawData[startIndex+5]));
-
-		// System.out.println(String.format("0x%02X", rawData[startIndex+6]));
-		// System.out.println(String.format("0x%02X", rawData[startIndex+7]));
-		
-		// System.out.println(String.format("0x%02X", rawData[startIndex+8]));
-		// System.out.println(String.format("0x%02X", rawData[startIndex+9]));
-		
-		// System.out.println(String.format("0x%02X", rawData[startIndex+10]));
-		// System.out.println(String.format("0x%02X", rawData[startIndex+11]));
-		
-		// System.out.println(String.format("0x%02X", rawData[startIndex+12]));
-		// System.out.println(String.format("0x%02X", rawData[startIndex+13]));
-		
-		// System.out.println(String.format("0x%02X", rawData[startIndex+14]));
-		// System.out.println(String.format("0x%02X", rawData[startIndex+15]));
-
-		// System.out.println(String.format("0x%04X", convert(rawData[startIndex+1], rawData[startIndex])));
-		// System.out.println(String.format("0x%04X", convert(rawData[startIndex+3], rawData[startIndex+2])));
-		// System.out.println(String.format("0x%04X", convert(rawData[startIndex+5], rawData[startIndex+4])));
-		// System.out.println(String.format("0x%04X", convert(rawData[startIndex+7], rawData[startIndex+6])));
-		// System.out.println(String.format("0x%04X", convert(rawData[startIndex+9], rawData[startIndex+8])));
-		// System.out.println(String.format("0x%04X", convert(rawData[startIndex+11], rawData[startIndex+10])));
-		// System.out.println(String.format("0x%04X", convert(rawData[startIndex+13], rawData[startIndex+12])));
-		// System.out.println(String.format("0x%04X", convert(rawData[startIndex+15], rawData[startIndex+14])));
-		// </editor-fold>
-		
-		// Tests if start point and its sequential data does not totally fit in the array and
-		// fills the overflow array with the remaining bytes. 12 is block size minus sync.
-		System.out.print( startIndex + " > " + ( rawData.length - 12 ) + ": " + (startIndex > rawData.length - 12) );
-		if(startIndex > rawData.length - 12) {
-			System.out.println("Wrapping pixy sends...");
-			overflowRawData = new byte[12];
-			byte[] tempRawData = new byte[12 - (rawData.length - (startIndex - 1))]; // Size of the remaining needed bytes
-
-			// Reading Pixy Data
-			try {
-				pixy.readOnly(tempRawData, tempRawData.length);
-			} catch (RuntimeException e) {
-				System.out.println(name + " - " + e);
-			}
-
-			// Checks to see if the pixy has sent new data instead of overflow data.
-			if(convertOneByte(tempRawData[0]) == 0x55 && convertOneByte(tempRawData[1]) == 0xaa){
-				System.out.println("Pixy sent new data instead of continuing data");
-				rawData = tempRawData;
-				putInArray(0, 0); // Check logic confirming rawData doesnt stay the length of tempRawData indefinatly.(it shouldnt)
-				return;
-			}
-
-			int j = 0; // could just use math in place of this variable but it makes it easier to read.
-			// Fills overflow array with the remaining in rawData and the next ones in overflowRawData.
-			for(int i = 0; i < overflowRawData.length - 2; i++) {
-				if(i < rawData.length) {
-					overflowRawData[i] = rawData[i + startIndex];
-				} else {
-					overflowRawData[i] = tempRawData[j];
-					j++;
-				}
-			}
-			useOverflow = true;
-		} else {
-			System.out.println("Not Wrapping Pixy Sends...");
 		}
 
-		int checksumData;
-		int signatureData;
-		if( useOverflow ) {
-			checksumData = convert(overflowRawData[1], overflowRawData[0]);
-			signatureData = convert(overflowRawData[3], overflowRawData[2]);
+	} // End of update
 
-			// Returns if the recieved block has a signature of 0 or greater than the number
-			// of used signatures being used (1 right now).
-			if (signatureData <= 0 || signatureData > 1) {
-				System.out.println("Invalid Signature " + signatureData + " in " + name);
-				return;
+	public PixyBlock parsePixyData(List<Integer> data) {
+		return new PixyBlock(
+			combineConvertedBytes(data.get(1), data.get(0)), // Checksum
+			combineConvertedBytes(data.get(3), data.get(2)), // Signature
+			combineConvertedBytes(data.get(5), data.get(4)), // X
+			combineConvertedBytes(data.get(7), data.get(6)), // Y
+			combineConvertedBytes(data.get(9), data.get(8)), // Width
+			combineConvertedBytes(data.get(11), data.get(10))// Height
+		);
+	}
+
+	public void add(int i) {
+		bytes.add(i);
+		Logger.debug("Added: " + i);
+
+		if(bytes.size() == 12) {
+			Logger.debug("Filled bytes into " + blockIndex + ": " + bytes);
+			if(iteratorState != PixyIteratorEnum.SYNCED) {
+				Logger.error("Reached size 12 but not in a synced state....");
 			}
-
-			blocks[blockIndex] = new PixyBlock();
-
-			//Sets values in the current block's array value
-			blocks[blockIndex].Signature = signatureData;
-			blocks[blockIndex].X = convert(overflowRawData[5], overflowRawData[4]);
-			blocks[blockIndex].Y = convert(overflowRawData[7], overflowRawData[6]);
-			blocks[blockIndex].Width = convert(overflowRawData[9], overflowRawData[8]);
-			blocks[blockIndex].Height = convert(overflowRawData[11], overflowRawData[10]);
-
-			useOverflow = false;
-		} else {
-			checksumData = convert(rawData[startIndex + 1], rawData[startIndex]);
-			signatureData = convert(rawData[startIndex + 3], rawData[startIndex + 2]);
-
-			// Returns if the recieved block has a signature of 0 or greater than the number
-			// of used signatures being used (1 right now).
-			if (signatureData <= 0 || signatureData > 1) {
-				System.out.println("Invalid Signature " + signatureData + " in " + name);
-				return;
-			}
-
-			blocks[blockIndex] = new PixyBlock();
-
-			//Sets values in the current block's array value
-			blocks[blockIndex].Signature = signatureData;
-			blocks[blockIndex].X = convert(rawData[startIndex + 5], rawData[startIndex + 4]);
-			blocks[blockIndex].Y = convert(rawData[startIndex + 7], rawData[startIndex + 6]);
-			blocks[blockIndex].Width = convert(rawData[startIndex + 9], rawData[startIndex + 8]);
-			blocks[blockIndex].Height = convert(rawData[startIndex + 11], rawData[startIndex + 10]);
+			blocks[blockIndex] = parsePixyData(bytes);
+			iteratorState = PixyIteratorEnum.LOOKING;
+			bytes.clear();
 		}
-
-		// Checks whether the data is valid using the checksum *This if block should never be entered*
-		if (checksumData != blocks[blockIndex].getSum()) {
-			blocks[blockIndex] = null;
-			System.out.println("CHECKSUM DATA DOES NOT CHECKOUT!!!!!!!!!!!!!!!!");
-			return;
-		}
-		hasNewBlocks = true;
-	} // End of putInArray
+	}
 
 	public PixyBlock[] getBlocks() {
 		hasNewBlocks = false;

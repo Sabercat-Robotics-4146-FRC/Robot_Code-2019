@@ -6,6 +6,8 @@ import edu.wpi.first.wpilibj.Talon;
 import edu.wpi.first.wpilibj.I2C;
 import edu.wpi.first.wpilibj.I2C.Port;
 
+import java.io.IOException;
+
 import com.ctre.phoenix.motorcontrol.ControlMode;
 import com.ctre.phoenix.motorcontrol.can.TalonSRX;
 
@@ -40,11 +42,15 @@ public class Robot extends SampleRobot {
 	@Override
 	public void operatorControl() {
 		while (isOperatorControl() && isEnabled()) {
-			//RobotMap.timer.update();
+			RobotMap.timer.update();
 			RobotMap.pixy.update();
 			
 			RobotMap.pixy.blocksToDashboard();
-			// Logger.update(RobotMap.timer.getDT());
+			try{
+				Logger.update(RobotMap.timer.getDT());
+			} catch(IOException e){
+				System.out.println("Logger IOException: " + e);
+			}
 			// testPixy();
 			// RobotMap.drive.arcadeDrive(RobotMap.driverController.getDeadbandLeftYAxis(),
 			// 	RobotMap.driverController.getDeadbandRightXAxis());

@@ -2,18 +2,36 @@ package frc.robot.Subassemblies.Pixy;
 
 
 import frc.robot.Utilities.Dashboard;
+import frc.robot.Utilities.Logger;
 
 
 public class PixyBlock {
+	public int Checksum;
 	public int Signature;
 	public int X;
 	public int Y;
 	public int Width;
 	public int Height;
+
+	public PixyBlock() {
+		// Nothing
+	}
+
+	public PixyBlock(int Checksum, int Signature, int X, int Y, int Width, int Height) {
+		this.Checksum = Checksum;
+		this.Signature = Signature;
+		this.X = X;
+		this.Y = Y;
+		this.Width = Width;
+		this.Height = Height;
+
+		checkChecksum();
+	}
     
     @Override
 	public String toString() {
 		return
+		"\nC: " + Checksum +
 		"\nS: " + Signature +
 		"\nX: " + X + 
 		"\nY: " + Y +
@@ -31,6 +49,13 @@ public class PixyBlock {
 
 	public int getSum() {
 		return  Signature + X + Y + Width + Height;
+	}
+
+	public void checkChecksum() {
+		if(this.Checksum != getSum()) {
+			Logger.error("CHECKSUM DATA DOES NOT CHECKOUT!!!!!!!!!!!!!!!!");
+			zero();
+		}
 	}
 
 	public void zero() {
