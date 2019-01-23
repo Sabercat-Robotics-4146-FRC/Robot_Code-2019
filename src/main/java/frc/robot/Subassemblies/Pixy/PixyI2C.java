@@ -63,32 +63,44 @@ public class PixyI2C {
 			Logger.error(name + " - Error Reading Data - " + e);
 		}
 
+		// System.out.println("============================");
+
 		for(int i = 0; i < rawData.length; i++) {
 			int currentByte = convertOneByte(rawData[i]);
+			// System.out.println("Current Byte: " + currentByte);
 
 			if(currentByte == SYNC_FIRST_HALF) {
+				// System.out.println("CB is SYNC_FIRST_HALF");
 				if(iteratorState != PixyIteratorEnum.SYNCED) {
+					// System.out.println("Currently not in Sync. Switching to POSSIBLE_BLOCK_SYNC");
 					iteratorState = PixyIteratorEnum.POSSIBLE_BLOCK_SYNC;
 				} else if(iteratorState == PixyIteratorEnum.SYNCED) {
+					// System.out.println("Currently in Sync. Switching to POSSIBLE_FRAME_SYNC");
 					iteratorState = PixyIteratorEnum.POSSIBLE_FRAME_SYNC;
 				}
 			} else if(currentByte == SYNC_SECOND_HALF) {
+				// System.out.println("CB is SYNC_SECOND_HALF");
 				if(iteratorState == PixyIteratorEnum.POSSIBLE_BLOCK_SYNC) {
+					// System.out.println("Currently in POSSIBLE_BLOCK_SYNC. Switching to Synced");
 					iteratorState = PixyIteratorEnum.SYNCED;
 					blockIndex = 1;
 				} else if(iteratorState == PixyIteratorEnum.POSSIBLE_FRAME_SYNC) {
+					// System.out.println("Currently in POSSIBLE_FRAME_SYNC. Switching to Synced");
 					iteratorState = PixyIteratorEnum.SYNCED;
 					blockIndex = 0;
 				}
 			} else {
+				// System.out.println("CB was neither sync byte.");
 				if(iteratorState == PixyIteratorEnum.POSSIBLE_BLOCK_SYNC || iteratorState == PixyIteratorEnum.POSSIBLE_FRAME_SYNC) {
+					// System.out.println("Currently in possible sync. did not find second sync, so added trigger to data.");
 					iteratorState = PixyIteratorEnum.SYNCED;
 					add(SYNC_FIRST_HALF);
 				}
 				if(iteratorState == PixyIteratorEnum.SYNCED) {
 					add(currentByte);
-					iteratorState = PixyIteratorEnum.LOOKING;
+					//iteratorState = PixyIteratorEnum.LOOKING;
 				}
+				// NOTE!!!!!: iteratorState is set to looking in add();
 			}
 		//	<editor-fold>
 		// 	Logger.debug("Iterating " + i);
@@ -155,6 +167,7 @@ public class PixyI2C {
 	} // End of update
 
 	public PixyBlock parsePixyData(List<Integer> data) {
+		//System.out.println(data);
 		return new PixyBlock(
 			combineConvertedBytes(data.get(1), data.get(0)), // Checksum
 			combineConvertedBytes(data.get(3), data.get(2)), // Signature
@@ -171,10 +184,13 @@ public class PixyI2C {
 
 		if(bytes.size() == 12) {
 			Logger.debug("Filled bytes into " + blockIndex + ": " + bytes);
+			//System.out.println("Filled bytes into " + blockIndex + ": " + bytes);
 			if(iteratorState != PixyIteratorEnum.SYNCED) {
 				Logger.error("Reached size 12 but not in a synced state....");
 			}
 			blocks[blockIndex] = parsePixyData(bytes);
+			//System.out.println(blocks[blockIndex]);
+			
 			iteratorState = PixyIteratorEnum.LOOKING;
 			bytes.clear();
 		}

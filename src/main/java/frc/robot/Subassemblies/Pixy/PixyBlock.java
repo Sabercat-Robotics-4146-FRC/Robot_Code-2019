@@ -25,6 +25,8 @@ public class PixyBlock {
 		this.Width = Width;
 		this.Height = Height;
 
+		// System.out.println("=============================");
+		// System.out.println(this);
 		checkChecksum();
 	}
     
