@@ -98,7 +98,7 @@ public class PixyI2C {
 				}
 				if(iteratorState == PixyIteratorEnum.SYNCED) {
 					add(currentByte);
-					//iteratorState = PixyIteratorEnum.LOOKING;
+					// iteratorState = PixyIteratorEnum.LOOKING;
 				}
 				// NOTE!!!!!: iteratorState is set to looking in add();
 			}
@@ -208,9 +208,11 @@ public class PixyI2C {
 	public void blocksToDashboard() {
 		if(blocks[0] != null){
 			Dashboard.send("X1", blocks[0].X);
+			Dashboard.send("Y1", blocks[0].Y);
 		}
 		if(blocks[1] != null){
 			Dashboard.send("X2", blocks[1].X);
+			Dashboard.send("Y2", blocks[1].Y);
 		}
 	}
 } // End of class

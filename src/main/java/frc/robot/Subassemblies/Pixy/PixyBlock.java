@@ -1,6 +1,7 @@
 package frc.robot.Subassemblies.Pixy;
 
 
+import frc.robot.RobotMap;
 import frc.robot.Utilities.Dashboard;
 import frc.robot.Utilities.Logger;
 
@@ -27,7 +28,7 @@ public class PixyBlock {
 
 		// System.out.println("=============================");
 		// System.out.println(this);
-		checkChecksum();
+		checkChecksumError();
 	}
     
     @Override
@@ -53,14 +54,18 @@ public class PixyBlock {
 		return  Signature + X + Y + Width + Height;
 	}
 
-	public void checkChecksum() {
+	public boolean checkChecksumError() {
 		if(this.Checksum != getSum()) {
-			Logger.error("CHECKSUM DATA DOES NOT CHECKOUT!!!!!!!!!!!!!!!!");
+			//Logger.error("CHECKSUM DATA DOES NOT CHECKOUT!!!!!!!!!!!!!!!!");
+			RobotMap.checksumErrorCount++;
+			Dashboard.send("checksumErrorCount", RobotMap.checksumErrorCount);
 			zero();
 		}
+		return false;
 	}
 
 	public void zero() {
+		Checksum = 0;
 		Signature = 0;
 		X = 0;
 		Y = 0;

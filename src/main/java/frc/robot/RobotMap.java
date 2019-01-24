@@ -23,6 +23,7 @@ public class RobotMap {
 	public static final double VISION_kD = 0.0;
 	public static final int PIXY_ADDRESS = 0x54;
 	public static final int PIXY_SIGNATURES_USED = 1;
+	public static int checksumErrorCount = 0;
 
 	
 	/////// Declarations ///////
