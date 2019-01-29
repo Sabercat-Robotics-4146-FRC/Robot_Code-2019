@@ -9,6 +9,7 @@ import edu.wpi.first.wpilibj.SpeedControllerGroup;
 
 // Our Imports
 import frc.robot.Utilities.*;
+import frc.robot.Subassemblies.LEDI2C;
 import frc.robot.Subassemblies.Pixy.*;
 
 public class RobotMap {
@@ -22,8 +23,10 @@ public class RobotMap {
 	public static final double VISION_kI = 0.0;
 	public static final double VISION_kD = 0.0;
 	public static final int PIXY_ADDRESS = 0x54;
-	public static final int PIXY_SIGNATURES_USED = 1;
-	public static int checksumErrorCount = 0;
+	public static final int LED_ADDRESS = 0x55;
+	public static final int PIXY_SIGNATURES_USED = 1; // Unused? 
+	public static final String PIXY_NAME = "Main Pixy";
+	public static int checksumErrorCount = 0; // not actually a constant.
 
 	
 	/////// Declarations ///////
@@ -33,16 +36,22 @@ public class RobotMap {
 	public static Timer timer;
 
 	// Motor Controller Declarations
-	public static WPI_TalonSRX leftTop;
-	public static WPI_TalonSRX leftBottom;
-	public static WPI_TalonSRX rightTop;
-	public static WPI_TalonSRX rightBottom;
+	// TODO
+	// public static WPI_TalonSRX leftTop;
+	// public static WPI_TalonSRX leftBottom;
+	// public static WPI_TalonSRX rightTop;
+	// public static WPI_TalonSRX rightBottom;
 
-	public static SpeedControllerGroup leftDriveMotors;
-	public static SpeedControllerGroup rightDriveMotors;
+	public static TalonSRX elevatorTop;
+	public static TalonSRX elevatorBottom;
+	public static TalonSRX arm;
+
+	// public static SpeedControllerGroup leftDriveMotors;
+	// public static SpeedControllerGroup rightDriveMotors;
 	
 	//// Sub-System Declarations ////
 	public static PixyI2C pixy;
+	public static LEDI2C leds;
 	public static DifferentialDrive drive;
 	
 	public static void init() { // This is to be called in robitInit and instantiates stuff.
@@ -53,18 +62,38 @@ public class RobotMap {
 		timer = new Timer();
 
 		// Motor Controllers Initialization
-		leftTop = new WPI_TalonSRX(1);
-		leftBottom = new WPI_TalonSRX(2);
-		rightTop = new WPI_TalonSRX(3);
-		rightBottom = new WPI_TalonSRX(4);
+		// TODO
+		// leftTop = new WPI_TalonSRX(1);
+		// leftBottom = new WPI_TalonSRX(2);
+		// rightTop = new WPI_TalonSRX(3);
+		// rightBottom = new WPI_TalonSRX(4);
 
-		leftDriveMotors = new SpeedControllerGroup(leftTop, leftBottom);
-		rightDriveMotors = new SpeedControllerGroup(rightTop, rightBottom);
+		elevatorTop = new TalonSRX(1);
+		elevatorBottom = new TalonSRX(2);
+
+		elevatorTop.configFactoryDefault();
+		elevatorBottom.configFactoryDefault();
+		elevatorBottom.follow(elevatorTop);
+
+		arm = new TalonSRX(3);
+		arm.configFactoryDefault();
+
+		// leftDriveMotors = new SpeedControllerGroup(leftTop, leftBottom);
+		// rightDriveMotors = new SpeedControllerGroup(rightTop, rightBottom);
 
 		//// Sub-System Initilization ////
-		pixy = new PixyI2C("Main", new I2C(Port.kOnboard, PIXY_ADDRESS));
+		pixy = new PixyI2C(PIXY_NAME, new I2C(Port.kOnboard, PIXY_ADDRESS));
 
-		drive = new DifferentialDrive(leftDriveMotors, rightDriveMotors);
-		drive.setSafetyEnabled(false);
+		leds = new LEDI2C(new I2C(Port.kOnboard, LED_ADDRESS));
+
+		// TODO
+		// drive = new DifferentialDrive(leftDriveMotors, rightDriveMotors);
+		/* diff drive assumes (by default) that 
+			right side must be negative to move forward.
+			Change to 'false' so positive/green-LEDs moves robot forward.
+			Make things go the right way by using motor controller inversions. 
+			https://github.com/CrossTheRoadElec/Phoenix-Examples-Languages/blob/master/Java/SixTalonArcadeDrive/src/main/java/frc/robot/Robot.java*/
+		// _drive.setRightSideInverted(false);
+		// drive.setSafetyEnabled(false);
 	}
 }

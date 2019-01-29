@@ -2,11 +2,11 @@ package frc.robot.Subassemblies.Pixy;
 
 import edu.wpi.first.wpilibj.I2C;
 import frc.robot.RobotMap;
+import java.util.List;
+import java.util.ArrayList;
 // Our imports
 import frc.robot.Utilities.Dashboard;
 import frc.robot.Utilities.Logger;
-import java.util.List;
-import java.util.ArrayList;
 
 public class PixyI2C {
 	public enum PixyIteratorEnum{

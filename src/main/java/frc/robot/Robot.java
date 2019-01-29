@@ -9,8 +9,11 @@ import edu.wpi.first.wpilibj.I2C.Port;
 import java.io.IOException;
 
 import com.ctre.phoenix.motorcontrol.ControlMode;
+import com.ctre.phoenix.motorcontrol.FeedbackDevice;
 import com.ctre.phoenix.motorcontrol.can.TalonSRX;
+import com.ctre.phoenix.motorcontrol.can.TalonSRXConfiguration;
 
+import frc.robot.Utilities.Dashboard;
 import frc.robot.Utilities.Logger;
 
 public class Robot extends SampleRobot {
@@ -41,17 +44,43 @@ public class Robot extends SampleRobot {
 	 */
 	@Override
 	public void operatorControl() {
+		TalonSRXConfiguration config = new TalonSRXConfiguration();
+
+		/**
+		 * PID Gains may have to be adjusted based on the responsiveness of control loop
+		 * 	           			  kP   kI    kD     kF(why)      Iz   PeakOut */
+		Gains kGains = new Gains( 1.0, 0.0, 0.0, 1023.0/6800.0, 400, 1.00 );
+
+		/* _config the master specific settings */
+        config.primaryPID.selectedFeedbackSensor = FeedbackDevice.CTRE_MagEncoder_Absolute;
+        config.neutralDeadband = 0.001; /* 0.1 % super small for best low-speed control. the min value. */
+        config.slot0.kF = kGains.kF;
+        config.slot0.kP = kGains.kP;
+        config.slot0.kI = kGains.kI;
+        config.slot0.kD = kGains.kD;
+        config.slot0.integralZone = (int)kGains.kIzone;
+        config.slot0.closedLoopPeakOutput = kGains.kPeakOutput;
+        // _config.slot0.allowableClosedloopError // left default for this example
+        // _config.slot0.maxIntegralAccumulator; // left default for this example
+        // _config.slot0.closedLoopPeriod; // left default for this example
+		RobotMap.elevatorTop.configAllSettings(config);
+
 		while (isOperatorControl() && isEnabled()) {
-			RobotMap.timer.update();
-			RobotMap.pixy.update();
+			// RobotMap.timer.update();
 			
-			RobotMap.pixy.blocksToDashboard();
-			try{
-				Logger.update(RobotMap.timer.getDT());
-			} catch(IOException e){
-				System.out.println("Logger IOException: " + e);
-			}
-			// testPixy();
+			// RobotMap.elevatorTop.set(ControlMode.PercentOutput, RobotMap.driverController.getDeadbandLeftYAxis());
+			// RobotMap.arm.set(ControlMode.PercentOutput, RobotMap.driverController.getDeadbandLeftYAxis());
+
+			
+
+			// try{
+			// 	Logger.update(RobotMap.timer.getDT());
+			// } catch(IOException e){
+			// 	System.out.println("Logger IOException: " + e);
+			// }
+
+			// Drive Code
+			// <editor-fold>
 			// RobotMap.drive.arcadeDrive(RobotMap.driverController.getDeadbandLeftYAxis(),
 			// 	RobotMap.driverController.getDeadbandRightXAxis());
 			
@@ -64,15 +93,9 @@ public class Robot extends SampleRobot {
 			// This one suposidly decreases input sensitivity at lower speeds.
 			// RobotMap.drive.arcadeDrive(RobotMap.driverController.getDeadbandLeftYAxis(),
 			// 	RobotMap.driverController.getDeadbandRightXAxis(), true);
+			// </editor-fold>
 		}
 	}
-
-	// public void testPixy(){
-	// 	PixyBlock test = pixy.readPacket(1);
-	// 	if( test != null ){
-	// 		test.toDashboard();
-	// 	}
-	// }
 
 	/**
 	 * Runs during test mode.
