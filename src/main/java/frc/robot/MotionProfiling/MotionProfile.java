@@ -4,6 +4,8 @@ import com.ctre.phoenix.motion.BufferedTrajectoryPointStream;
 import com.ctre.phoenix.motion.TrajectoryPoint;
 import com.ctre.phoenix.motorcontrol.can.TalonSRX;
 
+import frc.robot.RobotMap;
+
 public class MotionProfile {
     BufferedTrajectoryPointStream trajectoryPointStream = new BufferedTrajectoryPointStream();
 
