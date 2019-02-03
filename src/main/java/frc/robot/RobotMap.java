@@ -29,6 +29,10 @@ public class RobotMap {
 	public static final String PIXY_NAME = "Main Pixy";
 	public static int checksumErrorCount = 0; // not actually a constant.
 
+	// Motion Profiling Constants
+	public final static int kSensorUnitsPerRotation = 4096; // How many sensor units per rotation using CTRE Magnetic Encoder.
+	public final static double kNeutralDeadband = 0.001; // Motor neutral dead-band, set to the minimum 0.1%.
+	public final static int kPrimaryPIDSlot = 0; // any slot [0,3]
 	
 	/////// Declarations ///////
 	// Controller Declarations

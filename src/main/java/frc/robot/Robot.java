@@ -1,21 +1,11 @@
 
 package frc.robot;
 
-import edu.wpi.first.wpilibj.SampleRobot;
-import edu.wpi.first.wpilibj.Talon;
-import edu.wpi.first.wpilibj.I2C;
-import edu.wpi.first.wpilibj.I2C.Port;
-
-import java.io.IOException;
-
-import com.ctre.phoenix.motorcontrol.ControlMode;
 import com.ctre.phoenix.motorcontrol.FeedbackDevice;
-import com.ctre.phoenix.motorcontrol.can.TalonSRX;
 import com.ctre.phoenix.motorcontrol.can.TalonSRXConfiguration;
 
-import frc.robot.Subassemblies.Drivetrain;
-import frc.robot.Utilities.Dashboard;
-import frc.robot.Utilities.Logger;
+import edu.wpi.first.wpilibj.SampleRobot;
+import frc.robot.Subassemblies.Elevator;
 
 public class Robot extends SampleRobot {
 	public Robot() {
@@ -23,8 +13,8 @@ public class Robot extends SampleRobot {
 	}
 
 	/**
-	 * Runs once when the robot is powered on and called when you are basically guaranteed that
-	 * all WPILIBJ stuff will work.
+	 * Runs once when the robot is powered on and called when you are basically
+	 * guaranteed that all WPILIBJ stuff will work.
 	 */
 	@Override
 	public void robotInit() {
@@ -45,8 +35,10 @@ public class Robot extends SampleRobot {
 	 */
 	@Override
 	public void operatorControl() {
-		TalonSRXConfiguration config = new TalonSRXConfiguration();
+		Elevator elevator = new Elevator(); // get rid of this it is for testing
 
+		TalonSRXConfiguration config = new TalonSRXConfiguration();
+	
 		/**
 		 * PID Gains may have to be adjusted based on the responsiveness of control loop
 		 * 	           			  kP   kI    kD     kF(why)      Iz   PeakOut */
@@ -67,7 +59,8 @@ public class Robot extends SampleRobot {
 		RobotMap.elevatorTop.configAllSettings(config);
 
 		while (isOperatorControl() && isEnabled()) {
-			
+			elevator.update();
+
 			// RobotMap.timer.update();
 			
 			// RobotMap.elevatorTop.set(ControlMode.PercentOutput, RobotMap.driverController.getDeadbandLeftYAxis());

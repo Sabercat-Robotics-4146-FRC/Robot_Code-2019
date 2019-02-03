@@ -2,6 +2,7 @@ package frc.robot.Subassemblies;
 
 import edu.wpi.first.wpilibj.Relay.Direction;
 import frc.robot.RobotMap;
+import frc.robot.Utilities.Dashboard;
 
 public class Elevator {
 
@@ -25,6 +26,8 @@ public class Elevator {
     LevelEnum level = LevelEnum.STORAGE;
     DirectionEnum direction = DirectionEnum.FRONT;
     DirectionEnum lastDirection = DirectionEnum.FRONT;
+
+    String str = "";
 
     public void update() {
 
@@ -122,18 +125,18 @@ public class Elevator {
                 if (direction == DirectionEnum.FRONT) {
                     if (lastDirection == DirectionEnum.FRONT) {
                         // lift the elevator to the correct value
-                        System.out.println("Front, Intaking Cargo");
+                        str = ("Front, Intaking Cargo");
                     } else if (lastDirection == DirectionEnum.BACK) {
                         // move the arm over and move elevator to the correct value
-                        System.out.println("Switching to Front, Intaking Cargo");
+                        str = ("Switching to Front, Intaking Cargo");
                     }
                 } else if (direction == DirectionEnum.BACK) {
                     if (lastDirection == DirectionEnum.FRONT) {
                         // dont do anything, you cant intake from the back
-                        System.out.println("Trying to Go to Back Cargo, Not Allowed, Do Nothing");
+                        str = ("Trying to Go to Back Cargo, Not Allowed, Do Nothing");
                     } else if (lastDirection == DirectionEnum.BACK) {
                        // dont do anything, you cant intake from the back
-                       System.out.println("Trying to Go to Back Cargo, Not Allowed, Do Nothing");
+                       str = ("Trying to Go to Back Cargo, Not Allowed, Do Nothing");
                     }
                 }
                 break;
@@ -142,18 +145,18 @@ public class Elevator {
                 if (direction == DirectionEnum.FRONT) {
                     if (lastDirection == DirectionEnum.FRONT) {
                         // lift the elevator to the correct value
-                        System.out.println("Front, Intaking Hatch");
+                        str = ("Front, Intaking Hatch");
                     } else if (lastDirection == DirectionEnum.BACK) {
                         // move arm over and lift elevator to the correct value
-                        System.out.println("Switching to Front, Intaking Hatch");
+                        str = ("Switching to Front, Intaking Hatch");
                     }
                 } else if (direction == DirectionEnum.BACK) {
                     if (lastDirection == DirectionEnum.FRONT) {
                         // move arm over and lift elevator to the correct value
-                        System.out.println("Switching to Back, Intaking Hatch");
+                        str = ("Switching to Back, Intaking Hatch");
                     } else if (lastDirection == DirectionEnum.BACK) {
                         // lift the elevator to the correct value
-                        System.out.println("Back, Intaking Hatch");
+                        str = ("Back, Intaking Hatch");
                     }
                 }
                 break;
@@ -162,18 +165,18 @@ public class Elevator {
                 if (direction == DirectionEnum.FRONT) {
                     if (lastDirection == DirectionEnum.FRONT) {
                         // lift the elevator to the correct value
-                        System.out.println("Front, Bottom Port");
+                        str = ("Front, Bottom Port");
                     } else if (lastDirection == DirectionEnum.BACK) {
                         // move arm over and lift elevator to the correct value
-                        System.out.println("Switching to Front, Bottom Port");
+                        str = ("Switching to Front, Bottom Port");
                     }
                 } else if (direction == DirectionEnum.BACK) {
                     if (lastDirection == DirectionEnum.FRONT) {
                         // move arm over and lift elevator to the correct value
-                        System.out.println("Switching to Back, Bottom Port");
+                        str = ("Switching to Back, Bottom Port");
                     } else if (lastDirection == DirectionEnum.BACK) {
                         // lift the elevator to the correct value
-                        System.out.println("Back, Bottom Port");
+                        str = ("Back, Bottom Port");
                     }
                 }
                 break;
@@ -182,18 +185,18 @@ public class Elevator {
                 if (direction == DirectionEnum.FRONT) {
                     if (lastDirection == DirectionEnum.FRONT) {
                         // lift the elevator to the correct value
-                        System.out.println("Front, Ship Port");
+                        str = ("Front, Ship Port");
                     } else if (lastDirection == DirectionEnum.BACK) {
                         // move arm over and lift elevator to the correct value
-                        System.out.println("Switching to Front, Ship Port");
+                        str = ("Switching to Front, Ship Port");
                     }
                 } else if (direction == DirectionEnum.BACK) {
                     if (lastDirection == DirectionEnum.FRONT) {
                         // move arm over and lift elevator to the correct value
-                        System.out.println("Switching to Back, Ship Port");
+                        str = ("Switching to Back, Ship Port");
                     } else if (lastDirection == DirectionEnum.BACK) {
                         // lift the elevator to the correct value
-                        System.out.println("Back, Ship Port");
+                        str = ("Back, Ship Port");
                     }
                 }
                 break;
@@ -202,18 +205,18 @@ public class Elevator {
                 if (direction == DirectionEnum.FRONT) {
                     if (lastDirection == DirectionEnum.FRONT) {
                         // lift the elevator to the correct value
-                        System.out.println("Front, Mid Hatch");
+                        str = ("Front, Mid Hatch");
                     } else if (lastDirection == DirectionEnum.BACK) {
                         // move arm over and lift elevator to the correct value
-                        System.out.println("Switching to Front, Mid Hatch");
+                        str = ("Switching to Front, Mid Hatch");
                     }
                 } else if (direction == DirectionEnum.BACK) {
                     if (lastDirection == DirectionEnum.FRONT) {
                         // move arm over and lift elevator to the correct value
-                        System.out.println("Switching to Back, Mid Hatch");
+                        str = ("Switching to Back, Mid Hatch");
                     } else if (lastDirection == DirectionEnum.BACK) {
                         // lift the elevator to the correct value
-                        System.out.println("Back, Mid Hatch");
+                        str = ("Back, Mid Hatch");
                     }
                 }
                 break;
@@ -222,18 +225,18 @@ public class Elevator {
                 if (direction == DirectionEnum.FRONT) {
                     if (lastDirection == DirectionEnum.FRONT) {
                         // lift the elevator to the correct value
-                        System.out.println("Front, Mid Port");
+                        str = ("Front, Mid Port");
                     } else if (lastDirection == DirectionEnum.BACK) {
                         // move arm over and lift elevator to the correct value
-                        System.out.println("Switching to Front, Mid Port");
+                        str = ("Switching to Front, Mid Port");
                     }
                 } else if (direction == DirectionEnum.BACK) {
                     if (lastDirection == DirectionEnum.FRONT) {
                         // move arm over and lift elevator to the correct value
-                        System.out.println("Switching to Back, Mid Port");
+                        str = ("Switching to Back, Mid Port");
                     } else if (lastDirection == DirectionEnum.BACK) {
                         // lift the elevator to the correct value
-                        System.out.println("Back, Mid Port");
+                        str = ("Back, Mid Port");
                     }
                 }
                 break;
@@ -242,18 +245,18 @@ public class Elevator {
                 if (direction == DirectionEnum.FRONT) {
                     if (lastDirection == DirectionEnum.FRONT) {
                         // lift the elevator to the correct value
-                        System.out.println("Front, Top Hatch");
+                        str = ("Front, Top Hatch");
                     } else if (lastDirection == DirectionEnum.BACK) {
                         // move arm over and lift elevator to the correct value
-                        System.out.println("Switching to Front, Top Hatch");
+                        str = ("Switching to Front, Top Hatch");
                     }
                 } else if (direction == DirectionEnum.BACK) {
                     if (lastDirection == DirectionEnum.FRONT) {
                         // move arm over and lift elevator to the correct value
-                        System.out.println("Switching to Back, Top Hatch");
+                        str = ("Switching to Back, Top Hatch");
                     } else if (lastDirection == DirectionEnum.BACK) {
                         // lift the elevator to the correct value
-                        System.out.println("Back, Top Hatch");
+                        str = ("Back, Top Hatch");
                     }
                 }
                 break;
@@ -262,22 +265,24 @@ public class Elevator {
                 if (direction == DirectionEnum.FRONT) {
                     if (lastDirection == DirectionEnum.FRONT) {
                         // lift the elevator to the correct value
-                        System.out.println("Front, Top Port");
+                        str = ("Front, Top Port");
                     } else if (lastDirection == DirectionEnum.BACK) {
                         // move arm over and lift elevator to the correct value
-                        System.out.println("Switching to Front, Top Port");
+                        str = ("Switching to Front, Top Port");
                     }
                 } else if (direction == DirectionEnum.BACK) {
                     if (lastDirection == DirectionEnum.FRONT) {
                         // move arm over and lift elevator to the correct value
-                        System.out.println("Switching to Back, Top Port");
+                        str = ("Switching to Back, Top Port");
                     } else if (lastDirection == DirectionEnum.BACK) {
                         // lift the elevator to the correct value
-                        System.out.println("Back, Top Port");
+                        str = ("Back, Top Port");
                     }
                 }
                 break;
         }
+
+        Dashboard.send("Elevetor state", str);
     }
     
 }
