@@ -43,7 +43,7 @@ public class RobotMap {
 	public final static double kNeutralDeadband = 0.001; // Motor neutral dead-band, set to the minimum 0.1%.
 	public final static int kPrimaryPIDSlot = 0; // any slot [0,3]
 
-	//public final static Gains kGains_MotProf = new Gains( 1.0, 0.0,  0.0, 1023.0/6800.0,  400,  1.00 );
+	public final static Gains kGains_MotProf = new Gains( 1.0, 0.0,  0.0, 1023.0/6800.0,  400,  1.00 );
 	
 	/////// Declarations ///////
 	// Controller Declarations
@@ -113,24 +113,24 @@ public class RobotMap {
 
 		motionProfileTalon = new TalonSRX(12);
 
-		// config = new TalonSRXConfiguration(); // factory default settings
-		// /* _config the master specific settings */
-        // config.primaryPID.selectedFeedbackSensor = FeedbackDevice.QuadEncoder;
-    	// config.neutralDeadband = kNeutralDeadband; /* 0.1 % super small for best low-speed control */
-        // config.slot0.kF = kGains_MotProf.kF;
-        // config.slot0.kP = kGains_MotProf.kP;
-        // config.slot0.kI = kGains_MotProf.kI;
-        // config.slot0.kD = kGains_MotProf.kD;
-        // config.slot0.integralZone = (int) kGains_MotProf.kIzone;
-        // config.slot0.closedLoopPeakOutput = kGains_MotProf.kPeakOutput;
-        // // config.slot0.allowableClosedloopError // left default for this example
-		// // config.slot0.maxIntegralAccumulator; // left default for this example
-        // // config.slot0.closedLoopPeriod; // left default for this example
-        // motionProfileTalon.configAllSettings(config);
+		config = new TalonSRXConfiguration(); // factory default settings
+		/* _config the master specific settings */
+        config.primaryPID.selectedFeedbackSensor = FeedbackDevice.QuadEncoder;
+    	config.neutralDeadband = kNeutralDeadband; /* 0.1 % super small for best low-speed control */
+        config.slot0.kF = kGains_MotProf.kF;
+        config.slot0.kP = kGains_MotProf.kP;
+        config.slot0.kI = kGains_MotProf.kI;
+        config.slot0.kD = kGains_MotProf.kD;
+        config.slot0.integralZone = (int) kGains_MotProf.kIzone;
+        config.slot0.closedLoopPeakOutput = kGains_MotProf.kPeakOutput;
+        // config.slot0.allowableClosedloopError // left default for this example
+		// config.slot0.maxIntegralAccumulator; // left default for this example
+        // config.slot0.closedLoopPeriod; // left default for this example
+        motionProfileTalon.configAllSettings(config);
 
-        // /* pick the sensor phase and desired direction */
-        // motionProfileTalon.setSensorPhase(true);
-		// motionProfileTalon.setInverted(false);
+        /* pick the sensor phase and desired direction */
+        motionProfileTalon.setSensorPhase(true);
+		motionProfileTalon.setInverted(false);
 
 
 		SpeedControllerGroup leftDriveMotors = new SpeedControllerGroup(leftTop, leftBottom); // where should I put these?

@@ -5,7 +5,9 @@ import com.ctre.phoenix.motion.TrajectoryPoint;
 import com.ctre.phoenix.motorcontrol.can.TalonSRX;
 import com.ctre.phoenix.motorcontrol.ControlMode;
 import com.ctre.phoenix.motion.MotionProfileStatus;
+import com.ctre.phoenix.motion.SetValueMotionProfile;
 
+import frc.robot.Utilities.Dashboard;
 import frc.robot.RobotMap;
 
 public class MotionProfile {
@@ -13,21 +15,15 @@ public class MotionProfile {
     /** new class type in 2019 for holding MP buffer. */
     BufferedTrajectoryPointStream trajectoryPointStream = new BufferedTrajectoryPointStream();
 
-    TalonSRX talon;
+	TalonSRX talon;
+	
+	// this is for testing
+	SetValueMotionProfile setValue = SetValueMotionProfile.Disable;
 
     public MotionProfile(TalonSRX talons, double[][] points, int numPoints) {
 		talon = talons;
 		initBuffer(points, numPoints);
 	}
-
-	// public void update() {
-	// 	MotionProfileStatus status = new MotionProfileStatus();
-	// 	talon.getMotionProfileStatus(status);
-
-	// 	if (status.outputEnable.toString().equalsIgnoreCase("disable")) {
-
-	// 	}
-	// }
 
     private void initBuffer(double[][] profile, int totalCnt) {
 
@@ -67,10 +63,18 @@ public class MotionProfile {
     }
 
     public void startProfile() {
-		MotionProfileStatus status = new MotionProfileStatus();
-		talon.getMotionProfileStatus(status);
-
-		if (status.outputEnable.toString().equalsIgnoreCase("disable")) {
+		// MotionProfileStatus status = new MotionProfileStatus();
+		// talon.getMotionProfileStatus(status);
+		Dashboard.send("Motion Profile setVaue", setValue.toString());
+		//System.out.println(status.outputEnable.toString());
+		// if (status.outputEnable.toString().equalsIgnoreCase("disable")) {
+		// 	System.out.println("I am running a profile");
+		// 	talon.startMotionProfile(trajectoryPointStream, 10, ControlMode.MotionProfile);
+        // 	System.out.println("MP started");
+		// }
+		if (setValue == SetValueMotionProfile.Disable) {
+			setValue = SetValueMotionProfile.Enable;
+			System.out.println("I am running a profile");
 			talon.startMotionProfile(trajectoryPointStream, 10, ControlMode.MotionProfile);
         	System.out.println("MP started");
 		}
@@ -79,5 +83,13 @@ public class MotionProfile {
 	
 	public boolean isFinished() {
 		return talon.isMotionProfileFinished();
+	}
+
+	public void disableMotionProfile() { // this is had be called before another profile can br started
+		// MotionProfileStatus status = new MotionProfileStatus();
+		// talon.getMotionProfileStatus(status);
+		setValue = SetValueMotionProfile.Disable;
+		Dashboard.send("Motion Profile setVaue", setValue.toString());
+		
 	}
 }

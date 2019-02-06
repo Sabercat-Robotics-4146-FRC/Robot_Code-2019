@@ -54,44 +54,44 @@ public class Elevator {
                     if (RobotMap.driverController.getButtonA()) { 
                         // switch the direction and go to bottom port height.
                         lastDirection = direction;
-                        extracted();
+                        changeDirection();
                         level = LevelEnum.BOTTOM_PORT;
                     } else if (RobotMap.driverController.getButtonB()) {
                         // switch direction and going to ship port height
                         lastDirection = direction;
-                        extracted();
+                        changeDirection();
                         level = LevelEnum.SHIP_PORT;
                     } else if (RobotMap.driverController.getButtonX()) {
                         // switch direction and going to mid port height
                         lastDirection = direction;
-                        extracted();
+                        changeDirection();
                         level = LevelEnum.MID_PORT;
                     } else if (RobotMap.driverController.getButtonY()) {
                         // switch direction and goin to top port height
                         lastDirection = direction;
-                        extracted();
+                        changeDirection();
                         level = LevelEnum.TOP_PORT;
                     }
                 } else { // going to a hatch height
                     if (RobotMap.driverController.getButtonA()) {
                         // switch direction and go to intaking hatch height
                         lastDirection = direction;
-                        extracted();
+                        changeDirection();
                         level = LevelEnum.INTAKING_HATCH;
                     } else if (RobotMap.driverController.getButtonB()) {
                         // switch direction and go to intaking cargo height                                         check this so we can't intake cargo on wrong side of drivetrain
                         lastDirection = direction;
-                        extracted();
+                        changeDirection();
                         level = LevelEnum.INTAKING_CARGO;
                     } else if (RobotMap.driverController.getButtonX()) {
                         // switch direction and go to mid hatch height
                         lastDirection = direction;
-                        extracted();
+                        changeDirection();
                         level = LevelEnum.MID_HATCH;
                     } else if (RobotMap.driverController.getButtonY()) {
                         // switch direction and go to top hatch height
                         lastDirection = direction;
-                        extracted();
+                        changeDirection();
                         level = LevelEnum.TOP_HATCH;
                     }
                 }
@@ -138,13 +138,13 @@ public class Elevator {
 
         // this is just for testing motion profiling
         if (RobotMap.driverController.getButtonStart()) {
-            System.out.println("I want to run a profile");
             testProfile.startProfile();
             if (testProfile.isFinished()) {
                 System.out.println("MP Finished");
             }
         } else {
-            RobotMap.motionProfileTalon.set(ControlMode.PercentOutput, 0.0);
+            testProfile.disableMotionProfile();
+            RobotMap.motionProfileTalon.set(ControlMode.PercentOutput, RobotMap.driverController.getDeadbandLeftYAxis());
         }
 
         switch(level) {
@@ -324,14 +324,8 @@ public class Elevator {
         Dashboard.send("Elevetor state", str);
     }
 
-    private void extracted() {
+    private void changeDirection() {
         direction = direction == DirectionEnum.FRONT ? DirectionEnum.BACK : DirectionEnum.FRONT;
-        // if (rightBumperFlag && RobotMap.driverController.getRightBumper()) {
-        //     System.out.println("yo");
-        //     direction = direction == DirectionEnum.FRONT ? DirectionEnum.BACK : DirectionEnum.FRONT;
-        //     rightBumperFlag = false;
-        // }
-        
     }
     
 }
