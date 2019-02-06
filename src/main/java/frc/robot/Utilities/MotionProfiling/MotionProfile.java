@@ -1,4 +1,4 @@
-package frc.robot.MotionProfiling;
+package frc.robot.Utilities.MotionProfiling;
 
 import com.ctre.phoenix.motion.BufferedTrajectoryPointStream;
 import com.ctre.phoenix.motion.TrajectoryPoint;
@@ -41,7 +41,7 @@ public class MotionProfile {
 		// clear the buffer, in case it was used elsewhere 
 		trajectoryPointStream.Clear();
 
-		// Insert every point into buffer, no limit on size 
+		// Insert every point into buffer, no limit on size
 		for (int i = 0; i < totalCnt; ++i) {
 
 			double direction = forward ? +1 : -1;

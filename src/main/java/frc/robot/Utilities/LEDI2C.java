@@ -1,4 +1,4 @@
-package frc.robot.Subassemblies;
+package frc.robot.Utilities;
 
 import edu.wpi.first.wpilibj.I2C;
 
@@ -16,10 +16,11 @@ public class LEDI2C {
     }
 
     I2C leds;
-    ColorEnum colorState = ColorEnum.IDLE;
+    ColorEnum colorState;
 
     public LEDI2C(I2C leds) {
         this.leds = leds;
+        this.colorState = ColorEnum.IDLE;
     }
     
     public void changeColor (ColorEnum state) {

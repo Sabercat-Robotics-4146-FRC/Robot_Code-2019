@@ -1,11 +1,9 @@
 
 package frc.robot;
 
-import com.ctre.phoenix.motorcontrol.FeedbackDevice;
-import com.ctre.phoenix.motorcontrol.can.TalonSRXConfiguration;
+import com.ctre.phoenix.motorcontrol.ControlMode;
 
 import edu.wpi.first.wpilibj.SampleRobot;
-import frc.robot.Subassemblies.Elevator;
 
 public class Robot extends SampleRobot {
 	public Robot() {
@@ -35,59 +33,44 @@ public class Robot extends SampleRobot {
 	 */
 	@Override
 	public void operatorControl() {
-		Elevator elevator = new Elevator(); // get rid of this it is for testing
-
-		TalonSRXConfiguration config = new TalonSRXConfiguration();
-	
-		/**
-		 * PID Gains may have to be adjusted based on the responsiveness of control loop
-		 * 	           			  kP   kI    kD     kF(why)      Iz   PeakOut */
-		Gains kGains = new Gains( 1.0, 0.0, 0.0, 1023.0/6800.0, 400, 1.00 );
-
-		/* _config the master specific settings */
-        config.primaryPID.selectedFeedbackSensor = FeedbackDevice.CTRE_MagEncoder_Absolute;
-        config.neutralDeadband = 0.001; /* 0.1 % super small for best low-speed control. the min value. */
-        config.slot0.kF = kGains.kF;
-        config.slot0.kP = kGains.kP;
-        config.slot0.kI = kGains.kI;
-        config.slot0.kD = kGains.kD;
-        config.slot0.integralZone = (int)kGains.kIzone;
-        config.slot0.closedLoopPeakOutput = kGains.kPeakOutput;
-        // _config.slot0.allowableClosedloopError // left default for this example
-        // _config.slot0.maxIntegralAccumulator; // left default for this example
-        // _config.slot0.closedLoopPeriod; // left default for this example
-		RobotMap.elevatorTop.configAllSettings(config);
-
 		while (isOperatorControl() && isEnabled()) {
-			elevator.update();
+			RobotMap.timer.update();
+			RobotMap.arm.update();
+			RobotMap.drivetrain.update();
+			RobotMap.elevator.update();
+			RobotMap.intake.update();
 
-			// RobotMap.timer.update();
-			
-			// RobotMap.elevatorTop.set(ControlMode.PercentOutput, RobotMap.driverController.getDeadbandLeftYAxis());
-			// RobotMap.arm.set(ControlMode.PercentOutput, RobotMap.driverController.getDeadbandLeftYAxis());
+			// Testing DT motors direction code
+			// <editor-fold>
+			if(RobotMap.driverController.getButtonA()) {
+				RobotMap.driveLeftFront.set(ControlMode.Current, 0.3);
+			} else {
+				RobotMap.driveLeftFront.set(ControlMode.Current, 0.0);
+			}
 
-			
+			if(RobotMap.driverController.getButtonB()) {
+				RobotMap.driveLeftBack.set(ControlMode.Current, 0.3);
+			} else {
+				RobotMap.driveLeftBack.set(ControlMode.Current, 0.0);
+			}
 
-			// try{
-			// 	Logger.update(RobotMap.timer.getDT());
-			// } catch(IOException e){
-			// 	System.out.println("Logger IOException: " + e);
-			// }
+			if(RobotMap.driverController.getButtonX()) {
+				RobotMap.driveRightFront.set(ControlMode.Current, 0.3);
+			} else {
+				RobotMap.driveRightFront.set(ControlMode.Current, 0.0);
+			}
+
+			if(RobotMap.driverController.getButtonY()) {
+				RobotMap.driveRightBack.set(ControlMode.Current, 0.3);
+			} else {
+				RobotMap.driveRightBack.set(ControlMode.Current, 0.0);
+			}
+			// </editor-fold>
 
 			// Drive Code
 			// <editor-fold>
 			// RobotMap.drive.arcadeDrive(RobotMap.driverController.getDeadbandLeftYAxis(),
 			// 	RobotMap.driverController.getDeadbandRightXAxis());
-			
-			// if(RobotMap.driverController.getButtonA()){
-			// 	RobotMap.leftBottom.set(ControlMode.PercentOutput, 0.3);
-			// } else {
-			// 	RobotMap.leftBottom.set(ControlMode.PercentOutput, 0.0);
-			// }
-			
-			// This one suposidly decreases input sensitivity at lower speeds.
-			// RobotMap.drive.arcadeDrive(RobotMap.driverController.getDeadbandLeftYAxis(),
-			// 	RobotMap.driverController.getDeadbandRightXAxis(), true);
 			// </editor-fold>
 		}
 	}

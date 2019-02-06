@@ -2,16 +2,20 @@ package frc.robot;
 
 import com.ctre.phoenix.motorcontrol.can.TalonSRX;
 import com.ctre.phoenix.motorcontrol.can.WPI_TalonSRX;
+import com.ctre.phoenix.sensors.PigeonIMU;
 
+import edu.wpi.first.wpilibj.AnalogPotentiometer;
+import edu.wpi.first.wpilibj.DigitalInput;
+import edu.wpi.first.wpilibj.Encoder;
 import edu.wpi.first.wpilibj.I2C;
 import edu.wpi.first.wpilibj.I2C.Port;
 import edu.wpi.first.wpilibj.drive.DifferentialDrive;
 import edu.wpi.first.wpilibj.SpeedControllerGroup;
 
 // Our Imports
+import frc.robot.Subassemblies.*;
 import frc.robot.Utilities.*;
-import frc.robot.Subassemblies.LEDI2C;
-import frc.robot.Subassemblies.Pixy.*;
+import frc.robot.Utilities.Pixy.*;
 
 public class RobotMap {
 	public static Robot ROBOT;
@@ -25,7 +29,6 @@ public class RobotMap {
 	public static final double VISION_kD = 0.0;
 	public static final int PIXY_ADDRESS = 0x54;
 	public static final int LED_ADDRESS = 0x55;
-	public static final int PIXY_SIGNATURES_USED = 1; // Unused? 
 	public static final String PIXY_NAME = "Main Pixy";
 	public static int checksumErrorCount = 0; // not actually a constant.
 
@@ -34,86 +37,135 @@ public class RobotMap {
 	public final static double kNeutralDeadband = 0.001; // Motor neutral dead-band, set to the minimum 0.1%.
 	public final static int kPrimaryPIDSlot = 0; // any slot [0,3]
 	
-	/////// Declarations ///////
-	// Controller Declarations
-	public static Controller driverController;
-
+	/////// Declaring ///////
+	// Utility Declatations
 	public static Timer timer;
+	public static Controller driverController;
+	public static PixyI2C pixy;
+	public static LEDI2C leds;
 
-	// Motor Controller Declarations
-	public static WPI_TalonSRX leftTop;
-	public static WPI_TalonSRX leftBottom;
-	public static WPI_TalonSRX rightTop;
-	public static WPI_TalonSRX rightBottom;
+	/// Motor Controller Declarations ///
+	public static WPI_TalonSRX driveLeftFront;
+	public static WPI_TalonSRX driveLeftBack;
+	public static WPI_TalonSRX driveRightFront;
+	public static WPI_TalonSRX driveRightBack;
 	
-	public static TalonSRX elevatorTop;
-	public static TalonSRX elevatorBottom;
-	public static TalonSRX arm;
+	public static TalonSRX elevatorFront;
+	public static TalonSRX elevatorBack;
+	public static TalonSRX armPivot;
+	public static TalonSRX cargoRoller;
 
-	// Differential Drive Speed Controller Declaration
+	public static TalonSRX EGL_leftTop;
+	public static TalonSRX EGL_leftBottom;
+	public static TalonSRX EGL_rightTop;
+	public static TalonSRX EGL_rightBottom;
+
+	// Speed Controller Group Declaration
 	public static SpeedControllerGroup leftDriveMotors;
 	public static SpeedControllerGroup rightDriveMotors;
 
-	//// Sub-System Declarations ////
-	public static PixyI2C pixy;
-	public static LEDI2C leds;
-	public static DifferentialDrive drive; // is this meant to be here?
+	// Differential Drive Declaration
+	public static DifferentialDrive drive;
 
+	/// Sensor Declarations ///
+	public static Encoder leftDriveEncoder;
+	public static Encoder rightDriveEncoder;
+
+	public static AnalogPotentiometer armPot;
+	public static AnalogPotentiometer EGLPot;
+
+	public static DigitalInput elevatorLimitSwitch;
+	public static DigitalInput cargoLeftLimitSwitch;
+	public static DigitalInput cargoRightLimitSwitch;
+
+	public static PigeonIMU pidgey;
+
+	//// Sub-System Declarations ////
+	public static Arm arm;
+	public static Drivetrain drivetrain;
+	public static EGL egl;
+	public static Elevator elevator;
+	public static Intake intake;
 	
 	public static void init() { // This is to be called in robitInit and instantiates stuff.
 		/////// Initilizing ///////
-		// Controllers Initialization
-		driverController = new Controller(0);
-
+		// Utility Initilization
 		timer = new Timer();
-
-		// Motor Controllers Initialization
-
-		leftTop = new WPI_TalonSRX(1);
-		leftBottom = new WPI_TalonSRX(2);
-		rightTop = new WPI_TalonSRX(3);
-		rightBottom = new WPI_TalonSRX(4);
-			
-		rightTop.setInverted(true); 
-		rightBottom.setInverted(true);
-
-		leftTop.setSafetyEnabled(false);
-    	rightTop.setSafetyEnabled(false);
-    	leftBottom.setSafetyEnabled(false);
-    	rightBottom.setSafetyEnabled(false);
-		
-		elevatorTop = new TalonSRX(5);
-		elevatorBottom = new TalonSRX(6);
-
-		elevatorTop.configFactoryDefault();
-		elevatorBottom.configFactoryDefault();
-		elevatorBottom.follow(elevatorTop);
-
-		arm = new TalonSRX(7);
-		arm.configFactoryDefault();
-
-		SpeedControllerGroup leftDriveMotors = new SpeedControllerGroup(leftTop, leftBottom); // where should I put these?
-		SpeedControllerGroup rightDriveMotors = new SpeedControllerGroup(rightTop, rightBottom);
-
-		//// Sub-System Initilization ////
+		driverController = new Controller(0);
 		pixy = new PixyI2C(PIXY_NAME, new I2C(Port.kOnboard, PIXY_ADDRESS));
-
 		leds = new LEDI2C(new I2C(Port.kOnboard, LED_ADDRESS));
 
-		drive = new DifferentialDrive(leftDriveMotors, rightDriveMotors);
+		// Motor Controller Initialization
+		driveLeftFront = new WPI_TalonSRX(1);
+		driveLeftBack = new WPI_TalonSRX(2);
+		driveRightFront = new WPI_TalonSRX(3);
+		driveRightBack = new WPI_TalonSRX(4);
 
+		driveLeftFront.configFactoryDefault();
+		driveLeftBack.configFactoryDefault();
+		driveRightFront.configFactoryDefault();
+		driveRightBack.configFactoryDefault();
+		driveLeftFront.setSafetyEnabled(false);
+		driveLeftBack.setSafetyEnabled(false);
+		driveRightFront.setSafetyEnabled(false);
+		driveRightBack.setSafetyEnabled(false);
+		driveRightFront.setInverted(true); // Inverted for the drive
+		driveRightBack.setInverted(true);
+		
+		elevatorFront = new TalonSRX(5);
+		elevatorBack = new TalonSRX(6);
+
+		elevatorFront.configFactoryDefault();
+		elevatorBack.configFactoryDefault();
+		elevatorBack.follow(elevatorFront);
+
+		armPivot = new TalonSRX(7);
+		armPivot.configFactoryDefault();
+
+		cargoRoller = new TalonSRX(8);
+		cargoRoller.configFactoryDefault();
+		cargoRoller.setInverted(true); // Maybe???????
+
+		EGL_leftTop = new TalonSRX(9);
+		EGL_leftBottom = new TalonSRX(10);
+		EGL_rightTop = new TalonSRX(11);
+		EGL_rightBottom = new TalonSRX(12);
+
+		EGL_leftTop.configFactoryDefault();
+		EGL_leftBottom.configFactoryDefault();
+		EGL_rightTop.configFactoryDefault();
+		EGL_rightBottom.configFactoryDefault();
+
+		EGL_rightTop.setInverted(true); // Maybe????????
+		EGL_rightBottom.setInverted(true);
+
+		// Motor Group Initilization
+		leftDriveMotors = new SpeedControllerGroup(driveLeftFront, driveLeftBack);
+		rightDriveMotors = new SpeedControllerGroup(driveRightFront, driveRightBack);
+
+		// Differential Drive Initilization
+		drive = new DifferentialDrive(leftDriveMotors, rightDriveMotors);
 		drive.setRightSideInverted(false);
 		drive.setSafetyEnabled(false);
-		
 
-		// TODO
-		// drive = new DifferentialDrive(leftDriveMotors, rightDriveMotors);
-		/* diff drive assumes (by default) that 
-			right side must be negative to move forward.
-			Change to 'false' so positive/green-LEDs moves robot forward.
-			Make things go the right way by using motor controller inversions. 
-			https://github.com/CrossTheRoadElec/Phoenix-Examples-Languages/blob/master/Java/SixTalonArcadeDrive/src/main/java/frc/robot/Robot.java*/
-		// _drive.setRightSideInverted(false);
-		// drive.setSafetyEnabled(false);
+		// Sensor Initilization
+		leftDriveEncoder = new Encoder(1, 2, false, Encoder.EncodingType.k4X);
+		rightDriveEncoder = new Encoder(3, 4, true, Encoder.EncodingType.k4X);
+
+		armPot = new AnalogPotentiometer(0);
+		EGLPot = new AnalogPotentiometer(1);
+
+		elevatorLimitSwitch = new DigitalInput(0);
+		cargoLeftLimitSwitch = new DigitalInput(1);
+		cargoRightLimitSwitch = new DigitalInput(2);
+
+		pidgey = new PigeonIMU(a_talon);
+
+		//// Sub-System Initilization ////
+		arm = new Arm();
+		drivetrain = new Drivetrain();
+		egl = new EGL();
+		elevator = new Elevator();
+		intake = new Intake();
 	}
 }

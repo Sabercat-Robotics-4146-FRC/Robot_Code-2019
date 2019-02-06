@@ -1,7 +1,7 @@
-package frc.robot.PID;
+package frc.robot.Utilities.PID;
 
 import frc.robot.RobotMap;
-import frc.robot.Subassemblies.Pixy.*;
+import frc.robot.Utilities.Pixy.PixyI2C;
 import frc.robot.Utilities.Logger;
 
 

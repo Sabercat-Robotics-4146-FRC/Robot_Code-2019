@@ -1,4 +1,4 @@
-package frc.robot.Subassemblies.Pixy;
+package frc.robot.Utilities.Pixy;
 
 import edu.wpi.first.wpilibj.I2C;
 import frc.robot.RobotMap;
