@@ -35,7 +35,7 @@ public abstract class PID {
 
 
 	public PID( double sampleRate, double errorTolerance ){
-		setpoint = 0;
+		  setpoint = 0;
 	    integral = 0;
 	    nIterationsInTolerance = 0;
 	    this.sampleRate = sampleRate;
