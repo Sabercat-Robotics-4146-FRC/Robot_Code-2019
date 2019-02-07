@@ -1,4 +1,4 @@
-package frc.robot;
+package frc.robot.Utilities.MotionProfiling;
 
 /**
  *  Class that organizes gains used when assigning values to slots

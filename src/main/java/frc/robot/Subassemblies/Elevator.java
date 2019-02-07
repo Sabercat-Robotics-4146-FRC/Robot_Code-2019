@@ -3,8 +3,6 @@ package frc.robot.Subassemblies;
 import edu.wpi.first.wpilibj.Relay.Direction;
 import frc.robot.Robot;
 import frc.robot.RobotMap;
-import frc.robot.MotionProfiling.GeneratedProfiles;
-import frc.robot.MotionProfiling.MotionProfile;
 import frc.robot.Utilities.Dashboard;
 
 import com.ctre.phoenix.motorcontrol.ControlMode;
@@ -12,11 +10,8 @@ import com.ctre.phoenix.motorcontrol.can.TalonSRX;
 
 public class Elevator {
 
-    MotionProfile testProfile;
-
     public Elevator() {
-        
-        testProfile = new MotionProfile(RobotMap.motionProfileTalon, GeneratedProfiles.testProfile, GeneratedProfiles.kNumPointsTestProfile);
+    
     }
 
     public enum LevelEnum {
@@ -41,7 +36,6 @@ public class Elevator {
     DirectionEnum lastDirection = DirectionEnum.FRONT;
 
     String str = "";
-    boolean rightBumperFlag = true;
     boolean buttonFlag = true;
 
     public void update() {
@@ -54,44 +48,44 @@ public class Elevator {
                     if (RobotMap.driverController.getButtonA()) { 
                         // switch the direction and go to bottom port height.
                         lastDirection = direction;
-                        extracted();
+                        changeDirection();
                         level = LevelEnum.BOTTOM_PORT;
                     } else if (RobotMap.driverController.getButtonB()) {
                         // switch direction and going to ship port height
                         lastDirection = direction;
-                        extracted();
+                        changeDirection();
                         level = LevelEnum.SHIP_PORT;
                     } else if (RobotMap.driverController.getButtonX()) {
                         // switch direction and going to mid port height
                         lastDirection = direction;
-                        extracted();
+                        changeDirection();
                         level = LevelEnum.MID_PORT;
                     } else if (RobotMap.driverController.getButtonY()) {
                         // switch direction and goin to top port height
                         lastDirection = direction;
-                        extracted();
+                        changeDirection();
                         level = LevelEnum.TOP_PORT;
                     }
                 } else { // going to a hatch height
                     if (RobotMap.driverController.getButtonA()) {
                         // switch direction and go to intaking hatch height
                         lastDirection = direction;
-                        extracted();
+                        changeDirection();
                         level = LevelEnum.INTAKING_HATCH;
                     } else if (RobotMap.driverController.getButtonB()) {
                         // switch direction and go to intaking cargo height                                         check this so we can't intake cargo on wrong side of drivetrain
                         lastDirection = direction;
-                        extracted();
+                        changeDirection();
                         level = LevelEnum.INTAKING_CARGO;
                     } else if (RobotMap.driverController.getButtonX()) {
                         // switch direction and go to mid hatch height
                         lastDirection = direction;
-                        extracted();
+                        changeDirection();
                         level = LevelEnum.MID_HATCH;
                     } else if (RobotMap.driverController.getButtonY()) {
                         // switch direction and go to top hatch height
                         lastDirection = direction;
-                        extracted();
+                        changeDirection();
                         level = LevelEnum.TOP_HATCH;
                     }
                 }
@@ -136,17 +130,6 @@ public class Elevator {
             }
         }
 
-        // this is just for testing motion profiling
-        if (RobotMap.driverController.getButtonStart()) {
-            System.out.println("I want to run a profile");
-            testProfile.startProfile();
-            if (testProfile.isFinished()) {
-                System.out.println("MP Finished");
-            }
-        } else {
-            RobotMap.motionProfileTalon.set(ControlMode.PercentOutput, 0.0);
-        }
-
         switch(level) {
             case STORAGE:
                 break;
@@ -156,9 +139,13 @@ public class Elevator {
                     if (lastDirection == DirectionEnum.FRONT) {
                         // lift the elevator to the correct value
                         str = ("Front, Intaking Cargo");
+                        moveElevator(RobotMap.FRONT_INTAKING_CARGO_HEIGHT);
                     } else if (lastDirection == DirectionEnum.BACK) {
                         // move the arm over and move elevator to the correct value
                         str = ("Switching to Front, Intaking Cargo");
+                        moveElevator(RobotMap.ARM_OVER_HEIGHT);
+                        // start motion profile for the arm
+                        moveElevator(RobotMap.FRONT_INTAKING_CARGO_HEIGHT);
                     }
                 } else if (direction == DirectionEnum.BACK) {
                     if (lastDirection == DirectionEnum.FRONT) {
@@ -176,17 +163,25 @@ public class Elevator {
                     if (lastDirection == DirectionEnum.FRONT) {
                         // lift the elevator to the correct value
                         str = ("Front, Intaking Hatch");
+                        moveElevator(RobotMap.FRONT_INTAKING_HATCH_HEIGHT);
                     } else if (lastDirection == DirectionEnum.BACK) {
                         // move arm over and lift elevator to the correct value
                         str = ("Switching to Front, Intaking Hatch");
+                        moveElevator(RobotMap.ARM_OVER_HEIGHT);
+                        // start motion profile for the arm
+                        moveElevator(RobotMap.FRONT_INTAKING_HATCH_HEIGHT);
                     }
                 } else if (direction == DirectionEnum.BACK) {
                     if (lastDirection == DirectionEnum.FRONT) {
                         // move arm over and lift elevator to the correct value
                         str = ("Switching to Back, Intaking Hatch");
+                        moveElevator(RobotMap.ARM_OVER_HEIGHT);
+                        // start motion profile for the arm
+                        moveElevator(RobotMap.BACK_INTAKING_HATCH_HEIGHT);
                     } else if (lastDirection == DirectionEnum.BACK) {
                         // lift the elevator to the correct value
                         str = ("Back, Intaking Hatch");
+                        moveElevator(RobotMap.BACK_INTAKING_HATCH_HEIGHT);
                     }
                 }
                 break;
@@ -196,17 +191,25 @@ public class Elevator {
                     if (lastDirection == DirectionEnum.FRONT) {
                         // lift the elevator to the correct value
                         str = ("Front, Bottom Port");
+                        moveElevator(RobotMap.FRONT_BOTTOM_PORT_HEIGHT);
                     } else if (lastDirection == DirectionEnum.BACK) {
                         // move arm over and lift elevator to the correct value
                         str = ("Switching to Front, Bottom Port");
+                        moveElevator(RobotMap.ARM_OVER_HEIGHT);
+                        // start motion profile for the arm
+                        moveElevator(RobotMap.FRONT_BOTTOM_PORT_HEIGHT);
                     }
                 } else if (direction == DirectionEnum.BACK) {
                     if (lastDirection == DirectionEnum.FRONT) {
                         // move arm over and lift elevator to the correct value
                         str = ("Switching to Back, Bottom Port");
+                        moveElevator(RobotMap.ARM_OVER_HEIGHT);
+                        // start motion profile for the arm
+                        moveElevator(RobotMap.BACK_BOTTOM_PORT_HEIGHT);
                     } else if (lastDirection == DirectionEnum.BACK) {
                         // lift the elevator to the correct value
                         str = ("Back, Bottom Port");
+                        moveElevator(RobotMap.BACK_BOTTOM_PORT_HEIGHT);
                     }
                 }
                 break;
@@ -216,17 +219,25 @@ public class Elevator {
                     if (lastDirection == DirectionEnum.FRONT) {
                         // lift the elevator to the correct value
                         str = ("Front, Ship Port");
+                        moveElevator(RobotMap.FRONT_SHIP_PORT_HEIGHT);
                     } else if (lastDirection == DirectionEnum.BACK) {
                         // move arm over and lift elevator to the correct value
                         str = ("Switching to Front, Ship Port");
+                        moveElevator(RobotMap.ARM_OVER_HEIGHT);
+                        // start motion profile for the arm
+                        moveElevator(RobotMap.FRONT_SHIP_PORT_HEIGHT);
                     }
                 } else if (direction == DirectionEnum.BACK) {
                     if (lastDirection == DirectionEnum.FRONT) {
                         // move arm over and lift elevator to the correct value
                         str = ("Switching to Back, Ship Port");
+                        moveElevator(RobotMap.ARM_OVER_HEIGHT);
+                        // start motion profile for the arm
+                        moveElevator(RobotMap.BACK_SHIP_PORT_HEIGHT);
                     } else if (lastDirection == DirectionEnum.BACK) {
                         // lift the elevator to the correct value
                         str = ("Back, Ship Port");
+                        moveElevator(RobotMap.BACK_SHIP_PORT_HEIGHT);
                     }
                 }
                 break;
@@ -236,17 +247,25 @@ public class Elevator {
                     if (lastDirection == DirectionEnum.FRONT) {
                         // lift the elevator to the correct value
                         str = ("Front, Mid Hatch");
+                        moveElevator(RobotMap.FRONT_MID_HATCH_HEIGHT);
                     } else if (lastDirection == DirectionEnum.BACK) {
                         // move arm over and lift elevator to the correct value
                         str = ("Switching to Front, Mid Hatch");
+                        moveElevator(RobotMap.ARM_OVER_HEIGHT);
+                        // start motion profile for the arm
+                        moveElevator(RobotMap.FRONT_MID_HATCH_HEIGHT);
                     }
                 } else if (direction == DirectionEnum.BACK) {
                     if (lastDirection == DirectionEnum.FRONT) {
                         // move arm over and lift elevator to the correct value
                         str = ("Switching to Back, Mid Hatch");
+                        moveElevator(RobotMap.ARM_OVER_HEIGHT);
+                        // start motion profile for the arm
+                        moveElevator(RobotMap.BACK_MID_HATCH_HEIGHT);
                     } else if (lastDirection == DirectionEnum.BACK) {
                         // lift the elevator to the correct value
                         str = ("Back, Mid Hatch");
+                        moveElevator(RobotMap.BACK_MID_HATCH_HEIGHT);
                     }
                 }
                 break;
@@ -256,17 +275,25 @@ public class Elevator {
                     if (lastDirection == DirectionEnum.FRONT) {
                         // lift the elevator to the correct value
                         str = ("Front, Mid Port");
+                        moveElevator(RobotMap.FRONT_MID_PORT_HEIGHT);
                     } else if (lastDirection == DirectionEnum.BACK) {
                         // move arm over and lift elevator to the correct value
                         str = ("Switching to Front, Mid Port");
+                        moveElevator(RobotMap.ARM_OVER_HEIGHT);
+                        // start motion profile for the arm
+                        moveElevator(RobotMap.FRONT_MID_PORT_HEIGHT);
                     }
                 } else if (direction == DirectionEnum.BACK) {
                     if (lastDirection == DirectionEnum.FRONT) {
                         // move arm over and lift elevator to the correct value
                         str = ("Switching to Back, Mid Port");
+                        moveElevator(RobotMap.ARM_OVER_HEIGHT);
+                        // start motion profile for the arm
+                        moveElevator(RobotMap.BACK_MID_PORT_HEIGHT);
                     } else if (lastDirection == DirectionEnum.BACK) {
                         // lift the elevator to the correct value
                         str = ("Back, Mid Port");
+                        moveElevator(RobotMap.BACK_MID_PORT_HEIGHT);
                     }
                 }
                 break;
@@ -276,17 +303,25 @@ public class Elevator {
                     if (lastDirection == DirectionEnum.FRONT) {
                         // lift the elevator to the correct value
                         str = ("Front, Top Hatch");
+                        moveElevator(RobotMap.FRONT_TOP_HATCH_HEIGHT);
                     } else if (lastDirection == DirectionEnum.BACK) {
                         // move arm over and lift elevator to the correct value
                         str = ("Switching to Front, Top Hatch");
+                        moveElevator(RobotMap.ARM_OVER_HEIGHT);
+                        // start motion profile for the arm
+                        moveElevator(RobotMap.FRONT_TOP_HATCH_HEIGHT);
                     }
                 } else if (direction == DirectionEnum.BACK) {
                     if (lastDirection == DirectionEnum.FRONT) {
                         // move arm over and lift elevator to the correct value
                         str = ("Switching to Back, Top Hatch");
+                        moveElevator(RobotMap.ARM_OVER_HEIGHT);
+                        // start motion profile for the arm
+                        moveElevator(RobotMap.BACK_TOP_HATCH_HEIGHT);
                     } else if (lastDirection == DirectionEnum.BACK) {
                         // lift the elevator to the correct value
                         str = ("Back, Top Hatch");
+                        moveElevator(RobotMap.BACK_TOP_HATCH_HEIGHT);
                     }
                 }
                 break;
@@ -296,25 +331,29 @@ public class Elevator {
                     if (lastDirection == DirectionEnum.FRONT) {
                         // lift the elevator to the correct value
                         str = ("Front, Top Port");
+                        moveElevator(RobotMap.FRONT_TOP_PORT_HEIGHT);
                     } else if (lastDirection == DirectionEnum.BACK) {
                         // move arm over and lift elevator to the correct value
                         str = ("Switching to Front, Top Port");
+                        moveElevator(RobotMap.ARM_OVER_HEIGHT);
+                        // start motion profile for the arm
+                        moveElevator(RobotMap.FRONT_TOP_PORT_HEIGHT);
                     }
                 } else if (direction == DirectionEnum.BACK) {
                     if (lastDirection == DirectionEnum.FRONT) {
                         // move arm over and lift elevator to the correct value
                         str = ("Switching to Back, Top Port");
+                        moveElevator(RobotMap.ARM_OVER_HEIGHT);
+                        // start motion profile for the arm
+                        moveElevator(RobotMap.BACK_TOP_PORT_HEIGHT);
                     } else if (lastDirection == DirectionEnum.BACK) {
                         // lift the elevator to the correct value
                         str = ("Back, Top Port");
+                        moveElevator(RobotMap.BACK_TOP_PORT_HEIGHT);
                     }
                 }
                 break;
         }
-
-        // if (!RobotMap.driverController.getRightBumper()) {
-        //     rightBumperFlag = true;
-        // }
 
         if (!RobotMap.driverController.getButtonA() && !RobotMap.driverController.getButtonB() && 
             !RobotMap.driverController.getButtonX() && !RobotMap.driverController.getButtonY()) {
@@ -324,14 +363,12 @@ public class Elevator {
         Dashboard.send("Elevetor state", str);
     }
 
-    private void extracted() {
+    private void changeDirection() {
         direction = direction == DirectionEnum.FRONT ? DirectionEnum.BACK : DirectionEnum.FRONT;
-        // if (rightBumperFlag && RobotMap.driverController.getRightBumper()) {
-        //     System.out.println("yo");
-        //     direction = direction == DirectionEnum.FRONT ? DirectionEnum.BACK : DirectionEnum.FRONT;
-        //     rightBumperFlag = false;
-        // }
-        
+    }
+
+    private void moveElevator(double setPoint) {
+        RobotMap.elevatorFront.set(ControlMode.Position, setPoint);
     }
     
 }
