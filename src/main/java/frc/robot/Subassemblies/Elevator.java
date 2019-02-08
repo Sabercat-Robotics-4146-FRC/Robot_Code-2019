@@ -17,7 +17,7 @@ public class Elevator {
     public enum LevelEnum {
         STORAGE,
         INTAKING_CARGO,
-        INTAKING_HATCH,     // change this to a better name 
+        INTAKING_HATCH,     // change this to a better name
         BOTTOM_PORT,
         SHIP_PORT,
         MID_HATCH,

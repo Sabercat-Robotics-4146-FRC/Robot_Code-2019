@@ -35,36 +35,38 @@ public class Robot extends SampleRobot {
 	public void operatorControl() {
 		while (isOperatorControl() && isEnabled()) {
 			RobotMap.timer.update();
+
 			RobotMap.arm.update();
 			RobotMap.drivetrain.update();
 			RobotMap.elevator.update();
 			RobotMap.intake.update();
+			RobotMap.limelight.update();
 
 			// Testing DT motors direction code
 			// <editor-fold>
-			if(RobotMap.driverController.getButtonA()) {
-				RobotMap.driveLeftFront.set(ControlMode.Current, 0.3);
-			} else {
-				RobotMap.driveLeftFront.set(ControlMode.Current, 0.0);
-			}
+			// if(RobotMap.driverController.getButtonA()) {
+			// 	RobotMap.driveLeftFront.set(ControlMode.Current, 0.3);
+			// } else {
+			// 	RobotMap.driveLeftFront.set(ControlMode.Current, 0.0);
+			// }
 
-			if(RobotMap.driverController.getButtonB()) {
-				RobotMap.driveLeftBack.set(ControlMode.Current, 0.3);
-			} else {
-				RobotMap.driveLeftBack.set(ControlMode.Current, 0.0);
-			}
+			// if(RobotMap.driverController.getButtonB()) {
+			// 	RobotMap.driveLeftBack.set(ControlMode.Current, 0.3);
+			// } else {
+			// 	RobotMap.driveLeftBack.set(ControlMode.Current, 0.0);
+			// }
 
-			if(RobotMap.driverController.getButtonX()) {
-				RobotMap.driveRightFront.set(ControlMode.Current, 0.3);
-			} else {
-				RobotMap.driveRightFront.set(ControlMode.Current, 0.0);
-			}
+			// if(RobotMap.driverController.getButtonX()) {
+			// 	RobotMap.driveRightFront.set(ControlMode.Current, 0.3);
+			// } else {
+			// 	RobotMap.driveRightFront.set(ControlMode.Current, 0.0);
+			// }
 
-			if(RobotMap.driverController.getButtonY()) {
-				RobotMap.driveRightBack.set(ControlMode.Current, 0.3);
-			} else {
-				RobotMap.driveRightBack.set(ControlMode.Current, 0.0);
-			}
+			// if(RobotMap.driverController.getButtonY()) {
+			// 	RobotMap.driveRightBack.set(ControlMode.Current, 0.3);
+			// } else {
+			// 	RobotMap.driveRightBack.set(ControlMode.Current, 0.0);
+			// }
 			// </editor-fold>
 
 			// Drive Code

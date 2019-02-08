@@ -1,7 +1,7 @@
 package frc.robot.Subassemblies;
 
-public class EGL {
-    public EGL() {
+public class EndGameLift {
+    public EndGameLift() {
 
     }
 

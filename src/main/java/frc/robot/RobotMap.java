@@ -23,6 +23,7 @@ public class RobotMap {
 	/////// Constants ///////
 	// Vision Constants
 	public static final int PIXY_UPDATE_RATE = 50; //Htz
+	public static final int LIMELIGHT_UPDATE_RATE = 90; //Htz
 	public static final double VISION_BREAK_TOLERANCE = 1.5; //degrees?
 	public static final double VISION_kP = 1.0;
 	public static final double VISION_kI = 0.0;
@@ -101,10 +102,12 @@ public class RobotMap {
 
 	public static PigeonIMU pidgey;
 
+	public static Limelight limelight;
+
 	//// Sub-System Declarations ////
 	public static Arm arm;
 	public static Drivetrain drivetrain;
-	public static EGL egl;
+	public static EndGameLift egl;
 	public static Elevator elevator;
 	public static Intake intake;
 	
@@ -180,12 +183,14 @@ public class RobotMap {
 		cargoLeftLimitSwitch = new DigitalInput(1);
 		cargoRightLimitSwitch = new DigitalInput(2);
 
-		//pidgey = new PigeonIMU(a_talon);
+		// pidgey = new PigeonIMU(a_talon); TODO
+
+		limelight = new Limelight();
 
 		//// Sub-System Initilization ////
 		arm = new Arm();
 		drivetrain = new Drivetrain();
-		egl = new EGL();
+		egl = new EndGameLift();
 		elevator = new Elevator();
 		intake = new Intake();
 	}
