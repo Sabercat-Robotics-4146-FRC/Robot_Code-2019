@@ -5,6 +5,8 @@ import frc.robot.Robot;
 import frc.robot.RobotMap;
 import frc.robot.MotionProfiling.GeneratedProfiles;
 import frc.robot.MotionProfiling.MotionProfile;
+import frc.robot.MotionProfiling2.GeneratedProfiles2;
+import frc.robot.MotionProfiling2.MotionProfile2;
 import frc.robot.Utilities.Dashboard;
 
 import com.ctre.phoenix.motorcontrol.ControlMode;
@@ -12,11 +14,13 @@ import com.ctre.phoenix.motorcontrol.can.TalonSRX;
 
 public class Elevator {
 
-    MotionProfile testProfile;
+    //MotionProfile testProfile;
+    MotionProfile2 testProfile2;
 
     public Elevator() {
         
-        testProfile = new MotionProfile(RobotMap.motionProfileTalon, GeneratedProfiles.testProfile, GeneratedProfiles.kNumPointsTestProfile);
+        //testProfile = new MotionProfile(RobotMap.motionProfileTalon, GeneratedProfiles.testProfile, GeneratedProfiles.kNumPointsTestProfile);
+        testProfile2 = new MotionProfile2(RobotMap.motionProfileTalon);
     }
 
     public enum LevelEnum {
@@ -138,13 +142,19 @@ public class Elevator {
 
         // this is just for testing motion profiling
         if (RobotMap.driverController.getButtonStart()) {
-            testProfile.startProfile();
-            if (testProfile.isFinished()) {
-                System.out.println("MP Finished");
+            //testProfile2.initBuffer(GeneratedProfiles.testProfile, GeneratedProfiles.kNumPointsTestProfile);
+            testProfile2.startProfile(GeneratedProfiles2.testProfile1, GeneratedProfiles2.kNumPointsTestProfile1);
+            if (testProfile2.isFinished()) {
+                //System.out.println("MP1 Finished");
             }
-        } else {
-            testProfile.disableMotionProfile();
-            RobotMap.motionProfileTalon.set(ControlMode.PercentOutput, RobotMap.driverController.getDeadbandLeftYAxis());
+        } else if (RobotMap.driverController.getButtonBack()) {
+            testProfile2.startProfile(GeneratedProfiles2.testProfile2, GeneratedProfiles2.kNumPointsTestProfile2);
+            if (testProfile2.isFinished()) {
+                //System.out.println("MP2 Finished");
+            }
+        } else if (RobotMap.driverController.getLeftTriggerBool()) {
+            testProfile2.disableMotionProfile();
+            //RobotMap.motionProfileTalon.set(ControlMode.PercentOutput, RobotMap.driverController.getDeadbandLeftYAxis());
         }
 
         switch(level) {
