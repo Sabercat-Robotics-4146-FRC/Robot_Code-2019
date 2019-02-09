@@ -58,6 +58,8 @@ public class RobotMap {
 	public static final double BACK_TOP_PORT_HEIGHT = 0.0;
 
 	public static final double ARM_OVER_HEIGHT = 0.0;
+
+	public static final double LIMELIGHT_PORT_TAPE_HEIGHT = 0.0;
 	
 	/////// Declaring ///////
 	// Utility Declatations
