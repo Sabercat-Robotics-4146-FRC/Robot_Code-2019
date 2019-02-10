@@ -3,6 +3,7 @@ package frc.robot.Subassemblies;
 import edu.wpi.first.wpilibj.Relay.Direction;
 import frc.robot.Robot;
 import frc.robot.RobotMap;
+import frc.robot.TeleopControls;
 import frc.robot.Utilities.Dashboard;
 
 import com.ctre.phoenix.motorcontrol.ControlMode;
@@ -31,104 +32,105 @@ public class Elevator {
         BACK
     }
     
-    LevelEnum level = LevelEnum.STORAGE;
+    public LevelEnum level = LevelEnum.STORAGE;
     DirectionEnum direction = DirectionEnum.FRONT;
     DirectionEnum lastDirection = DirectionEnum.FRONT;
 
     String str = "";
-    boolean buttonFlag = true;
 
     public void update() {
 
-        if (RobotMap.driverController.getRightBumper()) { // switch the direction of the arm
-            if ((RobotMap.driverController.getButtonA() || RobotMap.driverController.getButtonB() || 
-                 RobotMap.driverController.getButtonX() || RobotMap.driverController.getButtonY()) && buttonFlag) { 
-                buttonFlag = false;
-                // if (RobotMap.driverController.getLeftBumper()) { // going to a port height
-                //     if (RobotMap.driverController.getButtonA()) { 
-                //         // switch the direction and go to bottom port height.
-                //         lastDirection = direction;
-                //         changeDirection();
-                //         level = LevelEnum.BOTTOM_PORT;
-                //     } else if (RobotMap.driverController.getButtonB()) {      // we still need the bumper for the cargo ship heights
-                //         // switch direction and going to ship port height
-                //         lastDirection = direction;
-                //         changeDirection();
-                //         level = LevelEnum.SHIP_PORT;
-                //     } else if (RobotMap.driverController.getButtonX()) {
-                //         // switch direction and going to mid port height
-                //         lastDirection = direction;
-                //         changeDirection();
-                //         level = LevelEnum.MID_PORT;
-                //     } else if (RobotMap.driverController.getButtonY()) {
-                //         // switch direction and goin to top port height
-                //         lastDirection = direction;
-                //         changeDirection();
-                //         level = LevelEnum.TOP_PORT;
-                //     }
-                // } else { // going to a hatch height
-                    if (RobotMap.driverController.getButtonA()) {
-                        // switch direction and go to intaking hatch height
-                        lastDirection = direction;
-                        changeDirection();
-                        level = LevelEnum.INTAKING_HATCH;
-                    } else if (RobotMap.driverController.getButtonB()) {
-                        // switch direction and go to intaking cargo height                                         check this so we can't intake cargo on wrong side of drivetrain
-                        lastDirection = direction;
-                        changeDirection();
-                        level = LevelEnum.INTAKING_CARGO;
-                    } else if (RobotMap.driverController.getButtonX()) {
-                        // switch direction and go to mid hatch height
-                        lastDirection = direction;
-                        changeDirection();
-                        level = LevelEnum.MID_HATCH;
-                    } else if (RobotMap.driverController.getButtonY()) {
-                        // switch direction and go to top hatch height
-                        lastDirection = direction;
-                        changeDirection();
-                        level = LevelEnum.TOP_HATCH;
-                    }
-               // }
-            }
-        } else { // staying on the same side of the elevator
-            // if (RobotMap.driverController.getLeftBumper()) { // going to a port height
-            //     if (RobotMap.driverController.getButtonA()) {
-            //         // go to bottom port height
-            //         lastDirection = direction;
-            //         level = LevelEnum.BOTTOM_PORT;
-            //     } else if (RobotMap.driverController.getButtonB()) {             // we still need the bumper for the cargo ship heights
-            //         // go to ship port height
-            //         lastDirection = direction;
-            //         level = LevelEnum.SHIP_PORT;
-            //     } else if (RobotMap.driverController.getButtonX()) {
-            //         // go to mid port height
-            //         lastDirection = direction;
-            //         level = LevelEnum.MID_PORT;
-            //     } else if (RobotMap.driverController.getButtonY()) {
-            //         // go to top port height
-            //         lastDirection = direction;
-            //         level = LevelEnum.TOP_PORT;
-            //     }
-            // } else { // go to hatch height
-                if (RobotMap.driverController.getButtonA()) {
-                    // go to intaking hatch height
-                    lastDirection = direction;
-                    level = LevelEnum.INTAKING_HATCH;
-                } else if (RobotMap.driverController.getButtonB()) {
-                    // go to intaking cargo height                                                               check this so we can't intake cargo on wrong side of drivetrain
-                    lastDirection = direction;
-                    level = LevelEnum.INTAKING_CARGO;
-                } else if (RobotMap.driverController.getButtonX()) {
-                    // go to mid hatch height
-                    lastDirection = direction;
-                    level = LevelEnum.MID_HATCH;
-                } else if (RobotMap.driverController.getButtonY()) {
-                    // go to top hatch height
-                    lastDirection = direction;
-                    level = LevelEnum.TOP_HATCH;
-                }
-            //}
-        }
+        boolean stopUpdating = TeleopControls.stopUpdating;
+
+        // if (RobotMap.driverController.getRightBumper()) { // switch the direction of the arm
+        //     if ((RobotMap.driverController.getButtonA() || RobotMap.driverController.getButtonB() || 
+        //          RobotMap.driverController.getButtonX() || RobotMap.driverController.getButtonY()) && buttonFlag) { 
+        //         buttonFlag = false;
+        //         // if (RobotMap.driverController.getLeftBumper()) { // going to a port height
+        //         //     if (RobotMap.driverController.getButtonA()) { 
+        //         //         // switch the direction and go to bottom port height.
+        //         //         lastDirection = direction;
+        //         //         changeDirection();
+        //         //         level = LevelEnum.BOTTOM_PORT;
+        //         //     } else if (RobotMap.driverController.getButtonB()) {      // we still need the bumper for the cargo ship heights
+        //         //         // switch direction and going to ship port height
+        //         //         lastDirection = direction;
+        //         //         changeDirection();
+        //         //         level = LevelEnum.SHIP_PORT;
+        //         //     } else if (RobotMap.driverController.getButtonX()) {
+        //         //         // switch direction and going to mid port height
+        //         //         lastDirection = direction;
+        //         //         changeDirection();
+        //         //         level = LevelEnum.MID_PORT;
+        //         //     } else if (RobotMap.driverController.getButtonY()) {
+        //         //         // switch direction and goin to top port height
+        //         //         lastDirection = direction;
+        //         //         changeDirection();
+        //         //         level = LevelEnum.TOP_PORT;
+        //         //     }
+        //         // } else { // going to a hatch height
+        //             if (RobotMap.driverController.getButtonA()) {
+        //                 // switch direction and go to intaking hatch height
+        //                 lastDirection = direction;
+        //                 changeDirection();
+        //                 level = LevelEnum.INTAKING_HATCH;
+        //             } else if (RobotMap.driverController.getButtonB()) {
+        //                 // switch direction and go to intaking cargo height                                         check this so we can't intake cargo on wrong side of drivetrain
+        //                 lastDirection = direction;
+        //                 changeDirection();
+        //                 level = LevelEnum.INTAKING_CARGO;
+        //             } else if (RobotMap.driverController.getButtonX()) {
+        //                 // switch direction and go to mid hatch height
+        //                 lastDirection = direction;
+        //                 changeDirection();
+        //                 level = LevelEnum.MID_HATCH;
+        //             } else if (RobotMap.driverController.getButtonY()) {
+        //                 // switch direction and go to top hatch height
+        //                 lastDirection = direction;
+        //                 changeDirection();
+        //                 level = LevelEnum.TOP_HATCH;
+        //             }
+        //        // }
+        //     }
+        // } else { // staying on the same side of the elevator
+        //     // if (RobotMap.driverController.getLeftBumper()) { // going to a port height
+        //     //     if (RobotMap.driverController.getButtonA()) {
+        //     //         // go to bottom port height
+        //     //         lastDirection = direction;
+        //     //         level = LevelEnum.BOTTOM_PORT;
+        //     //     } else if (RobotMap.driverController.getButtonB()) {             // we still need the bumper for the cargo ship heights
+        //     //         // go to ship port height
+        //     //         lastDirection = direction;
+        //     //         level = LevelEnum.SHIP_PORT;
+        //     //     } else if (RobotMap.driverController.getButtonX()) {
+        //     //         // go to mid port height
+        //     //         lastDirection = direction;
+        //     //         level = LevelEnum.MID_PORT;
+        //     //     } else if (RobotMap.driverController.getButtonY()) {
+        //     //         // go to top port height
+        //     //         lastDirection = direction;
+        //     //         level = LevelEnum.TOP_PORT;
+        //     //     }
+        //     // } else { // go to hatch height
+        //         if (RobotMap.driverController.getButtonA()) {
+        //             // go to intaking hatch height
+        //             lastDirection = direction;
+        //             level = LevelEnum.INTAKING_HATCH;
+        //         } else if (RobotMap.driverController.getButtonB()) {
+        //             // go to intaking cargo height                                                               check this so we can't intake cargo on wrong side of drivetrain
+        //             lastDirection = direction;
+        //             level = LevelEnum.INTAKING_CARGO;
+        //         } else if (RobotMap.driverController.getButtonX()) {
+        //             // go to mid hatch height
+        //             lastDirection = direction;
+        //             level = LevelEnum.MID_HATCH;
+        //         } else if (RobotMap.driverController.getButtonY()) {
+        //             // go to top hatch height
+        //             lastDirection = direction;
+        //             level = LevelEnum.TOP_HATCH;
+        //         }
+        //     //}
+        // }
 
         // check the Limelight to see if the elevator is going to a port or hatch height
         if (level == LevelEnum.INTAKING_HATCH) {
@@ -176,17 +178,18 @@ public class Elevator {
                 break;
 
             case INTAKING_HATCH:
-                if (direction == DirectionEnum.FRONT) {
-                    if (lastDirection == DirectionEnum.FRONT) {
-                        // lift the elevator to the correct value
-                        str = ("Front, Intaking Hatch");
+                if (!TeleopControls.changingDirection) {
+                    // lift the elevator to the correct value
+                    str = ("Front, Intaking Hatch");
+                    moveElevator(RobotMap.FRONT_INTAKING_HATCH_HEIGHT);
+                } else if (TeleopControls.changingDirection && !stopUpdating) { // test code for dealing with updating stuff
+                    // move arm over and lift elevator to the correct value
+                    str = ("Switching to Front, Intaking Hatch");
+                    moveElevator(RobotMap.ARM_OVER_HEIGHT);
+                    // start motion profile for the arm
+                    if (RobotMap.armPot.get() == RobotMap.POT_AT_RIGHT_VALUE) {
                         moveElevator(RobotMap.FRONT_INTAKING_HATCH_HEIGHT);
-                    } else if (lastDirection == DirectionEnum.BACK) {
-                        // move arm over and lift elevator to the correct value
-                        str = ("Switching to Front, Intaking Hatch");
-                        moveElevator(RobotMap.ARM_OVER_HEIGHT);
-                        // start motion profile for the arm
-                        moveElevator(RobotMap.FRONT_INTAKING_HATCH_HEIGHT);
+                        stopUpdating = true;
                     }
                 } else if (direction == DirectionEnum.BACK) {
                     if (lastDirection == DirectionEnum.FRONT) {
@@ -372,10 +375,10 @@ public class Elevator {
                 break;
         }
 
-        if (!RobotMap.driverController.getButtonA() && !RobotMap.driverController.getButtonB() && 
-            !RobotMap.driverController.getButtonX() && !RobotMap.driverController.getButtonY()) {
-            buttonFlag = true;
-        }
+        // if (!RobotMap.driverController.getButtonA() && !RobotMap.driverController.getButtonB() && 
+        //     !RobotMap.driverController.getButtonX() && !RobotMap.driverController.getButtonY()) {
+        //     buttonFlag = true;
+        // }
 
         Dashboard.send("Elevetor state", str);
     }
@@ -386,6 +389,22 @@ public class Elevator {
 
     private void moveElevator(double setPoint) {
         RobotMap.elevatorFront.set(ControlMode.Position, setPoint);
+    }
+
+    public void setLevelIntakingHatch() {
+        level = LevelEnum.INTAKING_HATCH;
+    }
+    
+    public void setLevelIntakingCargo() {
+        level = LevelEnum.INTAKING_CARGO;
+    }
+
+    public void setLevelMidHatch() {
+        level = LevelEnum.MID_HATCH;
+    }
+
+    public void setLevelTopHatch() {
+        level = LevelEnum.TOP_HATCH;
     }
     
 }
