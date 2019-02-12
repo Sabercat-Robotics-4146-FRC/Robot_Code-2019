@@ -19,6 +19,7 @@ import frc.robot.Utilities.Pixy.*;
 
 public class RobotMap {
 	public static Robot ROBOT;
+	public static TeleopControls teleopControls;
 	
 	/////// Constants ///////
 	// Vision Constants
@@ -118,6 +119,8 @@ public class RobotMap {
 	
 	public static void init() { // This is to be called in robitInit and instantiates stuff.
 		/////// Initilizing ///////
+		teleopControls = new TeleopControls(); // move this
+
 		// Utility Initilization
 		timer = new Timer();
 		driverController = new Controller(0);

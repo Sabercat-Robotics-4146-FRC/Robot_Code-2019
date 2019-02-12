@@ -1,31 +1,33 @@
 package frc.robot.Utilities.MotionProfiling;
 
 import com.ctre.phoenix.motion.BufferedTrajectoryPointStream;
-import com.ctre.phoenix.motion.TrajectoryPoint;
-import com.ctre.phoenix.motorcontrol.can.TalonSRX;
-import com.ctre.phoenix.motorcontrol.ControlMode;
-import com.ctre.phoenix.motion.MotionProfileStatus;
 import com.ctre.phoenix.motion.SetValueMotionProfile;
+import com.ctre.phoenix.motion.TrajectoryPoint;
+import com.ctre.phoenix.motorcontrol.ControlMode;
+import com.ctre.phoenix.motorcontrol.can.TalonSRX;
 
 import frc.robot.RobotMap;
 import frc.robot.Utilities.Dashboard;
 
 public class MotionProfile {
 
-    /** new class type in 2019 for holding MP buffer. */
-    BufferedTrajectoryPointStream trajectoryPointStream = new BufferedTrajectoryPointStream();
-
-	TalonSRX talon;
-	
-	SetValueMotionProfile setValue = SetValueMotionProfile.Disable;
-
-
-    public MotionProfile(TalonSRX talons, double[][] points, int numPoints) {
-		talon = talons;
-		initBuffer(points, numPoints);
+	public enum MotionProfileEnum {
+		DISABLE,
+		ENABLE
 	}
 
-    private void initBuffer(double[][] profile, int totalCnt) {
+	MotionProfileEnum motionProfileState = MotionProfileEnum.DISABLE;
+
+    /** new class type in 2019 for holding MP buffer. */
+    BufferedTrajectoryPointStream trajectoryPointStream = new BufferedTrajectoryPointStream();
+    
+    TalonSRX talon;
+
+    public MotionProfile(TalonSRX talon) {
+        this.talon = talon;
+    }
+
+    public void initBuffer(double[][] profile, int totalCnt) {
 
 		boolean forward = true; // set to false to drive in opposite direction of profile (not really needed
 								// since you can use negative numbers in profile).
@@ -36,7 +38,7 @@ public class MotionProfile {
 		// clear the buffer, in case it was used elsewhere 
 		trajectoryPointStream.Clear();
 
-		// Insert every point into buffer, no limit on size
+		// Insert every point into buffer, no limit on size 
 		for (int i = 0; i < totalCnt; ++i) {
 
 			double direction = forward ? +1 : -1;
@@ -62,25 +64,25 @@ public class MotionProfile {
 		}
     }
 
-    public void startProfile() {
-		//Dashboard.send("Motion Profile setVaue", setValue.toString());
-		if (setValue == SetValueMotionProfile.Disable) {
-			setValue = SetValueMotionProfile.Enable;
+    public void startProfile(double[][] profile, int totalCnt) {
+        initBuffer(profile, totalCnt);
+		Dashboard.send("Motion Profile setVaue", motionProfileState.toString());
+		if (motionProfileState == MotionProfileEnum.DISABLE) {
+			motionProfileState = MotionProfileEnum.ENABLE;
 			System.out.println("I am running a profile");
 			talon.startMotionProfile(trajectoryPointStream, 10, ControlMode.MotionProfile);
         	System.out.println("MP started");
 		}
         
-	}
-	
-	public boolean isFinished() {
+    }
+    
+    public boolean isFinished() {
 		return talon.isMotionProfileFinished();
 	}
 
 	public void disableMotionProfile() { // this is had be called before another profile can br started
-		setValue = SetValueMotionProfile.Disable;
-		Dashboard.send("Motion Profile setVaue", setValue.toString());
+		motionProfileState = MotionProfileEnum.DISABLE;
+		Dashboard.send("Motion Profile setVaue", motionProfileState.toString());
 		
 	}
-
 }
