@@ -12,11 +12,11 @@ import frc.robot.Utilities.Dashboard;
 public class MotionProfile {
 
 	public enum MotionProfileEnum {
-		DISABLE,
-		ENABLE
+		DISABLED,
+		ENABLED
 	}
 
-	MotionProfileEnum motionProfileState = MotionProfileEnum.DISABLE;
+	MotionProfileEnum motionProfileState = MotionProfileEnum.DISABLED;
 
     /** new class type in 2019 for holding MP buffer. */
     BufferedTrajectoryPointStream trajectoryPointStream = new BufferedTrajectoryPointStream();
@@ -27,7 +27,7 @@ public class MotionProfile {
         this.talon = talon;
     }
 
-    public void initBuffer(double[][] profile, int totalCnt) {
+    public void initBuffer(double[][] profile) {
 
 		boolean forward = true; // set to false to drive in opposite direction of profile (not really needed
 								// since you can use negative numbers in profile).
@@ -39,7 +39,7 @@ public class MotionProfile {
 		trajectoryPointStream.Clear();
 
 		// Insert every point into buffer, no limit on size 
-		for (int i = 0; i < totalCnt; ++i) {
+		for (int i = 0; i < profile.length; ++i) {
 
 			double direction = forward ? +1 : -1;
 			double positionRot = profile[i][0];
@@ -57,18 +57,18 @@ public class MotionProfile {
 			point.profileSlotSelect0 = RobotMap.kPrimaryPIDSlot; // which set of gains would you like to use [0,3]? 
 			point.profileSlotSelect1 = 0; // auxiliary PID [0,1], leave zero 
 			point.zeroPos = (i == 0); // set this to true on the first point 
-			point.isLastPoint = ((i + 1) == totalCnt); // set this to true on the last point 
+			point.isLastPoint = ((i + 1) == profile.length); // set this to true on the last point 
 			point.arbFeedFwd = 0; // you can add a constant offset to add to PID[0] output here 
 
 			trajectoryPointStream.Write(point);
 		}
     }
 
-    public void startProfile(double[][] profile, int totalCnt) {
-        initBuffer(profile, totalCnt);
+    public void startProfile(double[][] profile) {
+        initBuffer(profile);
 		Dashboard.send("Motion Profile setVaue", motionProfileState.toString());
-		if (motionProfileState == MotionProfileEnum.DISABLE) {
-			motionProfileState = MotionProfileEnum.ENABLE;
+		if (motionProfileState == MotionProfileEnum.DISABLED) {
+			motionProfileState = MotionProfileEnum.ENABLED;
 			System.out.println("I am running a profile");
 			talon.startMotionProfile(trajectoryPointStream, 10, ControlMode.MotionProfile);
         	System.out.println("MP started");
@@ -81,7 +81,7 @@ public class MotionProfile {
 	}
 
 	public void disableMotionProfile() { // this is had be called before another profile can br started
-		motionProfileState = MotionProfileEnum.DISABLE;
+		motionProfileState = MotionProfileEnum.DISABLED;
 		Dashboard.send("Motion Profile setVaue", motionProfileState.toString());
 		
 	}

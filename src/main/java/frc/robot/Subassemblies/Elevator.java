@@ -103,7 +103,7 @@ public class Elevator {
                     // move arm over and lift elevator to the correct value
                     str = ("Switching to Front, Intaking Hatch");
                     // start motion profile for the arm
-                    if (RobotMap.armPot.get() == RobotMap.POT_AT_RIGHT_VALUE) { // < > plzzzzz
+                    if (RobotMap.arm.isArmClear()) { // < > plzzzzz
                         moveElevator(RobotMap.FRONT_INTAKING_HATCH_HEIGHT);
                         RobotMap.teleopControls.setIsUpdating(false);
                     } else {

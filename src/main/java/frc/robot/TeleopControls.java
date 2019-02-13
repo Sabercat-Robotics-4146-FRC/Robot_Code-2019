@@ -13,7 +13,7 @@ public class TeleopControls {
     DirectionEnum direction = DirectionEnum.FRONT;
     DirectionEnum lastDirection = DirectionEnum.FRONT;
 
-    boolean elevatorButtonFlag;
+    boolean buttonFlag;
     public boolean changingDirection = false;
     public boolean isUpdating = true;
 
@@ -22,8 +22,8 @@ public class TeleopControls {
         // buttons to move the elevator
         if (RobotMap.driverController.getRightBumper()) { // switch the direction of the arm
             if ((RobotMap.driverController.getButtonA() || RobotMap.driverController.getButtonB() || 
-                    RobotMap.driverController.getButtonX() || RobotMap.driverController.getButtonY()) && elevatorButtonFlag) { 
-                elevatorButtonFlag = false;
+                    RobotMap.driverController.getButtonX() || RobotMap.driverController.getButtonY()) && buttonFlag) { 
+                buttonFlag = false;
                 setIsUpdating(true);
                 // if (RobotMap.driverController.getLeftBumper()) { // going to a port height
                 //     if (RobotMap.driverController.getButtonA()) {
@@ -54,31 +54,35 @@ public class TeleopControls {
                         RobotMap.arm.changeDirection();
                         changingDirection = true;
                         RobotMap.elevator.setLevelIntakingHatch();
+                        RobotMap.arm.setArmStateMoveArmOver();
                     } else if (RobotMap.driverController.getButtonB()) {
                         // switch direction and go to intaking cargo height                                         check this so we can't intake cargo on wrong side of drivetrain
                         RobotMap.arm.updateDirection();
                         RobotMap.arm.changeDirection();
                         changingDirection = true;
                         RobotMap.elevator.setLevelIntakingCargo();
+                        RobotMap.arm.setArmStateMoveArmOver();
                     } else if (RobotMap.driverController.getButtonX()) {
                         // switch direction and go to mid hatch height
                         RobotMap.arm.updateDirection();
                         RobotMap.arm.changeDirection();
                         changingDirection = true;
                         RobotMap.elevator.setLevelMidHatch();
+                        RobotMap.arm.setArmStateMoveArmOver();
                     } else if (RobotMap.driverController.getButtonY()) {
                         // switch direction and go to top hatch height
                         RobotMap.arm.updateDirection();
                         RobotMap.arm.changeDirection();
                         changingDirection = true;
                         RobotMap.elevator.setLevelTopHatch();
+                        RobotMap.arm.setArmStateMoveArmOver();
                     }
                // }
             }
         } else { // staying on the same side of the elevator
             if ((RobotMap.driverController.getButtonA() || RobotMap.driverController.getButtonB() ||
-                 RobotMap.driverController.getButtonX() || RobotMap.driverController.getButtonY()) && elevatorButtonFlag) { 
-                elevatorButtonFlag = false;
+                 RobotMap.driverController.getButtonX() || RobotMap.driverController.getButtonY()) && buttonFlag) { 
+                buttonFlag = false;
                 setIsUpdating(true);
                 // if (RobotMap.driverController.getLeftBumper()) { // going to a port height
                 //     if (RobotMap.driverController.getButtonA()) {
@@ -104,29 +108,33 @@ public class TeleopControls {
                         RobotMap.arm.updateDirection();
                         changingDirection = false;
                         RobotMap.elevator.setLevelIntakingHatch();
+                        RobotMap.arm.setArmStateHold();
                     } else if (RobotMap.driverController.getButtonB()) {
                         // go to intaking cargo height                                                               check this so we can't intake cargo on wrong side of drivetrain
                         RobotMap.arm.updateDirection();
                         changingDirection = false;
                         RobotMap.elevator.setLevelIntakingCargo();
+                        RobotMap.arm.setArmStateHold();
                     } else if (RobotMap.driverController.getButtonX()) {
                         // go to mid hatch height
                         RobotMap.arm.updateDirection();
                         changingDirection = false;
                         RobotMap.elevator.setLevelMidHatch();
+                        RobotMap.arm.setArmStateHold();
                     } else if (RobotMap.driverController.getButtonY()) {
                         // go to top hatch height
                         RobotMap.arm.updateDirection();
                         changingDirection = false;
                         RobotMap.elevator.setLevelTopHatch();
+                        RobotMap.arm.setArmStateHold();
                     }
                 //}
             }
         }
 
         if (!RobotMap.driverController.getButtonA() && !RobotMap.driverController.getButtonB() && 
-            !RobotMap.driverController.getButtonX() && !RobotMap.driverController.getButtonY()) {
-            elevatorButtonFlag = true;
+                !RobotMap.driverController.getButtonX() && !RobotMap.driverController.getButtonY()) {
+            buttonFlag = true;
         }
     }
 
