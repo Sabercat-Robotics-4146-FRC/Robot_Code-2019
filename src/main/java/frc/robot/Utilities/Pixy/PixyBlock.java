@@ -3,7 +3,7 @@ package frc.robot.Utilities.Pixy;
 
 import frc.robot.RobotMap;
 import frc.robot.Utilities.Dashboard;
-import frc.robot.Utilities.Logger;
+import frc.robot.Utilities.ConsoleLogger;
 
 
 public class PixyBlock {

@@ -5,7 +5,9 @@ import com.ctre.phoenix.motorcontrol.can.WPI_TalonSRX;
 import com.ctre.phoenix.sensors.PigeonIMU;
 
 import edu.wpi.first.wpilibj.AnalogPotentiometer;
+import edu.wpi.first.wpilibj.Compressor;
 import edu.wpi.first.wpilibj.DigitalInput;
+import edu.wpi.first.wpilibj.DoubleSolenoid;
 import edu.wpi.first.wpilibj.Encoder;
 import edu.wpi.first.wpilibj.I2C;
 import edu.wpi.first.wpilibj.I2C.Port;
@@ -97,6 +99,13 @@ public class RobotMap {
 	public static SpeedControllerGroup leftDriveMotors;
 	public static SpeedControllerGroup rightDriveMotors;
 
+	// Compressor Declaration
+	public static Compressor compressor;
+
+	// Solenoid Declaration
+	public static DoubleSolenoid leftSolenoid;
+	public static DoubleSolenoid rightSolenoid;
+
 	// Differential Drive Declaration
 	public static DifferentialDrive drive;
 
@@ -184,6 +193,13 @@ public class RobotMap {
 		drive = new DifferentialDrive(leftDriveMotors, rightDriveMotors);
 		drive.setRightSideInverted(false);
 		drive.setSafetyEnabled(false);
+
+		// Compressor Initilization
+		compressor = new Compressor();
+
+		// Solenoid Initilization
+		leftSolenoid = new DoubleSolenoid(1, 2);
+		rightSolenoid = new DoubleSolenoid(3, 4);
 
 		// Sensor Initilization
 		leftDriveEncoder = new Encoder(1, 2, false, Encoder.EncodingType.k4X);

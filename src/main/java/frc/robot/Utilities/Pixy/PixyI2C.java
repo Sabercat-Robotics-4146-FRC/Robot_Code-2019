@@ -6,7 +6,7 @@ import java.util.List;
 import java.util.ArrayList;
 // Our imports
 import frc.robot.Utilities.Dashboard;
-import frc.robot.Utilities.Logger;
+import frc.robot.Utilities.ConsoleLogger;
 
 public class PixyI2C {
 	public enum PixyIteratorEnum{
@@ -60,7 +60,7 @@ public class PixyI2C {
 		try {
 			pixy.readOnly(rawData, rawData.length);
 		} catch (RuntimeException e) {
-			Logger.error(name + " - Error Reading Data - " + e);
+			ConsoleLogger.error(name + " - Error Reading Data - " + e);
 		}
 
 		// System.out.println("============================");
@@ -180,13 +180,13 @@ public class PixyI2C {
 
 	public void add(int i) {
 		bytes.add(i);
-		Logger.debug("Added: " + i);
+		ConsoleLogger.debug("Added: " + i);
 
 		if(bytes.size() == 12) {
-			Logger.debug("Filled bytes into " + blockIndex + ": " + bytes);
+			ConsoleLogger.debug("Filled bytes into " + blockIndex + ": " + bytes);
 			//System.out.println("Filled bytes into " + blockIndex + ": " + bytes);
 			if(iteratorState != PixyIteratorEnum.SYNCED) {
-				Logger.error("Reached size 12 but not in a synced state....");
+				ConsoleLogger.error("Reached size 12 but not in a synced state....");
 			}
 			blocks[blockIndex] = parsePixyData(bytes);
 			//System.out.println(blocks[blockIndex]);

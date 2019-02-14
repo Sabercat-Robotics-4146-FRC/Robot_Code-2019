@@ -12,7 +12,7 @@ import java.io.FileOutputStream;
  *
  *  @author GowanR
  *  @author JacobE
- *  @version 0.0.2
+ *  @version 0.0.3
  */
 
 
@@ -26,7 +26,7 @@ import java.io.FileOutputStream;
  // \/		INFO, 	  Use when you're presenting consistent information. Ex: Version and build info.
 
 
-public class Logger {
+public class ConsoleLogger {
     public static final double UPDATE_RATE = 1; //Htz, once per second
     public static ArrayList<String> LOG_QUEUE = new ArrayList<String>();
     public static double DT_ACC = 0; // DT Accumulator
@@ -53,7 +53,7 @@ public class Logger {
         log("DEBUG", message);
     }
     
-    public static void warn(String message) {
+    public static void warning(String message) {
         log("WARNING", message);
     }
     

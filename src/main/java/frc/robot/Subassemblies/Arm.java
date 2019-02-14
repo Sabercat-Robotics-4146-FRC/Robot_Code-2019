@@ -3,7 +3,7 @@ package frc.robot.Subassemblies;
 import frc.robot.RobotMap;
 import frc.robot.TeleopControls;
 import frc.robot.Subassemblies.Elevator.DirectionEnum;
-import frc.robot.Utilities.Logger;
+import frc.robot.Utilities.ConsoleLogger;
 import frc.robot.Utilities.MotionProfiling.GeneratedProfiles;
 import frc.robot.Utilities.MotionProfiling.MotionProfile;
 
@@ -59,7 +59,7 @@ public class Arm {
                         armMotionProfile.disableMotionProfile(); // disbable profile so that you can run a profile the next time a button is pressed
                     }
                 } else {
-                    Logger.error("Arm is in case MOVE_ARM_OVER but the lastDirection and direction are the same.");
+                    ConsoleLogger.error("Arm is in case MOVE_ARM_OVER but the lastDirection and direction are the same.");
                 }
                 break;
 
@@ -93,7 +93,7 @@ public class Arm {
                 return false;
             }
         } else {
-            Logger.error("Checking isArmCLear when not changing direction.");
+            ConsoleLogger.error("Checking isArmCLear when not changing direction.");
             return false;
         }
     }

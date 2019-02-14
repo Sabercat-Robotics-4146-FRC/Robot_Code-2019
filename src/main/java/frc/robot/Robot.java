@@ -4,6 +4,7 @@ package frc.robot;
 import com.ctre.phoenix.motorcontrol.ControlMode;
 
 import edu.wpi.first.wpilibj.SampleRobot;
+import frc.robot.Utilities.Dashboard;
 
 public class Robot extends SampleRobot {
 	public Robot() {
@@ -33,14 +34,22 @@ public class Robot extends SampleRobot {
 	 */
 	@Override
 	public void operatorControl() {
+		RobotMap.compressor.setClosedLoopControl(false); // Disables the compressor during tellop. test if needed.
+
 		while (isOperatorControl() && isEnabled()) {
 			RobotMap.timer.update();
+			RobotMap.teleopControls.update();
 
 			RobotMap.arm.update();
 			RobotMap.drivetrain.update();
 			RobotMap.elevator.update();
-			RobotMap.intake.update();
+			RobotMap.intake.update(RobotMap.timer.getDT());
 			RobotMap.limelight.update();
+
+			// Figure out where to put this ====>>>> (maybe we need an update loop in disabled????)
+			Dashboard.send("Compressor Enabled", RobotMap.compressor.enabled());
+			Dashboard.send("Pressure Switch Triggered", RobotMap.compressor.getPressureSwitchValue());
+			Dashboard.send("Compressor Current", RobotMap.compressor.getCompressorCurrent());
 
 			// Testing DT motors direction code
 			// <editor-fold>
@@ -68,12 +77,6 @@ public class Robot extends SampleRobot {
 			// 	RobotMap.driveRightBack.set(ControlMode.Current, 0.0);
 			// }
 			// </editor-fold>
-
-			// Drive Code
-			// <editor-fold>
-			// RobotMap.drive.arcadeDrive(RobotMap.driverController.getDeadbandLeftYAxis(),
-			// 	RobotMap.driverController.getDeadbandRightXAxis());
-			// </editor-fold>
 		}
 	}
 
@@ -83,5 +86,13 @@ public class Robot extends SampleRobot {
 	@Override
 	public void test() {
 		
+	}
+	
+	/**
+	 * Runs during disabled mode.
+	 */
+	@Override
+	public void disabled() {
+		RobotMap.compressor.setClosedLoopControl(true); // Enables the compressor during disabled. test if needed.
 	}
 }

@@ -2,7 +2,7 @@ package frc.robot.Utilities.PID;
 
 import frc.robot.RobotMap;
 import frc.robot.Utilities.Pixy.PixyI2C;
-import frc.robot.Utilities.Logger;
+import frc.robot.Utilities.ConsoleLogger;
 
 
 public class VisionPID extends PID{

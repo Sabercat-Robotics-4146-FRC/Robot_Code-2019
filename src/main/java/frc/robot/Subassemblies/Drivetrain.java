@@ -1,7 +1,7 @@
 package frc.robot.Subassemblies;
 
 import frc.robot.RobotMap;
-import frc.robot.Utilities.Logger;
+import frc.robot.Utilities.ConsoleLogger;
 
 public class Drivetrain {
     // enum DrivetrainEnum {
@@ -22,7 +22,7 @@ public class Drivetrain {
         // drivetrainState = DrivetrainEnum.CONTROLLER_DRIVE;
 
         if (Math.abs(speedModifier) != 1 || Math.abs(rotationModifier) != 1) {
-            Logger.warn("Drivetrain Modifiers are not 1 or -1. Which means its clamped.");
+            ConsoleLogger.warning("Drivetrain Modifiers are not 1 or -1. Which means its clamped.");
         }
     }
 
@@ -34,28 +34,6 @@ public class Drivetrain {
         this.speed = speed;
         this.rotation = rotation;
     }
-
-    // public void controllerDrive(double speed, double rotation) {
-    //     this.speed = speed;
-    //     this.rotation = rotation;
-    //     changeDrivetrainState(DrivetrainEnum.CONTROLLER_DRIVE);
-    // }
-
-    // public void visionDrive(double speed, double rotation) {
-    //     this.speed = speed;
-    //     this.rotation = rotation;
-    //     changeDrivetrainState(DrivetrainEnum.VISION_DRIVE);
-    // }
-
-    // public void customDrive(double speed, double rotation) {
-    //     this.speed = speed;
-    //     this.rotation = rotation;
-    //     changeDrivetrainState(DrivetrainEnum.CUSTOM_DRIVE);
-    // }
-
-    // public void changeDrivetrainState(DrivetrainEnum state) {
-    //     this.drivetrainState = state;
-    // }
 
     public void setSpeedModifier(double speedModifier) {
         this.speedModifier = speedModifier;
