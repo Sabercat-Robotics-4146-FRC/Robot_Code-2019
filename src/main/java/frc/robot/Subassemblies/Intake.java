@@ -20,6 +20,7 @@ public class Intake {
 
     CargoRollerEnum cargoRollerState;
     PistonEnum pistonState;
+    double dtAccumulator;
 
     public Intake() {
        cargoRollerState = CargoRollerEnum.DISABLED;
@@ -27,6 +28,8 @@ public class Intake {
     }
 
     public void update(double dt) {
+        dtAccumulator += dt;
+
         // Cargo Roller
         if (cargoRollerState == CargoRollerEnum.INTAKING) {
             RobotMap.cargoRoller.set(ControlMode.PercentOutput, RobotMap.CARGO_ROLLER_INTAKING_SPEED);
@@ -40,12 +43,20 @@ public class Intake {
 
         // Hatch Manipulator
         if (pistonState == PistonEnum.EXTENDED) {
-            RobotMap.leftSolenoid.set(DoubleSolenoid.Value.kForward);
+            RobotMap.leftSolenoid.set(DoubleSolenoid.Value.kForward); // Maybe want to put a flag on this to olky do it once?
             RobotMap.rightSolenoid.set(DoubleSolenoid.Value.kForward);
+
+            if (dtAccumulator >= RobotMap.INTAKE_PISON_EXTENSION_TIME) {
+                // Add code stuff. gtg
+            }
         }
     }
 
     public void setCargoRollerState(CargoRollerEnum cargoRollerState) {
         this.cargoRollerState = cargoRollerState;
+    }
+
+    public void ejectHatch() {
+        pistonState = PistonEnum.EXTENDED;
     }
 }

@@ -71,6 +71,7 @@ public class RobotMap {
 	// Intake Constants
 	public static final double CARGO_ROLLER_INTAKING_SPEED = 0.7;
 	public static final double CARGO_ROLLER_OUTPUTTING_SPEED = -0.8;
+	public static final double INTAKE_PISON_EXTENSION_TIME = 0.5;
 
 	/////// Declaring ///////
 	// Utility Declatations
