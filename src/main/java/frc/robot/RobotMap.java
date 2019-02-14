@@ -66,6 +66,10 @@ public class RobotMap {
 	public static final double FRONT_ARM_CLEAR_VALUE = 0.0;
 	public static final double BACK_ARM_CLEAR_VALUE = 0.0;
 	
+	// Intake Constants
+	public static final double CARGO_ROLLER_INTAKING_SPEED = 0.7;
+	public static final double CARGO_ROLLER_OUTPUTTING_SPEED = -0.8;
+
 	/////// Declaring ///////
 	// Utility Declatations
 	public static Timer timer;
