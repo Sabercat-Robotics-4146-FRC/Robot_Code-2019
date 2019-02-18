@@ -77,6 +77,11 @@ public class Robot extends SampleRobot {
 			// 	RobotMap.driveRightBack.set(ControlMode.Current, 0.0);
 			// }
 			// </editor-fold>
+
+			// debugging tools for testing the sensors for the first time
+			Dashboard.send("Elevator Limit Switch", RobotMap.elevatorLimitSwitch.get());
+			Dashboard.send("Arm Pot", RobotMap.armPot.get());
+			Dashboard.send("Elevator Encoder", RobotMap.elevatorFront.getSelectedSensorPosition());
 		}
 	}
 

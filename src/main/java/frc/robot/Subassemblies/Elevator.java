@@ -2,6 +2,7 @@ package frc.robot.Subassemblies;
 
 import frc.robot.Robot;
 import frc.robot.RobotMap;
+import frc.robot.Utilities.ConsoleLogger;
 import frc.robot.Utilities.Dashboard;
 
 import com.ctre.phoenix.motorcontrol.ControlMode;
@@ -33,6 +34,9 @@ public class Elevator {
     DirectionEnum direction = DirectionEnum.FRONT;
     DirectionEnum lastDirection = DirectionEnum.FRONT;
 
+    double tareEncoderTick;
+
+    boolean limitSwitchPressedFlag = false;
     String str = "";
 
     public void update() {
@@ -309,6 +313,16 @@ public class Elevator {
                 break;
         }
 
+        if (RobotMap.elevatorLimitSwitch.get() && !limitSwitchPressedFlag) {
+            ConsoleLogger.info("Elevator limit switch pressed, resetting elevator encoder.");
+            tareEncoderTick = RobotMap.elevatorFront.getSelectedSensorPosition();
+            limitSwitchPressedFlag = true;
+        }
+
+        if (!RobotMap.elevatorLimitSwitch.get()) {
+            limitSwitchPressedFlag = false;
+        }
+
         Dashboard.send("Elevetor state", str);
     }
 
@@ -321,7 +335,7 @@ public class Elevator {
     }
 
     private void moveElevator(double setPoint) {
-        RobotMap.elevatorFront.set(ControlMode.Position, setPoint);
+        RobotMap.elevatorFront.set(ControlMode.Position, setPoint + tareEncoderTick);
     }
 
     public void setLevelIntakingHatch() {
