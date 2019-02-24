@@ -20,6 +20,7 @@ public class TeleopControls {
     public void update() {
 
         // buttons to move the elevator
+        // <editor-fold>
         if (RobotMap.driverController.getRightBumper()) { // switch the direction of the arm
             if ((RobotMap.driverController.getButtonA() || RobotMap.driverController.getButtonB() || 
                     RobotMap.driverController.getButtonX() || RobotMap.driverController.getButtonY()) && buttonFlag) { 
@@ -137,10 +138,12 @@ public class TeleopControls {
     
         // controlls for drive train
         if (RobotMap.driverController.getButtonStart()) {
-            RobotMap.drivetrain.setDrivetrainValues(0.0, /*TODO CAMERA PID LOOP*/0.0);
+            RobotMap.drivetrain.runVisionPID(RobotMap.driverController.getDeadbandLeftYAxis());
         } else {
             RobotMap.drivetrain.setDrivetrainValues(RobotMap.driverController.getDeadbandLeftYAxis(),
                 RobotMap.driverController.getDeadbandRightXAxis());
+                
+            RobotMap.drivetrain.restartVisionPID();
         }
 
         // controlls for intake/hatch manipulator

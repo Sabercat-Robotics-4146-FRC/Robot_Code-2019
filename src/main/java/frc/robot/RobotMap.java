@@ -10,6 +10,7 @@ import edu.wpi.first.wpilibj.DigitalInput;
 import edu.wpi.first.wpilibj.DoubleSolenoid;
 import edu.wpi.first.wpilibj.Encoder;
 import edu.wpi.first.wpilibj.I2C;
+import edu.wpi.first.wpilibj.Solenoid;
 import edu.wpi.first.wpilibj.I2C.Port;
 import edu.wpi.first.wpilibj.drive.DifferentialDrive;
 import edu.wpi.first.wpilibj.SpeedControllerGroup;
@@ -17,6 +18,7 @@ import edu.wpi.first.wpilibj.SpeedControllerGroup;
 // Our Imports
 import frc.robot.Subassemblies.*;
 import frc.robot.Utilities.*;
+import frc.robot.Utilities.PID.VisionTurningPID;
 import frc.robot.Utilities.Pixy.*;
 
 public class RobotMap {
@@ -27,7 +29,7 @@ public class RobotMap {
 	// Vision Constants
 	public static final int PIXY_UPDATE_RATE = 50; //Htz
 	public static final int LIMELIGHT_UPDATE_RATE = 90; //Htz
-	public static final double VISION_BREAK_TOLERANCE = 1.5; //degrees?
+	public static final double VISION_BREAK_TOLERANCE = 0;
 	public static final double VISION_kP = 1.0;
 	public static final double VISION_kI = 0.0;
 	public static final double VISION_kD = 0.0;
@@ -71,7 +73,7 @@ public class RobotMap {
 	// Intake Constants
 	public static final double CARGO_ROLLER_INTAKING_SPEED = 0.7;
 	public static final double CARGO_ROLLER_OUTPUTTING_SPEED = -0.8;
-	public static final double INTAKE_PISON_EXTENSION_TIME = 0.5;
+	public static final double INTAKE_PISTON_EXTENSION_TIME = 0.5;
 
 	/////// Declaring ///////
 	// Utility Declatations
@@ -90,11 +92,12 @@ public class RobotMap {
 	public static TalonSRX elevatorBack;
 	public static TalonSRX armPivot;
 	public static TalonSRX cargoRoller;
+	public static TalonSRX intakeConveyor;
 
-	public static TalonSRX EGL_leftTop;
-	public static TalonSRX EGL_leftBottom;
-	public static TalonSRX EGL_rightTop;
-	public static TalonSRX EGL_rightBottom;
+	public static TalonSRX EGL_leftFront;
+	public static TalonSRX EGL_leftBack;
+	public static TalonSRX EGL_rightFront;
+	public static TalonSRX EGL_rightBack;
 
 	// Speed Controller Group Declaration
 	public static SpeedControllerGroup leftDriveMotors;
@@ -104,8 +107,7 @@ public class RobotMap {
 	public static Compressor compressor;
 
 	// Solenoid Declaration
-	public static DoubleSolenoid leftSolenoid;
-	public static DoubleSolenoid rightSolenoid;
+	public static Solenoid intakeSolenoid;
 
 	// Differential Drive Declaration
 	public static DifferentialDrive drive;
@@ -121,7 +123,7 @@ public class RobotMap {
 	public static DigitalInput cargoLeftLimitSwitch;
 	public static DigitalInput cargoRightLimitSwitch;
 
-	public static PigeonIMU pidgey;
+	// public static PigeonIMU pidgey; // TODO
 
 	public static Limelight limelight;
 
@@ -130,8 +132,8 @@ public class RobotMap {
 	public static Drivetrain drivetrain;
 	public static EndGameLift egl;
 	public static Elevator elevator;
-	public static Intake intake;
-	
+    public static Intake intake;
+    
 	public static void init() { // This is to be called in robitInit and instantiates stuff.
 		/////// Initilizing ///////
 		teleopControls = new TeleopControls(); // move this
@@ -173,18 +175,25 @@ public class RobotMap {
 		cargoRoller.configFactoryDefault();
 		cargoRoller.setInverted(true); // Maybe???????
 
-		EGL_leftTop = new TalonSRX(9);
-		EGL_leftBottom = new TalonSRX(10);
-		EGL_rightTop = new TalonSRX(11);
-		EGL_rightBottom = new TalonSRX(12);
+		intakeConveyor = new TalonSRX(9);
+		intakeConveyor.configFactoryDefault();
 
-		EGL_leftTop.configFactoryDefault();
-		EGL_leftBottom.configFactoryDefault();
-		EGL_rightTop.configFactoryDefault();
-		EGL_rightBottom.configFactoryDefault();
+		EGL_leftFront = new TalonSRX(10);
+		EGL_leftBack = new TalonSRX(11);
+		EGL_rightFront = new TalonSRX(12);
+		EGL_rightBack = new TalonSRX(13);
 
-		EGL_rightTop.setInverted(true); // Maybe????????
-		EGL_rightBottom.setInverted(true);
+		EGL_leftFront.configFactoryDefault();
+		EGL_leftBack.configFactoryDefault();
+		EGL_rightFront.configFactoryDefault();
+		EGL_rightBack.configFactoryDefault();
+
+		EGL_rightFront.setInverted(true); // Maybe????????
+		EGL_rightBack.setInverted(true);
+
+		EGL_leftBack.follow(EGL_leftFront);
+		EGL_rightFront.follow(EGL_leftFront);
+		EGL_rightBack.follow(EGL_leftFront);
 
 		// Motor Group Initilization
 		leftDriveMotors = new SpeedControllerGroup(driveLeftFront, driveLeftBack);
@@ -199,12 +208,11 @@ public class RobotMap {
 		compressor = new Compressor();
 
 		// Solenoid Initilization
-		leftSolenoid = new DoubleSolenoid(1, 2);
-		rightSolenoid = new DoubleSolenoid(3, 4);
+		intakeSolenoid = new Solenoid(0);
 
 		// Sensor Initilization
-		leftDriveEncoder = new Encoder(1, 2, false, Encoder.EncodingType.k4X);
-		rightDriveEncoder = new Encoder(3, 4, true, Encoder.EncodingType.k4X);
+		leftDriveEncoder = new Encoder(3, 4, false, Encoder.EncodingType.k4X);
+		rightDriveEncoder = new Encoder(5, 6, true, Encoder.EncodingType.k4X);
 
 		armPot = new AnalogPotentiometer(0);
 		EGLPot = new AnalogPotentiometer(1);

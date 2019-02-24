@@ -34,44 +34,46 @@ public class Robot extends SampleRobot {
 	 */
 	@Override
 	public void operatorControl() {
-		RobotMap.compressor.setClosedLoopControl(false); // Disables the compressor during tellop. test if needed.
+		RobotMap.compressor.setClosedLoopControl(false); // TODO Disables the compressor during tellop. test if needed.
 
 		while (isOperatorControl() && isEnabled()) {
+			RobotMap.limelight.update();
 			RobotMap.timer.update();
+
 			RobotMap.teleopControls.update();
 
-			RobotMap.arm.update();
+			// RobotMap.arm.update();
 			RobotMap.drivetrain.update();
-			RobotMap.elevator.update();
-			RobotMap.intake.update(RobotMap.timer.getDT());
-			RobotMap.limelight.update();
+			// RobotMap.elevator.update();
+			// RobotMap.intake.update(RobotMap.timer.getDT());
+
 
 			// Figure out where to put this ====>>>> (maybe we need an update loop in disabled????)
-			Dashboard.send("Compressor Enabled", RobotMap.compressor.enabled());
-			Dashboard.send("Pressure Switch Triggered", RobotMap.compressor.getPressureSwitchValue());
-			Dashboard.send("Compressor Current", RobotMap.compressor.getCompressorCurrent());
+			// Dashboard.send("Compressor Enabled", RobotMap.compressor.enabled());
+			// Dashboard.send("Pressure Switch Triggered", RobotMap.compressor.getPressureSwitchValue());
+			// Dashboard.send("Compressor Current", RobotMap.compressor.getCompressorCurrent());
 
 			// Testing DT motors direction code
 			// <editor-fold>
-			// if(RobotMap.driverController.getButtonA()) {
+			// if (RobotMap.driverController.getButtonA()) {
 			// 	RobotMap.driveLeftFront.set(ControlMode.Current, 0.3);
 			// } else {
 			// 	RobotMap.driveLeftFront.set(ControlMode.Current, 0.0);
 			// }
 
-			// if(RobotMap.driverController.getButtonB()) {
+			// if (RobotMap.driverController.getButtonB()) {
 			// 	RobotMap.driveLeftBack.set(ControlMode.Current, 0.3);
 			// } else {
 			// 	RobotMap.driveLeftBack.set(ControlMode.Current, 0.0);
 			// }
 
-			// if(RobotMap.driverController.getButtonX()) {
+			// if (RobotMap.driverController.getButtonX()) {
 			// 	RobotMap.driveRightFront.set(ControlMode.Current, 0.3);
 			// } else {
 			// 	RobotMap.driveRightFront.set(ControlMode.Current, 0.0);
 			// }
 
-			// if(RobotMap.driverController.getButtonY()) {
+			// if (RobotMap.driverController.getButtonY()) {
 			// 	RobotMap.driveRightBack.set(ControlMode.Current, 0.3);
 			// } else {
 			// 	RobotMap.driveRightBack.set(ControlMode.Current, 0.0);
@@ -80,6 +82,8 @@ public class Robot extends SampleRobot {
 
 			// debugging tools for testing the sensors for the first time
 			Dashboard.send("Elevator Limit Switch", RobotMap.elevatorLimitSwitch.get());
+			Dashboard.send("Left Cargo Limit switch", RobotMap.cargoLeftLimitSwitch.get());
+			Dashboard.send("Right Cargo Limit Switch", RobotMap.cargoRightLimitSwitch.get());
 			Dashboard.send("Arm Pot", RobotMap.armPot.get());
 			Dashboard.send("Elevator Encoder", RobotMap.elevatorFront.getSelectedSensorPosition());
 		}
@@ -98,6 +102,6 @@ public class Robot extends SampleRobot {
 	 */
 	@Override
 	public void disabled() {
-		RobotMap.compressor.setClosedLoopControl(true); // Enables the compressor during disabled. test if needed.
+		
 	}
 }
