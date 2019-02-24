@@ -22,8 +22,9 @@ public class TeleopControls {
         // buttons to move the elevator
         // <editor-fold>
         if (RobotMap.driverController.getRightBumper()) { // switch the direction of the arm
-            if ((RobotMap.driverController.getButtonA() || RobotMap.driverController.getButtonB() || 
-                    RobotMap.driverController.getButtonX() || RobotMap.driverController.getButtonY()) && buttonFlag) { 
+            if ((RobotMap.driverController.getButtonA() || RobotMap.driverController.getButtonB()
+                    || RobotMap.driverController.getButtonX() || RobotMap.driverController.getButtonY())
+                    && buttonFlag) {
                 buttonFlag = false;
                 setIsUpdating(true);
                 // if (RobotMap.driverController.getLeftBumper()) { // going to a port height
@@ -81,8 +82,9 @@ public class TeleopControls {
                // }
             }
         } else { // staying on the same side of the elevator
-            if ((RobotMap.driverController.getButtonA() || RobotMap.driverController.getButtonB() ||
-                 RobotMap.driverController.getButtonX() || RobotMap.driverController.getButtonY()) && buttonFlag) { 
+            if ((RobotMap.driverController.getButtonA() || RobotMap.driverController.getButtonB()
+                    || RobotMap.driverController.getButtonX() || RobotMap.driverController.getButtonY())
+                    && buttonFlag) {
                 buttonFlag = false;
                 setIsUpdating(true);
                 // if (RobotMap.driverController.getLeftBumper()) { // going to a port height
@@ -129,20 +131,28 @@ public class TeleopControls {
             }
         }
 
-        if (!RobotMap.driverController.getButtonA() && !RobotMap.driverController.getButtonB() && 
-                !RobotMap.driverController.getButtonX() && !RobotMap.driverController.getButtonY()) {
+        if (!RobotMap.driverController.getButtonA() && !RobotMap.driverController.getButtonB()
+                && !RobotMap.driverController.getButtonX() && !RobotMap.driverController.getButtonY()) {
             buttonFlag = true;
         }
 
         // </editor-fold>
-    
+
         // controlls for drive train
         if (RobotMap.driverController.getButtonStart()) {
-            RobotMap.drivetrain.runVisionPID(RobotMap.driverController.getDeadbandLeftYAxis());
+            RobotMap.limelight.setLightEnabled(true);
+
+            if (RobotMap.limelight.hasValidTarget()) {
+                RobotMap.drivetrain.runVisionPID(RobotMap.driverController.getDeadbandLeftYAxis());
+            } else {
+                RobotMap.drivetrain.setDrivetrainValues(RobotMap.driverController.getDeadbandLeftYAxis(),
+                        RobotMap.driverController.getDeadbandRightXAxis());
+            }
         } else {
+            RobotMap.limelight.setLightEnabled(false);
             RobotMap.drivetrain.setDrivetrainValues(RobotMap.driverController.getDeadbandLeftYAxis(),
-                RobotMap.driverController.getDeadbandRightXAxis());
-                
+                    RobotMap.driverController.getDeadbandRightXAxis());
+
             RobotMap.drivetrain.restartVisionPID();
         }
 

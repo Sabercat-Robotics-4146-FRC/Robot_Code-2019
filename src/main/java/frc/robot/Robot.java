@@ -48,9 +48,9 @@ public class Robot extends SampleRobot {
 			// RobotMap.intake.update(RobotMap.timer.getDT());
 
 
-			// Figure out where to put this ====>>>> (maybe we need an update loop in disabled????)
-			// Dashboard.send("Compressor Enabled", RobotMap.compressor.enabled());
-			// Dashboard.send("Pressure Switch Triggered", RobotMap.compressor.getPressureSwitchValue());
+			Dashboard.send("Compressor Enabled", RobotMap.compressor.enabled());
+			Dashboard.send("Pressure Switch Triggered", RobotMap.compressor.getPressureSwitchValue());
+			Dashboard.send("Compressor Current", RobotMap.compressor.getCompressorCurrent());
 			// Dashboard.send("Compressor Current", RobotMap.compressor.getCompressorCurrent());
 
 			// Testing DT motors direction code

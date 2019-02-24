@@ -30,7 +30,7 @@ public class RobotMap {
 	public static final int PIXY_UPDATE_RATE = 50; //Htz
 	public static final int LIMELIGHT_UPDATE_RATE = 90; //Htz
 	public static final double VISION_BREAK_TOLERANCE = 0;
-	public static final double VISION_kP = 1.0;
+	public static final double VISION_kP = 0.1;
 	public static final double VISION_kI = 0.0;
 	public static final double VISION_kD = 0.0;
 	public static final int PIXY_ADDRESS = 0x54;
