@@ -4,7 +4,11 @@ package frc.robot;
 import com.ctre.phoenix.motorcontrol.ControlMode;
 
 import edu.wpi.first.wpilibj.SampleRobot;
+import frc.robot.Utilities.ConsoleLogger;
 import frc.robot.Utilities.Dashboard;
+import frc.robot.Utilities.Limelight;
+
+import edu.wpi.first.wpilibj.CameraServer;
 
 public class Robot extends SampleRobot {
 	public Robot() {
@@ -17,7 +21,8 @@ public class Robot extends SampleRobot {
 	 */
 	@Override
 	public void robotInit() {
-		RobotMap.init(); // Instantiates things to be used from RobotMap.
+        RobotMap.init(); // Instantiates things to be used from RobotMap.
+        //CameraServer.getInstance().startAutomaticCapture();
 	}
 
 	/**
@@ -37,7 +42,7 @@ public class Robot extends SampleRobot {
 		RobotMap.compressor.setClosedLoopControl(false); // TODO Disables the compressor during tellop. test if needed.
 
 		while (isOperatorControl() && isEnabled()) {
-			RobotMap.limelight.update();
+			//RobotMap.limelight.update();
 			RobotMap.timer.update();
 
 			RobotMap.teleopControls.update();
@@ -45,47 +50,36 @@ public class Robot extends SampleRobot {
 			// RobotMap.arm.update();
 			RobotMap.drivetrain.update();
 			// RobotMap.elevator.update();
-			// RobotMap.intake.update(RobotMap.timer.getDT());
+            // RobotMap.intake.update(RobotMap.timer.getDT());
+            ConsoleLogger.update(RobotMap.timer.getDT());
 
 
-			Dashboard.send("Compressor Enabled", RobotMap.compressor.enabled());
-			Dashboard.send("Pressure Switch Triggered", RobotMap.compressor.getPressureSwitchValue());
-			Dashboard.send("Compressor Current", RobotMap.compressor.getCompressorCurrent());
-			// Dashboard.send("Compressor Current", RobotMap.compressor.getCompressorCurrent());
-
-			// Testing DT motors direction code
-			// <editor-fold>
-			// if (RobotMap.driverController.getButtonA()) {
-			// 	RobotMap.driveLeftFront.set(ControlMode.Current, 0.3);
-			// } else {
-			// 	RobotMap.driveLeftFront.set(ControlMode.Current, 0.0);
-			// }
-
-			// if (RobotMap.driverController.getButtonB()) {
-			// 	RobotMap.driveLeftBack.set(ControlMode.Current, 0.3);
-			// } else {
-			// 	RobotMap.driveLeftBack.set(ControlMode.Current, 0.0);
-			// }
-
-			// if (RobotMap.driverController.getButtonX()) {
-			// 	RobotMap.driveRightFront.set(ControlMode.Current, 0.3);
-			// } else {
-			// 	RobotMap.driveRightFront.set(ControlMode.Current, 0.0);
-			// }
-
-			// if (RobotMap.driverController.getButtonY()) {
-			// 	RobotMap.driveRightBack.set(ControlMode.Current, 0.3);
-			// } else {
-			// 	RobotMap.driveRightBack.set(ControlMode.Current, 0.0);
-			// }
-			// </editor-fold>
-
-			// debugging tools for testing the sensors for the first time
-			Dashboard.send("Elevator Limit Switch", RobotMap.elevatorLimitSwitch.get());
-			Dashboard.send("Left Cargo Limit switch", RobotMap.cargoLeftLimitSwitch.get());
-			Dashboard.send("Right Cargo Limit Switch", RobotMap.cargoRightLimitSwitch.get());
-			Dashboard.send("Arm Pot", RobotMap.armPot.get());
-			Dashboard.send("Elevator Encoder", RobotMap.elevatorFront.getSelectedSensorPosition());
+			//Dashboard.send("Compressor Enabled", RobotMap.compressor.enabled());
+			//Dashboard.send("Pressure Switch Triggered", RobotMap.compressor.getPressureSwitchValue());
+            //Dashboard.send("Compressor Current", RobotMap.compressor.getCompressorCurrent());
+            
+            // if (RobotMap.driverController.getLeftTriggerBool()) {
+            //     RobotMap.cargoRoller.set(ControlMode.PercentOutput, 1.0);
+            // } else if (RobotMap.driverController.getRightTriggerBool()) {
+            //     RobotMap.cargoRoller.set(ControlMode.PercentOutput, -1.0);
+            // } else {
+            //     RobotMap.cargoRoller.set(ControlMode.PercentOutput, 0.0);
+            // }
+            
+            // if (RobotMap.driverController.getButtonA()) {
+            //     RobotMap.driveLeftFront.set(ControlMode.PercentOutput, 0.5);
+            // } else if (RobotMap.driverController.getButtonB()) {
+            //     RobotMap.driveLeftBack.set(ControlMode.PercentOutput, 0.5);
+            // } else if (RobotMap.driverController.getButtonX()) {
+            //     RobotMap.driveRightFront.set(ControlMode.PercentOutput, 0.5);
+            // } else if (RobotMap.driverController.getButtonY()) {
+            //     RobotMap.driveRightBack.set(ControlMode.PercentOutput, 0.5);
+            // } else {
+            //     RobotMap.driveLeftFront.set(ControlMode.PercentOutput, 0.0);
+            //     RobotMap.driveLeftBack.set(ControlMode.PercentOutput, 0.0);
+            //     RobotMap.driveRightFront.set(ControlMode.PercentOutput, 0.0);
+            //     RobotMap.driveRightBack.set(ControlMode.PercentOutput, 0.0);
+            // }
 		}
 	}
 
@@ -102,6 +96,6 @@ public class Robot extends SampleRobot {
 	 */
 	@Override
 	public void disabled() {
-		
+		//RobotMap.limelight.setLightMode(Limelight.LEDEnum.OFF);
 	}
 }

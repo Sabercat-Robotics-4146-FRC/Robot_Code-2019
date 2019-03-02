@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.text.SimpleDateFormat;
 import java.io.IOException;
+import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 
 /*
@@ -70,13 +71,17 @@ public class ConsoleLogger {
     }
     
     @SuppressWarnings("unused") // eclipse calls the file printing dead code if name is blank and underlines are annoying.
-	public static void update(double dt) throws IOException { // Run this in the main operation loop.
+	public static void update(double dt) { // Run this in the main operation loop.
     	if(LOG_QUEUE.isEmpty()) {
     		return;
     	}
     	
         if (FILE_NAME != "" && OUTPUT_STREAM == null) {
-           OUTPUT_STREAM = new FileOutputStream(FILE_NAME);
+            try {
+                OUTPUT_STREAM = new FileOutputStream(FILE_NAME);
+            } catch (FileNotFoundException e) {
+                ConsoleLogger.warning("File Not Found Exception in ConsoleLogger.");
+		    }
         }
         
         DT_ACC += dt;
@@ -85,7 +90,11 @@ public class ConsoleLogger {
                 System.out.println(message);
                 if (FILE_NAME != "") {
                     message += "\n";
-                    OUTPUT_STREAM.write(message.getBytes());
+                    try {
+                        OUTPUT_STREAM.write(message.getBytes());
+                    } catch (IOException e) {
+                        ConsoleLogger.warning("IO Exception in ConsoleLogger.");
+                    }
                 } 
             }
             

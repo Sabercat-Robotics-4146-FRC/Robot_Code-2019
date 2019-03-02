@@ -3,6 +3,7 @@ package frc.robot;
 import frc.robot.Subassemblies.Elevator;
 import frc.robot.Subassemblies.Elevator.LevelEnum;
 import frc.robot.Subassemblies.Intake.CargoRollerEnum;
+import frc.robot.Utilities.Limelight.LEDEnum;
 
 public class TeleopControls {
 
@@ -18,7 +19,6 @@ public class TeleopControls {
     public boolean isUpdating = true;
 
     public void update() {
-
         // buttons to move the elevator
         // <editor-fold>
         if (RobotMap.driverController.getRightBumper()) { // switch the direction of the arm
@@ -53,33 +53,35 @@ public class TeleopControls {
                 //         RobotMap.elevator.setLevelTopPort();
                 //         RobotMap.arm.setArmStateMoveArmOver();
                 //     }
+                // }
                 // } else { // going to a hatch height
-                    if (RobotMap.driverController.getButtonA()) {
-                        // switch direction and go to intaking hatch height
-                        updateDirection();
-                        changeDirection();
-                        RobotMap.elevator.setLevelIntakingHatch();
-                        RobotMap.arm.setArmStateMoveArmOver();
-                    } else if (RobotMap.driverController.getButtonB()) {
-                        // switch direction and go to intaking cargo height                                         check this so we can't intake cargo on wrong side of drivetrain
-                        updateDirection();
-                        changeDirection();
-                        RobotMap.elevator.setLevelIntakingCargo();
-                        RobotMap.arm.setArmStateMoveArmOver();
-                    } else if (RobotMap.driverController.getButtonX()) {
-                        // switch direction and go to mid hatch height
-                        updateDirection();
-                        changeDirection();
-                        RobotMap.elevator.setLevelMidHatch();
-                        RobotMap.arm.setArmStateMoveArmOver();
-                    } else if (RobotMap.driverController.getButtonY()) {
-                        // switch direction and go to top hatch height
-                        updateDirection();
-                        changeDirection();
-                        RobotMap.elevator.setLevelTopHatch();
-                        RobotMap.arm.setArmStateMoveArmOver();
-                    }
-               // }
+                if (RobotMap.driverController.getButtonA()) {
+                    // switch direction and go to intaking hatch height
+                    updateDirection();
+                    changeDirection();
+                    RobotMap.elevator.setLevelIntakingHatch();
+                    RobotMap.arm.setArmStateMoveArmOver();
+                } else if (RobotMap.driverController.getButtonB()) {
+                    // switch direction and go to intaking cargo height check this so we can't
+                    // intake cargo on wrong side of drivetrain
+                    updateDirection();
+                    changeDirection();
+                    RobotMap.elevator.setLevelIntakingCargo();
+                    RobotMap.arm.setArmStateMoveArmOver();
+                } else if (RobotMap.driverController.getButtonX()) {
+                    // switch direction and go to mid hatch height
+                    updateDirection();
+                    changeDirection();
+                    RobotMap.elevator.setLevelMidHatch();
+                    RobotMap.arm.setArmStateMoveArmOver();
+                } else if (RobotMap.driverController.getButtonY()) {
+                    // switch direction and go to top hatch height
+                    updateDirection();
+                    changeDirection();
+                    RobotMap.elevator.setLevelTopHatch();
+                    RobotMap.arm.setArmStateMoveArmOver();
+                }
+                // }
             }
         } else { // staying on the same side of the elevator
             if ((RobotMap.driverController.getButtonA() || RobotMap.driverController.getButtonB()
@@ -106,28 +108,29 @@ public class TeleopControls {
                 //         RobotMap.elevator.setLevelTopPort();
                 //     }
                 // } else { // go to hatch height
-                    if (RobotMap.driverController.getButtonA()) {
-                        // go to intaking hatch height
-                        updateDirection();
-                        RobotMap.elevator.setLevelIntakingHatch();
-                        RobotMap.arm.setArmStateHold();
-                    } else if (RobotMap.driverController.getButtonB()) {
-                        // go to intaking cargo height                                                               check this so we can't intake cargo on wrong side of drivetrain
-                        updateDirection();
-                        RobotMap.elevator.setLevelIntakingCargo();
-                        RobotMap.arm.setArmStateHold();
-                    } else if (RobotMap.driverController.getButtonX()) {
-                        // go to mid hatch height
-                        updateDirection();
-                        RobotMap.elevator.setLevelMidHatch();
-                        RobotMap.arm.setArmStateHold();
-                    } else if (RobotMap.driverController.getButtonY()) {
-                        // go to top hatch height
-                        updateDirection();
-                        RobotMap.elevator.setLevelTopHatch();
-                        RobotMap.arm.setArmStateHold();
-                    }
-                //}
+                if (RobotMap.driverController.getButtonA()) {
+                    // go to intaking hatch height
+                    updateDirection();
+                    RobotMap.elevator.setLevelIntakingHatch();
+                    RobotMap.arm.setArmStateHold();
+                } else if (RobotMap.driverController.getButtonB()) {
+                    // go to intaking cargo height check this so we can't intake cargo on wrong side
+                    // of drivetrain
+                    updateDirection();
+                    RobotMap.elevator.setLevelIntakingCargo();
+                    RobotMap.arm.setArmStateHold();
+                } else if (RobotMap.driverController.getButtonX()) {
+                    // go to mid hatch height
+                    updateDirection();
+                    RobotMap.elevator.setLevelMidHatch();
+                    RobotMap.arm.setArmStateHold();
+                } else if (RobotMap.driverController.getButtonY()) {
+                    // go to top hatch height
+                    updateDirection();
+                    RobotMap.elevator.setLevelTopHatch();
+                    RobotMap.arm.setArmStateHold();
+                }
+                // }
             }
         }
 
@@ -140,7 +143,7 @@ public class TeleopControls {
 
         // controlls for drive train
         if (RobotMap.driverController.getButtonStart()) {
-            RobotMap.limelight.setLightEnabled(true);
+            RobotMap.limelight.setLightMode(LEDEnum.ENABLED);
 
             if (RobotMap.limelight.hasValidTarget()) {
                 RobotMap.drivetrain.runVisionPID(RobotMap.driverController.getDeadbandLeftYAxis());
@@ -149,7 +152,7 @@ public class TeleopControls {
                         RobotMap.driverController.getDeadbandRightXAxis());
             }
         } else {
-            RobotMap.limelight.setLightEnabled(false);
+            RobotMap.limelight.setLightMode(LEDEnum.DISABLED);
             RobotMap.drivetrain.setDrivetrainValues(RobotMap.driverController.getDeadbandLeftYAxis(),
                     RobotMap.driverController.getDeadbandRightXAxis());
 
@@ -165,6 +168,9 @@ public class TeleopControls {
             RobotMap.intake.setCargoRollerState(CargoRollerEnum.DISABLED);
         }
 
+        if (RobotMap.driverController.getRightBumper()) {
+            RobotMap.intake.ejectHatch();
+        }
     }
 
     public boolean getIsUpdating() {

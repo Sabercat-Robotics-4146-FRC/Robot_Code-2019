@@ -315,7 +315,7 @@ public class Elevator {
 
         if (RobotMap.elevatorLimitSwitch.get() && !limitSwitchPressedFlag) {
             ConsoleLogger.info("Elevator limit switch pressed, resetting elevator encoder.");
-            tareEncoderTick = RobotMap.elevatorFront.getSelectedSensorPosition();
+            // tareEncoderTick = RobotMap.elevatorFront.getSelectedSensorPosition();
             limitSwitchPressedFlag = true;
         }
 

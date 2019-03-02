@@ -42,7 +42,7 @@ public class Arm {
                 if (lastDirection == DirectionEnum.BACK && direction == DirectionEnum.FRONT && 
                         RobotMap.teleopControls.getIsUpdating()) { // going to the front
                     armMotionProfile.startProfile(GeneratedProfiles.backDownToBackTilt);
-                    if (RobotMap.elevatorFront.getSelectedSensorPosition() >= RobotMap.ARM_OVER_HEIGHT) { // check >= for actual robot
+                    if (/*RobotMap.elevatorFront.getSelectedSensorPosition() >= RobotMap.ARM_OVER_HEIGHT*/ true) { // check >= for actual robot
                         armMotionProfile.disableMotionProfile();
                         armMotionProfile.startProfile(GeneratedProfiles.backTiltToFrontDown);
                         RobotMap.teleopControls.setIsUpdating(false);
@@ -52,7 +52,7 @@ public class Arm {
                 if (lastDirection == DirectionEnum.FRONT && direction == DirectionEnum.BACK &&
                         RobotMap.teleopControls.getIsUpdating()) { // going to the back
                     armMotionProfile.startProfile(GeneratedProfiles.frontDownToFrontTilt);
-                    if (RobotMap.elevatorFront.getSelectedSensorPosition() >= RobotMap.ARM_OVER_HEIGHT) { // check >= for actual robot
+                    if (/*RobotMap.elevatorFront.getSelectedSensorPosition() >= RobotMap.ARM_OVER_HEIGHT*/true) { // check >= for actual robot
                         armMotionProfile.disableMotionProfile();
                         armMotionProfile.startProfile(GeneratedProfiles.frontTiltToBackDown);
                         RobotMap.teleopControls.setIsUpdating(false); // stop updating this code so that the motion profiles don't keep running

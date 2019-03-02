@@ -14,8 +14,7 @@ public class Intake {
     }
     enum PistonEnum {
         EXTENDED,
-        RETRACTED,
-        DISABLED
+        RETRACTED
     }
 
     CargoRollerEnum cargoRollerState;
@@ -43,11 +42,12 @@ public class Intake {
 
         // Hatch Manipulator
         if (pistonState == PistonEnum.EXTENDED) {
-            RobotMap.leftSolenoid.set(DoubleSolenoid.Value.kForward); // Maybe want to put a flag on this to olky do it once?
-            RobotMap.rightSolenoid.set(DoubleSolenoid.Value.kForward);
+            RobotMap.intakeSolenoid.set(true);
 
-            if (dtAccumulator >= RobotMap.INTAKE_PISON_EXTENSION_TIME) {
-                // Add code stuff. gtg
+            if (dtAccumulator >= RobotMap.INTAKE_PISTON_EXTENSION_TIME) {
+                RobotMap.intakeSolenoid.set(false);
+                pistonState = PistonEnum.RETRACTED;
+                dtAccumulator = 0;
             }
         }
     }
@@ -58,5 +58,6 @@ public class Intake {
 
     public void ejectHatch() {
         pistonState = PistonEnum.EXTENDED;
+        dtAccumulator = 0;
     }
 }

@@ -1,5 +1,6 @@
 package frc.robot;
 
+import com.ctre.phoenix.motorcontrol.NeutralMode;
 import com.ctre.phoenix.motorcontrol.can.TalonSRX;
 import com.ctre.phoenix.motorcontrol.can.WPI_TalonSRX;
 import com.ctre.phoenix.sensors.PigeonIMU;
@@ -30,7 +31,7 @@ public class RobotMap {
 	public static final int PIXY_UPDATE_RATE = 50; //Htz
 	public static final int LIMELIGHT_UPDATE_RATE = 90; //Htz
 	public static final double VISION_BREAK_TOLERANCE = 0;
-	public static final double VISION_kP = 0.1;
+	public static final double VISION_kP = 0.05;
 	public static final double VISION_kI = 0.0;
 	public static final double VISION_kD = 0.0;
 	public static final int PIXY_ADDRESS = 0x54;
@@ -159,7 +160,12 @@ public class RobotMap {
 		driveRightFront.setSafetyEnabled(false);
 		driveRightBack.setSafetyEnabled(false);
 		driveRightFront.setInverted(true); // Inverted for the drive
-		driveRightBack.setInverted(true);
+        driveRightBack.setInverted(true);
+        
+        driveLeftFront.setNeutralMode(NeutralMode.Brake);
+        driveLeftBack.setNeutralMode(NeutralMode.Brake);
+        driveRightFront.setNeutralMode(NeutralMode.Brake);
+        driveRightBack.setNeutralMode(NeutralMode.Brake);
 		
 		elevatorFront = new TalonSRX(5);
 		elevatorBack = new TalonSRX(6);
