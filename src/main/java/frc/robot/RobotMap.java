@@ -1,5 +1,6 @@
 package frc.robot;
 
+import com.ctre.phoenix.motorcontrol.FeedbackDevice;
 import com.ctre.phoenix.motorcontrol.NeutralMode;
 import com.ctre.phoenix.motorcontrol.can.TalonSRX;
 import com.ctre.phoenix.motorcontrol.can.WPI_TalonSRX;
@@ -8,7 +9,6 @@ import com.ctre.phoenix.sensors.PigeonIMU;
 import edu.wpi.first.wpilibj.AnalogPotentiometer;
 import edu.wpi.first.wpilibj.Compressor;
 import edu.wpi.first.wpilibj.DigitalInput;
-import edu.wpi.first.wpilibj.DoubleSolenoid;
 import edu.wpi.first.wpilibj.Encoder;
 import edu.wpi.first.wpilibj.I2C;
 import edu.wpi.first.wpilibj.Solenoid;
@@ -19,7 +19,6 @@ import edu.wpi.first.wpilibj.SpeedControllerGroup;
 // Our Imports
 import frc.robot.Subassemblies.*;
 import frc.robot.Utilities.*;
-import frc.robot.Utilities.PID.VisionTurningPID;
 import frc.robot.Utilities.Pixy.*;
 
 public class RobotMap {
@@ -37,7 +36,8 @@ public class RobotMap {
 	public static final int PIXY_ADDRESS = 0x54;
 	public static final int LED_ADDRESS = 0x55;
 	public static final String PIXY_NAME = "Main Pixy";
-	public static int checksumErrorCount = 0; // not actually a constant.
+    public static int checksumErrorCount = 0; // not actually a constant.
+    public static final boolean syncLEDsWithRumble = true;
 
 	// Motion Profiling Constants
 	public final static int kSensorUnitsPerRotation = 4096; // How many sensor units per rotation using CTRE Magnetic Encoder.
@@ -74,12 +74,19 @@ public class RobotMap {
 	// Intake Constants
 	public static final double CARGO_ROLLER_INTAKING_SPEED = 0.7;
 	public static final double CARGO_ROLLER_OUTPUTTING_SPEED = -0.8;
-	public static final double INTAKE_PISTON_EXTENSION_TIME = 0.5;
+    public static final double CLAW_RELEASE_TIME = 1.0;
+    
+    // End Game Lift Constants
+    public static final double EGL_UPPER_SOFT_STOP = 5.0;
+    public static final double EGL_LOWER_SOFT_STOP = 1.0;
+    public static final double ELG_RAISING_SPEED = 8.0;
+    public static final double ELG_LOWERING_SPEED = 5.0;
 
 	/////// Declaring ///////
 	// Utility Declatations
 	public static Timer timer;
-	public static Controller driverController;
+    public static Controller pilotController;
+    public static Controller copilotController;
 	public static PixyI2C pixy;
 	public static LEDI2C leds;
 
@@ -108,7 +115,7 @@ public class RobotMap {
 	public static Compressor compressor;
 
 	// Solenoid Declaration
-	public static Solenoid intakeSolenoid;
+	public static Solenoid clawSolenoid;
 
 	// Differential Drive Declaration
 	public static DifferentialDrive drive;
@@ -121,8 +128,8 @@ public class RobotMap {
 	public static AnalogPotentiometer EGLPot;
 
 	public static DigitalInput elevatorLimitSwitch;
-	public static DigitalInput cargoLeftLimitSwitch;
-	public static DigitalInput cargoRightLimitSwitch;
+	public static DigitalInput cargoLimitSwitch;
+	public static DigitalInput hatchLimitSwitch;
 
 	// public static PigeonIMU pidgey; // TODO
 
@@ -141,7 +148,8 @@ public class RobotMap {
 
 		// Utility Initilization
 		timer = new Timer();
-		driverController = new Controller(0);
+        pilotController = new Controller(0);
+        copilotController = new Controller(0);
 		pixy = new PixyI2C(PIXY_NAME, new I2C(Port.kOnboard, PIXY_ADDRESS));
 		leds = new LEDI2C(new I2C(Port.kOnboard, LED_ADDRESS));
 
@@ -172,7 +180,9 @@ public class RobotMap {
 
 		elevatorFront.configFactoryDefault();
 		elevatorBack.configFactoryDefault();
-		elevatorBack.follow(elevatorFront);
+        elevatorBack.follow(elevatorFront);
+        
+        elevatorFront.configSelectedFeedbackSensor(FeedbackDevice.CTRE_MagEncoder_Relative);
 
 		armPivot = new TalonSRX(7);
 		armPivot.configFactoryDefault();
@@ -214,7 +224,7 @@ public class RobotMap {
 		compressor = new Compressor();
 
 		// Solenoid Initilization
-		intakeSolenoid = new Solenoid(0);
+		clawSolenoid = new Solenoid(0);
 
 		// Sensor Initilization
 		leftDriveEncoder = new Encoder(3, 4, false, Encoder.EncodingType.k4X);
@@ -224,8 +234,8 @@ public class RobotMap {
 		EGLPot = new AnalogPotentiometer(1);
 
 		elevatorLimitSwitch = new DigitalInput(0);
-		cargoLeftLimitSwitch = new DigitalInput(1);
-		cargoRightLimitSwitch = new DigitalInput(2);
+		cargoLimitSwitch = new DigitalInput(1);
+		hatchLimitSwitch = new DigitalInput(2);
 
 		// pidgey = new PigeonIMU(a_talon); TODO
 

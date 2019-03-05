@@ -1,8 +1,6 @@
 package frc.robot.Subassemblies;
 
 import frc.robot.RobotMap;
-import frc.robot.TeleopControls;
-import frc.robot.Subassemblies.Elevator.DirectionEnum;
 import frc.robot.Utilities.ConsoleLogger;
 import frc.robot.Utilities.MotionProfiling.GeneratedProfiles;
 import frc.robot.Utilities.MotionProfiling.MotionProfile;

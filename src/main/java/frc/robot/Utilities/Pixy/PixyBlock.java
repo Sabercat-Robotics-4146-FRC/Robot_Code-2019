@@ -3,8 +3,6 @@ package frc.robot.Utilities.Pixy;
 
 import frc.robot.RobotMap;
 import frc.robot.Utilities.Dashboard;
-import frc.robot.Utilities.ConsoleLogger;
-
 
 public class PixyBlock {
 	public int Checksum;

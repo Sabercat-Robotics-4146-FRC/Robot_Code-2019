@@ -1,5 +1,7 @@
 package frc.robot.Utilities;
 import edu.wpi.first.wpilibj.GenericHID.RumbleType;
+import frc.robot.RobotMap;
+import frc.robot.Utilities.Limelight.LEDEnum;
 import edu.wpi.first.wpilibj.Joystick;
 //import edu.wpi.first.wpilibj.;
 
@@ -22,7 +24,8 @@ public class Controller {
 	double offDuration = 0;
 	double elapsedTime = 0;
 	boolean isRumblingFlag = false;
-	boolean firstBuzzFlag = false;
+    boolean firstBuzzFlag = false;
+    boolean syncLEDsWithRumble;
 	
 	//// Constant Variables ////
 	// Define buttons
@@ -61,7 +64,14 @@ public class Controller {
 	 * @param number integer to define which port a controller is using
 	 */
 	public Controller(int number) {
-		joy = new Joystick(number);
+        joy = new Joystick(number);
+        
+        try {
+            this.syncLEDsWithRumble = RobotMap.syncLEDsWithRumble;
+        } catch (Exception e) {
+            this.syncLEDsWithRumble = false;
+            ConsoleLogger.warning("No preference for syncLEDsWithRumble found for controller. Using default: false.");
+        }
 	}
 	
 	/**
@@ -340,7 +350,15 @@ public class Controller {
 	 */
 	public void setRumble(double intensity){
 		joy.setRumble(RumbleType.kLeftRumble, intensity);
-		joy.setRumble(RumbleType.kRightRumble, intensity);
+        joy.setRumble(RumbleType.kRightRumble, intensity);
+        
+        if (this.syncLEDsWithRumble) {
+            if (intensity != 0) {
+                RobotMap.limelight.setLightMode(LEDEnum.ENABLED);
+            } else if (intensity == 0) {
+                RobotMap.limelight.setLightMode(LEDEnum.DISABLED);
+            }
+        }
 	}
 	
 	public void updateRumbleBuzz(double dt) { // dt is in seconds

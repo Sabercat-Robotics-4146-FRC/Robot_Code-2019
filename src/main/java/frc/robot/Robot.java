@@ -6,9 +6,7 @@ import com.ctre.phoenix.motorcontrol.ControlMode;
 import edu.wpi.first.wpilibj.SampleRobot;
 import frc.robot.Utilities.ConsoleLogger;
 import frc.robot.Utilities.Dashboard;
-import frc.robot.Utilities.Limelight;
-
-import edu.wpi.first.wpilibj.CameraServer;
+import frc.robot.Utilities.Limelight.LEDEnum;
 
 public class Robot extends SampleRobot {
 	public Robot() {
@@ -42,37 +40,41 @@ public class Robot extends SampleRobot {
 		RobotMap.compressor.setClosedLoopControl(false); // TODO Disables the compressor during tellop. test if needed.
 
 		while (isOperatorControl() && isEnabled()) {
-			//RobotMap.limelight.update();
+			RobotMap.limelight.update();
 			RobotMap.timer.update();
-
 			RobotMap.teleopControls.update();
 
 			// RobotMap.arm.update();
-			RobotMap.drivetrain.update();
-			// RobotMap.elevator.update();
+			// RobotMap.drivetrain.update();
+            // RobotMap.elevator.update();
             // RobotMap.intake.update(RobotMap.timer.getDT());
             ConsoleLogger.update(RobotMap.timer.getDT());
 
+            // RobotMap.pilotController.updateRumbleBuzz(RobotMap.timer.getDT());
+
+            RobotMap.EGL_leftFront.set(ControlMode.PercentOutput, RobotMap.pilotController.getRightTrigger() - RobotMap.pilotController.getLeftTrigger());
+
+            // RobotMap.elevatorFront.set(ControlMode.PercentOutput, RobotMap.pilotController.getRightTrigger() - RobotMap.pilotController.getLeftTrigger());
 
 			//Dashboard.send("Compressor Enabled", RobotMap.compressor.enabled());
 			//Dashboard.send("Pressure Switch Triggered", RobotMap.compressor.getPressureSwitchValue());
             //Dashboard.send("Compressor Current", RobotMap.compressor.getCompressorCurrent());
             
-            // if (RobotMap.driverController.getLeftTriggerBool()) {
+            // if (RobotMap.pilotController.getLeftTriggerBool()) {
             //     RobotMap.cargoRoller.set(ControlMode.PercentOutput, 1.0);
-            // } else if (RobotMap.driverController.getRightTriggerBool()) {
+            // } else if (RobotMap.pilotController.getRightTriggerBool()) {
             //     RobotMap.cargoRoller.set(ControlMode.PercentOutput, -1.0);
             // } else {
             //     RobotMap.cargoRoller.set(ControlMode.PercentOutput, 0.0);
             // }
             
-            // if (RobotMap.driverController.getButtonA()) {
+            // if (RobotMap.pilotController.getButtonA()) {
             //     RobotMap.driveLeftFront.set(ControlMode.PercentOutput, 0.5);
-            // } else if (RobotMap.driverController.getButtonB()) {
+            // } else if (RobotMap.pilotController.getButtonB()) {
             //     RobotMap.driveLeftBack.set(ControlMode.PercentOutput, 0.5);
-            // } else if (RobotMap.driverController.getButtonX()) {
+            // } else if (RobotMap.pilotController.getButtonX()) {
             //     RobotMap.driveRightFront.set(ControlMode.PercentOutput, 0.5);
-            // } else if (RobotMap.driverController.getButtonY()) {
+            // } else if (RobotMap.pilotController.getButtonY()) {
             //     RobotMap.driveRightBack.set(ControlMode.PercentOutput, 0.5);
             // } else {
             //     RobotMap.driveLeftFront.set(ControlMode.PercentOutput, 0.0);
@@ -96,6 +98,6 @@ public class Robot extends SampleRobot {
 	 */
 	@Override
 	public void disabled() {
-		//RobotMap.limelight.setLightMode(Limelight.LEDEnum.OFF);
+		RobotMap.limelight.setLightMode(LEDEnum.DISABLED);
 	}
 }

@@ -9,7 +9,7 @@ public class Drivetrain {
     private double rotation = 0;
 
     private double speedModifier = 1.0; // -1 for inverted and 1 for not
-    private double rotationModifier = 1.0;
+    private double rotationModifier = 0.83;
 
     private VisionTurningPID visionPID;
 

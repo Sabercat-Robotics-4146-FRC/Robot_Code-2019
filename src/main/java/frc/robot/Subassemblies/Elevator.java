@@ -1,11 +1,10 @@
 package frc.robot.Subassemblies;
 
-import frc.robot.Robot;
+import com.ctre.phoenix.motorcontrol.ControlMode;
+
 import frc.robot.RobotMap;
 import frc.robot.Utilities.ConsoleLogger;
 import frc.robot.Utilities.Dashboard;
-
-import com.ctre.phoenix.motorcontrol.ControlMode;
 
 public class Elevator {
 
@@ -34,29 +33,27 @@ public class Elevator {
     DirectionEnum direction = DirectionEnum.FRONT;
     DirectionEnum lastDirection = DirectionEnum.FRONT;
 
-    double tareEncoderTick;
-
     boolean limitSwitchPressedFlag = false;
     String str = "";
 
     public void update() {
 
         // check the Limelight to see if the elevator is going to a port or hatch height
-        if (level == LevelEnum.INTAKING_HATCH) {
-            if (RobotMap.limelight.getY() >= RobotMap.LIMELIGHT_PORT_TAPE_HEIGHT) {
-                level = LevelEnum.BOTTOM_PORT;
-            }
-        }
-        if (level == LevelEnum.MID_HATCH) {
-            if (RobotMap.limelight.getY() >= RobotMap.LIMELIGHT_PORT_TAPE_HEIGHT) {
-                level = LevelEnum.MID_PORT;
-            }
-        }
-        if (level == LevelEnum.TOP_HATCH) {
-            if (RobotMap.limelight.getY() >= RobotMap.LIMELIGHT_PORT_TAPE_HEIGHT) {
-                level = LevelEnum.TOP_PORT;
-            }
-        }
+        // if (level == LevelEnum.INTAKING_HATCH) {
+        //     if (RobotMap.limelight.getY() >= RobotMap.LIMELIGHT_PORT_TAPE_HEIGHT) {
+        //         level = LevelEnum.BOTTOM_PORT;
+        //     }
+        // }
+        // if (level == LevelEnum.MID_HATCH) {
+        //     if (RobotMap.limelight.getY() >= RobotMap.LIMELIGHT_PORT_TAPE_HEIGHT) {
+        //         level = LevelEnum.MID_PORT;
+        //     }
+        // }
+        // if (level == LevelEnum.TOP_HATCH) {
+        //     if (RobotMap.limelight.getY() >= RobotMap.LIMELIGHT_PORT_TAPE_HEIGHT) {
+        //         level = LevelEnum.TOP_PORT;
+        //     }
+        // }
 
         switch(level) {
             case STORAGE:
@@ -314,8 +311,8 @@ public class Elevator {
         }
 
         if (RobotMap.elevatorLimitSwitch.get() && !limitSwitchPressedFlag) {
-            ConsoleLogger.info("Elevator limit switch pressed, resetting elevator encoder.");
-            // tareEncoderTick = RobotMap.elevatorFront.getSelectedSensorPosition();
+            ConsoleLogger.debug("Elevator limit switch pressed, resetting elevator encoder.");
+            RobotMap.elevatorFront.setSelectedSensorPosition(0);
             limitSwitchPressedFlag = true;
         }
 
@@ -335,7 +332,7 @@ public class Elevator {
     }
 
     private void moveElevator(double setPoint) {
-        RobotMap.elevatorFront.set(ControlMode.Position, setPoint + tareEncoderTick);
+        RobotMap.elevatorFront.set(ControlMode.Position, setPoint);
     }
 
     public void setLevelIntakingHatch() {

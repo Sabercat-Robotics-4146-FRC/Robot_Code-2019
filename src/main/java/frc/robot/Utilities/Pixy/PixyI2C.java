@@ -1,7 +1,6 @@
 package frc.robot.Utilities.Pixy;
 
 import edu.wpi.first.wpilibj.I2C;
-import frc.robot.RobotMap;
 import java.util.List;
 import java.util.ArrayList;
 // Our imports

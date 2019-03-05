@@ -25,7 +25,6 @@ public class Limelight {
     private double area = 4146;
 
     private LEDEnum LEDState = LEDEnum.DISABLED;
-    private LEDEnum lastLEDState = LEDEnum.DISABLED;
 
     public Limelight() {
         table = NetworkTableInstance.getDefault().getTable("limelight");
