@@ -1,6 +1,10 @@
 package frc.robot.Subassemblies;
 
+import com.ctre.phoenix.motorcontrol.ControlMode;
+
 import frc.robot.RobotMap;
+import frc.robot.TeleopControls;
+import frc.robot.Subassemblies.Elevator.DirectionEnum;
 import frc.robot.Utilities.ConsoleLogger;
 import frc.robot.Utilities.MotionProfiling.GeneratedProfiles;
 import frc.robot.Utilities.MotionProfiling.MotionProfile;
@@ -19,45 +23,44 @@ public class Arm {
     }
 
     public enum ArmEnum {
-        HOLD,
-        MOVE_ARM_OVER,
+        FRONT_LEVEL,
+        BACK_LEVEL,
+        FRONT_TILT,
+        BACK_TILT,
         RESET
     }
 
     DirectionEnum direction = DirectionEnum.FRONT;
     DirectionEnum lastDirection = DirectionEnum.FRONT;
 
-    ArmEnum armState = ArmEnum.HOLD;
+    ArmEnum armState = ArmEnum.FRONT_LEVEL;
+
+    boolean changingDirectionFlag = false;
 
     public void update() {
 
         switch(armState) {
-            case HOLD:
-                // keep the arm in the same place
+            case FRONT_LEVEL:
+                setArmPosition(RobotMap.ARM_FRONT_LEVEL_POSITION);
                 break;
 
-            case MOVE_ARM_OVER:
-                if (lastDirection == DirectionEnum.BACK && direction == DirectionEnum.FRONT && 
-                        RobotMap.teleopControls.getIsUpdating()) { // going to the front
-                    armMotionProfile.startProfile(GeneratedProfiles.backDownToBackTilt);
-                    if (/*RobotMap.elevatorFront.getSelectedSensorPosition() >= RobotMap.ARM_OVER_HEIGHT*/ true) { // check >= for actual robot
-                        armMotionProfile.disableMotionProfile();
-                        armMotionProfile.startProfile(GeneratedProfiles.backTiltToFrontDown);
-                        RobotMap.teleopControls.setIsUpdating(false);
-                        armMotionProfile.disableMotionProfile(); // disbable profile so that you can run a profile the next time a button is pressed
-                    }
+            case BACK_LEVEL:
+                setArmPosition(RobotMap.ARM_BACK_LEVEL_POSITION);
+                break;
+
+            case FRONT_TILT:
+                setArmPosition(RobotMap.ARM_FRONT_TILT_POSITION);
+
+                if (RobotMap.elevator.isElevatorClear() && changingDirectionFlag) {
+                    armState = ArmEnum.BACK_LEVEL;
                 }
-                if (lastDirection == DirectionEnum.FRONT && direction == DirectionEnum.BACK &&
-                        RobotMap.teleopControls.getIsUpdating()) { // going to the back
-                    armMotionProfile.startProfile(GeneratedProfiles.frontDownToFrontTilt);
-                    if (/*RobotMap.elevatorFront.getSelectedSensorPosition() >= RobotMap.ARM_OVER_HEIGHT*/true) { // check >= for actual robot
-                        armMotionProfile.disableMotionProfile();
-                        armMotionProfile.startProfile(GeneratedProfiles.frontTiltToBackDown);
-                        RobotMap.teleopControls.setIsUpdating(false); // stop updating this code so that the motion profiles don't keep running
-                        armMotionProfile.disableMotionProfile(); // disbable profile so that you can run a profile the next time a button is pressed
-                    }
-                } else {
-                    ConsoleLogger.error("Arm is in case MOVE_ARM_OVER but the lastDirection and direction are the same.");
+                break;
+
+            case BACK_TILT:
+                setArmPosition(RobotMap.ARM_BACK_TILT_POSITION);
+
+                if (RobotMap.elevator.isElevatorClear() && changingDirectionFlag) {
+                    armState = ArmEnum.FRONT_LEVEL;
                 }
                 break;
 
@@ -70,10 +73,18 @@ public class Arm {
 
     public void updateDirection() {
         lastDirection = direction;
+        changingDirectionFlag = false;
     }
     
     public void changeDirection() {
         direction = direction == DirectionEnum.FRONT ? DirectionEnum.BACK : DirectionEnum.FRONT;
+        changingDirectionFlag = true;
+
+        if (lastDirection == DirectionEnum.FRONT && direction == DirectionEnum.BACK) {
+            armState = ArmEnum.FRONT_TILT;
+        } else if (lastDirection == DirectionEnum.BACK && direction == DirectionEnum.FRONT) {
+            armState = ArmEnum.BACK_TILT;
+        }
     }
 
     public boolean isArmClear() {
@@ -96,15 +107,9 @@ public class Arm {
         }
     }
 
-    public void setArmStateHold() {
-        armState = ArmEnum.HOLD;
+    public void setArmPosition(double position) {
+        RobotMap.armPivot.set(ControlMode.Position, position);
     }
 
-    public void setArmStateMoveArmOver() {
-        armState = ArmEnum.MOVE_ARM_OVER;
-    }
-
-    public void setArmStateReset() {
-        armState = ArmEnum.RESET;
-    }
+    
 }

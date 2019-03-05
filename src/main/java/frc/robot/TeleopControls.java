@@ -31,25 +31,21 @@ public class TeleopControls {
                         updateDirection();
                         changeDirection();
                         RobotMap.elevator.setLevelBottomPort();
-                        RobotMap.arm.setArmStateMoveArmOver();
                     } else if (RobotMap.pilotController.getButtonB()) {      // we still need the bumper for the cargo ship heights
                         // switch direction and going to ship port height
                         updateDirection();
                         changeDirection();
                         RobotMap.elevator.setLevelShipPort();
-                        RobotMap.arm.setArmStateMoveArmOver();
                     } else if (RobotMap.pilotController.getButtonX()) {
                         // switch direction and going to mid port height
                         updateDirection();
                         changeDirection();
                         RobotMap.elevator.setLevelMidPort();
-                        RobotMap.arm.setArmStateMoveArmOver();
                     } else if (RobotMap.pilotController.getButtonY()) {
                         // switch direction and goin to top port height
                         updateDirection();
                         changeDirection();
                         RobotMap.elevator.setLevelTopPort();
-                        RobotMap.arm.setArmStateMoveArmOver();
                     }
                 } else { // going to a hatch height
                     if (RobotMap.pilotController.getButtonA()) {
@@ -57,26 +53,22 @@ public class TeleopControls {
                         updateDirection();
                         changeDirection();
                         RobotMap.elevator.setLevelIntakingHatch();
-                        RobotMap.arm.setArmStateMoveArmOver();
                     } else if (RobotMap.pilotController.getButtonB()) {
                         // switch direction and go to intaking cargo height check this so we can't
                         // intake cargo on wrong side of drivetrain
                         updateDirection();
                         changeDirection();
                         RobotMap.elevator.setLevelIntakingCargo();
-                        RobotMap.arm.setArmStateMoveArmOver();
                     } else if (RobotMap.pilotController.getButtonX()) {
                         // switch direction and go to mid hatch height
                         updateDirection();
                         changeDirection();
                         RobotMap.elevator.setLevelMidHatch();
-                        RobotMap.arm.setArmStateMoveArmOver();
                     } else if (RobotMap.pilotController.getButtonY()) {
                         // switch direction and go to top hatch height
                         updateDirection();
                         changeDirection();
                         RobotMap.elevator.setLevelTopHatch();
-                        RobotMap.arm.setArmStateMoveArmOver();
                     }
                 } // port 
             }
@@ -109,23 +101,19 @@ public class TeleopControls {
                         // go to intaking hatch height
                         updateDirection();
                         RobotMap.elevator.setLevelIntakingHatch();
-                        RobotMap.arm.setArmStateHold();
                     } else if (RobotMap.pilotController.getButtonB()) {
                         // go to intaking cargo height check this so we can't intake cargo on wrong side
                         // of drivetrain
                         updateDirection();
                         RobotMap.elevator.setLevelIntakingCargo();
-                        RobotMap.arm.setArmStateHold();
                     } else if (RobotMap.pilotController.getButtonX()) {
                         // go to mid hatch height
                         updateDirection();
                         RobotMap.elevator.setLevelMidHatch();
-                        RobotMap.arm.setArmStateHold();
                     } else if (RobotMap.pilotController.getButtonY()) {
                         // go to top hatch height
                         updateDirection();
                         RobotMap.elevator.setLevelTopHatch();
-                        RobotMap.arm.setArmStateHold();
                     }
                 } // port 
             }

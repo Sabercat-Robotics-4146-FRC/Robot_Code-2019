@@ -67,7 +67,11 @@ public class RobotMap {
 
 	public static final double LIMELIGHT_PORT_TAPE_HEIGHT = 0.0;
 
-	// Arm Constants
+    // Arm Constants
+	public static final double ARM_FRONT_LEVEL_POSITION = 0.0;
+	public static final double ARM_FRONT_TILT_POSITION = 0.0;
+	public static final double ARM_BACK_LEVEL_POSITION = 0.0;
+	public static final double ARM_BACK_TILT_POSITION = 0.0;
 	public static final double FRONT_ARM_CLEAR_VALUE = 0.0;
 	public static final double BACK_ARM_CLEAR_VALUE = 0.0;
 	

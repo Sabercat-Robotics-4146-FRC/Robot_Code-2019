@@ -335,6 +335,14 @@ public class Elevator {
         RobotMap.elevatorFront.set(ControlMode.Position, setPoint);
     }
 
+    public boolean isElevatorClear() {
+        if (RobotMap.elevatorFront.getSelectedSensorPosition() >= (RobotMap.ARM_OVER_HEIGHT /*+ tareEncoderTick*/))  {
+            return true;
+        } else {
+            return false;
+        }
+    }
+
     public void setLevelIntakingHatch() {
         level = LevelEnum.INTAKING_HATCH;
     }
