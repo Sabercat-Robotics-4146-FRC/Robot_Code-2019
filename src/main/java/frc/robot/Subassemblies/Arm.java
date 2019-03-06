@@ -3,10 +3,7 @@ package frc.robot.Subassemblies;
 import com.ctre.phoenix.motorcontrol.ControlMode;
 
 import frc.robot.RobotMap;
-import frc.robot.TeleopControls;
-import frc.robot.Subassemblies.Elevator.DirectionEnum;
 import frc.robot.Utilities.ConsoleLogger;
-import frc.robot.Utilities.MotionProfiling.GeneratedProfiles;
 import frc.robot.Utilities.MotionProfiling.MotionProfile;
 
 public class Arm {
