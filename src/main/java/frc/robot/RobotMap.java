@@ -47,8 +47,6 @@ public class RobotMap {
 	//public final static Gains kGains_MotProf = new Gains( 1.0, 0.0,  0.0, 1023.0/6800.0,  400,  1.00 );
 
 	// Elevator Constants
-	public static final int TICKS_PER_MAG_ENCODER_ROTATION = 4096;
-	public static final int ELEVATOR_GEARBOX_REDUCTION = 10;
 	public static final double FRONT_INTAKING_CARGO_HEIGHT = 0.0;
 	public static final double FRONT_INTAKING_HATCH_HEIGHT = 0.0;
 	public static final double FRONT_BOTTOM_PORT_HEIGHT = 0.0;
@@ -74,6 +72,7 @@ public class RobotMap {
 	public static final double ARM_FRONT_TILT_POSITION = 0.0;
 	public static final double ARM_BACK_LEVEL_POSITION = 0.0;
 	public static final double ARM_BACK_TILT_POSITION = 0.0;
+	
 	public static final double FRONT_ARM_CLEAR_VALUE = 0.0;
 	public static final double BACK_ARM_CLEAR_VALUE = 0.0;
 	

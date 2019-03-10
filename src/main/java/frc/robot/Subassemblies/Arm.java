@@ -7,19 +7,13 @@ import frc.robot.Utilities.ConsoleLogger;
 import frc.robot.Utilities.MotionProfiling.MotionProfile;
 
 public class Arm {
-
-    MotionProfile armMotionProfile;
-
-    public Arm() {
-        armMotionProfile = new MotionProfile(RobotMap.armPivot);
-    }
-    
     public enum DirectionEnum {
         FRONT,
         BACK
     }
 
-    public enum ArmEnum {
+    public enum ArmPositionEnum {
+        STORAGE, // only for front
         FRONT_LEVEL,
         BACK_LEVEL,
         FRONT_TILT,
@@ -27,84 +21,52 @@ public class Arm {
         RESET
     }
 
-    DirectionEnum direction = DirectionEnum.FRONT;
-    DirectionEnum lastDirection = DirectionEnum.FRONT;
+    DirectionEnum directionState;
+    ArmPositionEnum armPositionState = ArmPositionEnum.STORAGE;
 
-    ArmEnum armState = ArmEnum.FRONT_LEVEL;
-
-    boolean changingDirectionFlag = false;
+    public Arm() {
+        directionState = DirectionEnum.FRONT;
+        armPositionState = ArmPositionEnum.STORAGE;
+    }
 
     public void update() {
 
-        switch(armState) {
-            case FRONT_LEVEL:
-                setArmPosition(RobotMap.ARM_FRONT_LEVEL_POSITION);
-                break;
+    }
 
-            case BACK_LEVEL:
-                setArmPosition(RobotMap.ARM_BACK_LEVEL_POSITION);
-                break;
-
-            case FRONT_TILT:
-                setArmPosition(RobotMap.ARM_FRONT_TILT_POSITION);
-
-                if (RobotMap.elevator.isElevatorClear() && changingDirectionFlag) {
-                    armState = ArmEnum.BACK_LEVEL;
-                }
-                break;
-
-            case BACK_TILT:
-                setArmPosition(RobotMap.ARM_BACK_TILT_POSITION);
-
-                if (RobotMap.elevator.isElevatorClear() && changingDirectionFlag) {
-                    armState = ArmEnum.FRONT_LEVEL;
-                }
-                break;
-
-            case RESET:
-                // write this once we know pot values
-                break;
-        }
+    // Setters
     
+    public void toggleDirection() {
+        directionState = directionState == DirectionEnum.FRONT ? DirectionEnum.BACK : DirectionEnum.FRONT;
     }
 
-    public void updateDirection() {
-        lastDirection = direction;
-        changingDirectionFlag = false;
-    }
-    
-    public void changeDirection() {
-        direction = direction == DirectionEnum.FRONT ? DirectionEnum.BACK : DirectionEnum.FRONT;
-        changingDirectionFlag = true;
-
-        if (lastDirection == DirectionEnum.FRONT && direction == DirectionEnum.BACK) {
-            armState = ArmEnum.FRONT_TILT;
-        } else if (lastDirection == DirectionEnum.BACK && direction == DirectionEnum.FRONT) {
-            armState = ArmEnum.BACK_TILT;
-        }
+    public void setDirection(DirectionEnum state) { // may be unneeded
+        directionState = state;
     }
 
-    public boolean isArmClear() {
-        if (lastDirection == DirectionEnum.FRONT && direction == DirectionEnum.BACK) {
-            if (RobotMap.armPot.get() == RobotMap.BACK_ARM_CLEAR_VALUE) { // fix the == once we know pot values
-                return true;
-            } else {
-                return false;
-            }
-        }
-        if (lastDirection == DirectionEnum.BACK && direction == DirectionEnum.FRONT) {
-            if (RobotMap.armPot.get() == RobotMap.FRONT_ARM_CLEAR_VALUE) { // fix the == once we know pot values
-                return true;
-            } else {
-                return false;
-            }
-        } else {
-            ConsoleLogger.error("Checking isArmCLear when not changing direction.");
-            return false;
-        }
+    public void setPosition(ArmPositionEnum state) {
+        armPositionState = state;
     }
 
-    public void setArmPosition(double position) {
+    // Getters
+
+    public DirectionEnum getDirection() {
+        return directionState;
+    }
+
+    public ArmPositionEnum getPosition() {
+        return armPositionState;
+    }
+
+    // Testers
+
+    public boolean isArmClear() { // tests if the arm is forward or backwards enough to clear the top of the elevator.
+        return RobotMap.armPivot.getSelectedSensorPosition() > RobotMap.FRONT_ARM_CLEAR_VALUE &&
+                RobotMap.armPivot.getSelectedSensorPosition() < RobotMap.BACK_ARM_CLEAR_VALUE; // TODO check pot polarity
+    }
+
+    // Utilities
+
+    private void moveArm(double position) {
         RobotMap.armPivot.set(ControlMode.Position, position);
     }
 
