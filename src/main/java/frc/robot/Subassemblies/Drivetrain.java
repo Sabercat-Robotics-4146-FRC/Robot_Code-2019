@@ -2,7 +2,7 @@ package frc.robot.Subassemblies;
 
 import frc.robot.RobotMap;
 import frc.robot.Utilities.ConsoleLogger;
-import frc.robot.Utilities.PID.VisionTurningPID;
+import frc.robot.Utilities.PID.LimelightTurningPID;
 
 public class Drivetrain {
     private double speed = 0;
@@ -11,14 +11,14 @@ public class Drivetrain {
     private double speedModifier = 1.0; // -1 for inverted and 1 for not
     private double rotationModifier = 0.83;
 
-    private VisionTurningPID visionPID;
+    private LimelightTurningPID limelightVisionPID;
 
     public Drivetrain() {
         if (Math.abs(speedModifier) != 1 || Math.abs(rotationModifier) != 1) {
             ConsoleLogger.warning("Drivetrain Modifiers are not 1 or -1. Which means its clamped.");
         }
 
-        visionPID = new VisionTurningPID();
+        limelightVisionPID = new LimelightTurningPID();
     }
 
     public void update() {
@@ -26,14 +26,14 @@ public class Drivetrain {
     }
 
     public void restartVisionPID() {
-        this.visionPID.reset();
-        this.visionPID.flush();
+        this.limelightVisionPID.reset();
+        this.limelightVisionPID.flush();
     }
 
     public void runVisionPID(double speed) {
-        this.visionPID.update(RobotMap.timer.getDT());
+        this.limelightVisionPID.update(RobotMap.timer.getDT());
         this.speed = speed;
-        this.rotation = visionPID.get();
+        this.rotation = limelightVisionPID.get();
     }
 
     public void setDrivetrainValues(double speed, double rotation) {

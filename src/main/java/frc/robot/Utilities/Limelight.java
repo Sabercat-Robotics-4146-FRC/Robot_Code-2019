@@ -34,6 +34,8 @@ public class Limelight {
     }
 
     public void update() {
+        Dashboard.send("LED state", LEDState.toString());
+        Dashboard.send("LED Table state", table.getEntry("ledMode").getDouble(4146));
         // NOTE!!!! This may be bad querrying the table every iteration.
         if (LEDState == LEDEnum.ENABLED && table.getEntry("ledMode").getDouble(4146) != enabledCode) {
             this.table.getEntry("ledMode").setNumber(enabledCode);

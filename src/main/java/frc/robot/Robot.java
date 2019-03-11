@@ -3,6 +3,8 @@ package frc.robot;
 
 import com.ctre.phoenix.motorcontrol.ControlMode;
 
+import edu.wpi.cscore.UsbCamera;
+import edu.wpi.first.cameraserver.CameraServer;
 import edu.wpi.first.wpilibj.SampleRobot;
 import frc.robot.Utilities.ConsoleLogger;
 import frc.robot.Utilities.Dashboard;
@@ -21,6 +23,8 @@ public class Robot extends SampleRobot {
 	public void robotInit() {
         RobotMap.init(); // Instantiates things to be used from RobotMap.
         //CameraServer.getInstance().startAutomaticCapture();
+		UsbCamera cameraOne = CameraServer.getInstance().startAutomaticCapture(0);
+		UsbCamera cameraTwo =CameraServer.getInstance().startAutomaticCapture(1);
 	}
 
 	/**
@@ -37,9 +41,14 @@ public class Robot extends SampleRobot {
 	 */
 	@Override
 	public void operatorControl() {
-		RobotMap.compressor.setClosedLoopControl(false); // TODO Disables the compressor during tellop. test if needed.
 
 		while (isOperatorControl() && isEnabled()) {
+			if (!RobotMap.compressor.getCompressorNotConnectedFault()) {
+				RobotMap.compressor.setClosedLoopControl(true);
+			} else {
+				RobotMap.compressor.setClosedLoopControl(false);
+			}
+
 			RobotMap.limelight.update();
 			RobotMap.timer.update();
 			RobotMap.teleopControls.update();
@@ -47,12 +56,27 @@ public class Robot extends SampleRobot {
 			// RobotMap.arm.update();
 			// RobotMap.drivetrain.update();
             // RobotMap.elevator.update();
-            // RobotMap.intake.update(RobotMap.timer.getDT());
-            ConsoleLogger.update(RobotMap.timer.getDT());
+			RobotMap.intake.update(RobotMap.timer.getDT());
+			
+			ConsoleLogger.update(RobotMap.timer.getDT());
+			RobotMap.pilotController.updateRumbleBuzz(RobotMap.timer.getDT());
+			
+			if (RobotMap.pilotController.getButtonBack()) {
+				RobotMap.elevatorFront.setSelectedSensorPosition(0);
+			}
+
+			Dashboard.send("Elevator Pos", RobotMap.elevatorFront.getSelectedSensorPosition());
+			Dashboard.send("Elevator Error", RobotMap.elevatorFront.getClosedLoopError());
+			Dashboard.send("Arm Pos", RobotMap.armPivot.getSelectedSensorPosition());
+			Dashboard.send("Arm Error", RobotMap.armPivot.getClosedLoopError());
+
+			Dashboard.send("Elevator LS", RobotMap.elevatorLimitSwitch.get());
+			Dashboard.send("Hatch LS", RobotMap.hatchLimitSwitch.get());
+			Dashboard.send("Cargo LS", RobotMap.cargoLimitSwitch.get());
 
             // RobotMap.pilotController.updateRumbleBuzz(RobotMap.timer.getDT());
 
-            RobotMap.EGL_leftFront.set(ControlMode.PercentOutput, RobotMap.pilotController.getRightTrigger() - RobotMap.pilotController.getLeftTrigger());
+            // RobotMap.EGL_leftFront.set(ControlMode.PercentOutput, RobotMap.pilotController.getRightTrigger() - RobotMap.pilotController.getLeftTrigger());
 
             // RobotMap.elevatorFront.set(ControlMode.PercentOutput, RobotMap.pilotController.getRightTrigger() - RobotMap.pilotController.getLeftTrigger());
 
@@ -99,5 +123,6 @@ public class Robot extends SampleRobot {
 	@Override
 	public void disabled() {
 		RobotMap.limelight.setLightMode(LEDEnum.DISABLED);
+		RobotMap.limelight.update();
 	}
 }

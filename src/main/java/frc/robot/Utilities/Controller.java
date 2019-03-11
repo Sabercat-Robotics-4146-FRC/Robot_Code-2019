@@ -25,7 +25,6 @@ public class Controller {
 	double elapsedTime = 0;
 	boolean isRumblingFlag = false;
     boolean firstBuzzFlag = false;
-    boolean syncLEDsWithRumble;
 	
 	//// Constant Variables ////
 	// Define buttons
@@ -65,13 +64,6 @@ public class Controller {
 	 */
 	public Controller(int number) {
         joy = new Joystick(number);
-        
-        try {
-            this.syncLEDsWithRumble = RobotMap.syncLEDsWithRumble;
-        } catch (Exception e) {
-            this.syncLEDsWithRumble = false;
-            ConsoleLogger.warning("No preference for syncLEDsWithRumble found for controller. Using default: false.");
-        }
 	}
 	
 	/**
@@ -348,43 +340,40 @@ public class Controller {
 	 * 
 	 * @param intensity of the rumble (0-1)
 	 */
-	public void setRumble(double intensity){
+	public void setRumble(double intensity, boolean syncLED){
 		joy.setRumble(RumbleType.kLeftRumble, intensity);
         joy.setRumble(RumbleType.kRightRumble, intensity);
-        
-        if (this.syncLEDsWithRumble) {
-            if (intensity != 0) {
-                RobotMap.limelight.setLightMode(LEDEnum.ENABLED);
-            } else if (intensity == 0) {
-                RobotMap.limelight.setLightMode(LEDEnum.DISABLED);
-            }
-        }
+		
+		if (syncLED) {
+			if (intensity != 0) {
+				RobotMap.limelight.setLightMode(LEDEnum.ENABLED);
+			} else if (intensity == 0) {
+				RobotMap.limelight.setLightMode(LEDEnum.DISABLED);
+			}
+		}
 	}
 	
 	public void updateRumbleBuzz(double dt) { // dt is in seconds
 		if(count > 0) {
 			if(!firstBuzzFlag) {
-				System.out.println("First Rumble.");
 				firstBuzzFlag = true;
 				isRumblingFlag = true;
 				count--;
-				setRumble(1.0);
+				setRumble(1.0, true);
 				return;
 			}
 		
 			elapsedTime += dt;
 			if(!isRumblingFlag && elapsedTime >= offDuration) { // Turning buzz on
-				System.out.println("Turn on.");
 				isRumblingFlag = true;
 				elapsedTime = 0;
 				count--;
-				setRumble(1.0);
+				setRumble(1.0, true);
 			} else if(isRumblingFlag && elapsedTime >= onDuration) { // Turning buzz off
-				System.out.println("Turn off.");
 				elapsedTime = 0;
 				isRumblingFlag = false;
 				count--;
-				setRumble(0.0);
+				setRumble(0.0, true);
 			}
 		}
 	}
