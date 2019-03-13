@@ -45,12 +45,6 @@ public class Robot extends SampleRobot {
 		boolean hatchFlag = true;
 
 		while (isOperatorControl() && isEnabled()) {
-			if (!RobotMap.compressor.getCompressorNotConnectedFault()) {
-				RobotMap.compressor.setClosedLoopControl(true);
-			} else {
-				RobotMap.compressor.setClosedLoopControl(false);
-			}
-
 			RobotMap.limelight.update();
 			RobotMap.timer.update();
 			RobotMap.teleopControls.update();
@@ -62,10 +56,6 @@ public class Robot extends SampleRobot {
 			
 			ConsoleLogger.update(RobotMap.timer.getDT());
 			RobotMap.pilotController.updateRumbleBuzz(RobotMap.timer.getDT());
-			
-			if (RobotMap.copilotController.getButtonBack()) {
-				RobotMap.elevatorFront.setSelectedSensorPosition(0);
-			}
 
 			if (RobotMap.pilotController.getDPadBool() && hatchFlag) {
 				hatchFlag = false;
@@ -88,39 +78,6 @@ public class Robot extends SampleRobot {
 			Dashboard.send("Elevator LS", RobotMap.elevatorLimitSwitch.get());
 			Dashboard.send("Hatch LS", RobotMap.hatchLimitSwitch.get());
 			Dashboard.send("Cargo LS", RobotMap.cargoLimitSwitch.get());
-
-            // RobotMap.pilotController.updateRumbleBuzz(RobotMap.timer.getDT());
-
-            // RobotMap.EGL_leftFront.set(ControlMode.PercentOutput, RobotMap.pilotController.getRightTrigger() - RobotMap.pilotController.getLeftTrigger());
-
-            // RobotMap.elevatorFront.set(ControlMode.PercentOutput, RobotMap.pilotController.getRightTrigger() - RobotMap.pilotController.getLeftTrigger());
-
-			//Dashboard.send("Compressor Enabled", RobotMap.compressor.enabled());
-			//Dashboard.send("Pressure Switch Triggered", RobotMap.compressor.getPressureSwitchValue());
-            //Dashboard.send("Compressor Current", RobotMap.compressor.getCompressorCurrent());
-            
-            // if (RobotMap.pilotController.getLeftTriggerBool()) {
-            //     RobotMap.cargoRoller.set(ControlMode.PercentOutput, 1.0);
-            // } else if (RobotMap.pilotController.getRightTriggerBool()) {
-            //     RobotMap.cargoRoller.set(ControlMode.PercentOutput, -1.0);
-            // } else {
-            //     RobotMap.cargoRoller.set(ControlMode.PercentOutput, 0.0);
-            // }
-            
-            // if (RobotMap.pilotController.getButtonA()) {
-            //     RobotMap.driveLeftFront.set(ControlMode.PercentOutput, 0.5);
-            // } else if (RobotMap.pilotController.getButtonB()) {
-            //     RobotMap.driveLeftBack.set(ControlMode.PercentOutput, 0.5);
-            // } else if (RobotMap.pilotController.getButtonX()) {
-            //     RobotMap.driveRightFront.set(ControlMode.PercentOutput, 0.5);
-            // } else if (RobotMap.pilotController.getButtonY()) {
-            //     RobotMap.driveRightBack.set(ControlMode.PercentOutput, 0.5);
-            // } else {
-            //     RobotMap.driveLeftFront.set(ControlMode.PercentOutput, 0.0);
-            //     RobotMap.driveLeftBack.set(ControlMode.PercentOutput, 0.0);
-            //     RobotMap.driveRightFront.set(ControlMode.PercentOutput, 0.0);
-            //     RobotMap.driveRightBack.set(ControlMode.PercentOutput, 0.0);
-            // }
 		}
 	}
 
@@ -129,6 +86,62 @@ public class Robot extends SampleRobot {
 	 */
 	@Override
 	public void test() {
+		while(isTest() && isEnabled()) {
+			RobotMap.timer.update();
+			ConsoleLogger.update(RobotMap.timer.getDT());
+
+			//Arm - Left Joystick Y Axis
+			RobotMap.armPivot.set(ControlMode.PercentOutput, RobotMap.pilotController.getDeadbandLeftYAxis());
+
+			// Elevator - Right Joystick Y Axis
+			RobotMap.elevatorFront.set(ControlMode.PercentOutput, RobotMap.pilotController.getDeadbandRightYAxis());
+
+			if (RobotMap.pilotController.getButtonBack()) {
+				RobotMap.elevatorFront.setSelectedSensorPosition(0);
+			}
+
+			// EGL - Right Trigger, Raise Robot; Left Trigger, Lower Robot
+			RobotMap.EGL_leftFront.set(ControlMode.PercentOutput, RobotMap.pilotController.getLeftTrigger()
+					 - RobotMap.pilotController.getRightTrigger());
+
+			// Compressor
+			if (!RobotMap.compressor.getCompressorNotConnectedFault()) {
+				RobotMap.compressor.setClosedLoopControl(true);
+			} else {
+				RobotMap.compressor.setClosedLoopControl(false);
+			}
+
+			if (RobotMap.pilotController.getButtonStart()) {
+				RobotMap.compressor.clearAllPCMStickyFaults();
+			}
+
+			Dashboard.send("Elevator Pos", RobotMap.elevatorFront.getSelectedSensorPosition());
+			Dashboard.send("Elevator Error", RobotMap.elevatorFront.getClosedLoopError());
+			Dashboard.send("Arm Pos", RobotMap.armPivot.getSelectedSensorPosition());
+			Dashboard.send("Arm Error", RobotMap.armPivot.getClosedLoopError());
+
+			Dashboard.send("Elevator LS", RobotMap.elevatorLimitSwitch.get());
+			Dashboard.send("Hatch LS", RobotMap.hatchLimitSwitch.get());
+			Dashboard.send("Cargo LS", RobotMap.cargoLimitSwitch.get());
+
+			Dashboard.send("Compressor Enabled", RobotMap.compressor.enabled());
+			Dashboard.send("Pressure Switch Triggered", RobotMap.compressor.getPressureSwitchValue());
+			Dashboard.send("Compressor Current(Amps)", RobotMap.compressor.getCompressorCurrent());
+			Dashboard.send("Compressor Connected", !RobotMap.compressor.getCompressorNotConnectedFault());
+
+			if (RobotMap.compressor.getCompressorCurrentTooHighFault()) {
+				ConsoleLogger.error("Compressor Current too High!");
+			}
+			if (RobotMap.compressor.getCompressorCurrentTooHighStickyFault()) {
+				ConsoleLogger.error("Compressor Current too High Sticky Fault!");
+			}
+			if (RobotMap.compressor.getCompressorShortedFault()) {
+				ConsoleLogger.error("Compressor Output appears to be shorted!");
+			}
+			if (RobotMap.compressor.getCompressorShortedStickyFault()) {
+				ConsoleLogger.error("Compressor Output appears to be shorted and sticky faulted!");
+			}
+		}
 		
 	}
 	
