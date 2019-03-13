@@ -61,22 +61,22 @@ public class Intake {
         }
 
         // Hatch Manipulator
-        if (this.dtAccumulator < RobotMap.CLAW_RELEASE_TIME) {
-            this.dtAccumulator += dt;
-        }
+        // if (this.dtAccumulator < RobotMap.CLAW_RELEASE_TIME) {
+        //     this.dtAccumulator += dt;
+        // }
 
-        if (RobotMap.hatchLimitSwitch.get() && dtAccumulator >= RobotMap.CLAW_RELEASE_TIME) {
-            // System.out.println("Hatch LS go!!!!!");
-            clawState = ClawEnum.HOLDING;
-        }
+        // if (RobotMap.hatchLimitSwitch.get() && dtAccumulator >= RobotMap.CLAW_RELEASE_TIME) {
+        //     // System.out.println("Hatch LS go!!!!!");
+        //     clawState = ClawEnum.HOLDING;
+        // }
 
-        if (clawState == ClawEnum.HOLDING) {
-            RobotMap.clawSolenoid.set(true);
-        } else if (clawState == ClawEnum.RELEASED) {
-            RobotMap.clawSolenoid.set(false);
-        } else {
-            ConsoleLogger.error("Claw is in an unnacounted for state.");
-        }
+        // if (clawState == ClawEnum.HOLDING) {
+        //     RobotMap.clawSolenoid.set(true);
+        // } else if (clawState == ClawEnum.RELEASED) {
+        //     RobotMap.clawSolenoid.set(false);
+        // } else {
+        //     ConsoleLogger.error("Claw is in an unnacounted for state.");
+        // }
     }
 
     public void setCargoRollerState(CargoRollerEnum cargoRollerState) {

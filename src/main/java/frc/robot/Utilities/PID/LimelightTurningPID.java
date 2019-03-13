@@ -7,8 +7,8 @@ public class LimelightTurningPID extends PID {
     PixyI2C pixy;
 
     public LimelightTurningPID() {
-        super(RobotMap.LIMELIGHT_UPDATE_RATE, RobotMap.VISION_BREAK_TOLERANCE);
-        setPID(RobotMap.VISION_kP, RobotMap.VISION_kI, RobotMap.VISION_kD);
+        super(RobotMap.LIMELIGHT_UPDATE_RATE, RobotMap.LIMELIGHT_BREAK_TOLERANCE);
+        setPID(RobotMap.LIMELIGHT_kP, RobotMap.LIMELIGHT_kI, RobotMap.LIMELIGHT_kD);
     }
 
     @Override

@@ -15,19 +15,27 @@ public class Arm {
 
     public enum ArmEnum {
         STORAGE,
+        INTAKING_CARGO,
         FRONT_LEVEL,
         BACK_LEVEL,
         FRONT_TILT,
         BACK_TILT,
-        FRONT_CARGO,
-        BACK_CARGO,
+        FRONT_BOTTOM_CARGO,
+        FRONT_MID_CARGO,
+        FRONT_TOP_CARGO,
+        BACK_BOTTOM_CARGO,
+        BACK_MID_CARGO,
+        BACK_TOP_CARGO,
+        FRONT_CARGO_SHIP_PORT,
+        BACK_CARGO_SHIP_PORT,
+        BACK_TILT_FOR_INTAKING_CARGO, // this is a really stupid state to fix a problem
         RESET
     }
 
     DirectionEnum direction = DirectionEnum.FRONT;
     DirectionEnum lastDirection = DirectionEnum.FRONT;
 
-    ArmEnum armState = ArmEnum.FRONT_LEVEL;
+    ArmEnum armState = ArmEnum.STORAGE;
 
     boolean changingDirectionFlag = false;
 
@@ -41,6 +49,12 @@ public class Arm {
                     setArmPosition(RobotMap.ARM_BACK_STORAGE_POSITION);
                 } else {
                     ConsoleLogger.error("The arm is not in the front or back. What the fuck!");
+                }
+                break;
+
+            case INTAKING_CARGO:
+                if (isArmInFront()) {
+                    setArmPosition(RobotMap.ARM_FRONT_CARGO_INTAKING_POSITION);
                 }
                 break;
 
@@ -68,19 +82,91 @@ public class Arm {
                 }
                 break;
 
-            case FRONT_CARGO:
-                setArmPosition(RobotMap.ARM_FRONT_CARGO_POSITION);
+            case BACK_TILT_FOR_INTAKING_CARGO:
+                setArmPosition(RobotMap.ARM_BACK_TILT_POSITION);
 
                 if (RobotMap.elevator.isElevatorClear() && changingDirectionFlag) {
-                    armState = ArmEnum.BACK_CARGO;
+                    armState = ArmEnum.INTAKING_CARGO;
+                }
+                break; 
+
+            // case FRONT_CARGO:
+            //     setArmPosition(RobotMap.ARM_FRONT_CARGO_POSITION);
+
+            //     if (RobotMap.elevator.isElevatorClear() && changingDirectionFlag) {
+            //         armState = ArmEnum.BACK_CARGO;
+            //     }
+            //     break;
+
+            case FRONT_BOTTOM_CARGO:
+                setArmPosition(RobotMap.ARM_FRONT_BOTTOM_CARGO_POSITION);
+
+                if (RobotMap.elevator.isElevatorClear() && changingDirectionFlag) {
+                    armState = ArmEnum.BACK_BOTTOM_CARGO;
                 }
                 break;
 
-            case BACK_CARGO:
-                setArmPosition(RobotMap.ARM_BACK_CARGO_POSITION);
+            case FRONT_MID_CARGO:
+                setArmPosition(RobotMap.ARM_FRONT_MID_CARGO_POSITION);
 
                 if (RobotMap.elevator.isElevatorClear() && changingDirectionFlag) {
-                    armState = ArmEnum.FRONT_CARGO;
+                    armState = ArmEnum.BACK_MID_CARGO;
+                }
+                break;
+
+            case FRONT_TOP_CARGO:
+                setArmPosition(RobotMap.ARM_FRONT_TOP_CARGO_POSITION);
+
+                if (RobotMap.elevator.isElevatorClear() && changingDirectionFlag) {
+                    armState = ArmEnum.BACK_TOP_CARGO;
+                }
+                break;
+
+            // case BACK_CARGO:
+            //     setArmPosition(RobotMap.ARM_BACK_CARGO_POSITION);
+
+            //     if (RobotMap.elevator.isElevatorClear() && changingDirectionFlag) {
+            //         armState = ArmEnum.FRONT_CARGO;
+            //     }
+            //     break;
+
+            case BACK_BOTTOM_CARGO:
+                setArmPosition(RobotMap.ARM_BACK_BOTTOM_CARGO_POSITION);
+
+                if (RobotMap.elevator.isElevatorClear() && changingDirectionFlag) {
+                    armState = ArmEnum.FRONT_BOTTOM_CARGO;
+                }
+                break;
+
+            case BACK_MID_CARGO:
+                setArmPosition(RobotMap.ARM_BACK_MID_CARGO_POSITION);
+
+                if (RobotMap.elevator.isElevatorClear() && changingDirectionFlag) {
+                    armState = ArmEnum.FRONT_MID_CARGO;
+                }
+                break;
+
+            case BACK_TOP_CARGO:
+                setArmPosition(RobotMap.ARM_BACK_TOP_CARGO_POSITION);
+
+                if (RobotMap.elevator.isElevatorClear() && changingDirectionFlag) {
+                    armState = ArmEnum.FRONT_TOP_CARGO;
+                }
+                break;
+
+            case FRONT_CARGO_SHIP_PORT:
+                setArmPosition(RobotMap.ARM_FRONT_CARGO_SHIP_POSITION);
+
+                if (RobotMap.elevator.isElevatorClear() && changingDirectionFlag) {
+                    armState = ArmEnum.BACK_CARGO_SHIP_PORT;
+                }
+                break;
+
+            case BACK_CARGO_SHIP_PORT:
+                setArmPosition(RobotMap.ARM_BACK_CARGO_SHIP_POSITION);
+
+                if (RobotMap.elevator.isElevatorClear() && changingDirectionFlag) {
+                    armState = ArmEnum.FRONT_CARGO_SHIP_PORT;
                 }
                 break;
 
@@ -90,6 +176,7 @@ public class Arm {
         }
 
         Dashboard.send("isArmCLear", isArmClear());
+        Dashboard.send("Arm State", armState.toString());
     
     }
 
@@ -157,16 +244,48 @@ public class Arm {
         armState = ArmEnum.BACK_TILT;
     }
 
-    public void setArmStateFrontCargo() {
-        armState = ArmEnum.FRONT_CARGO;
+    public void setArmStateFrontBottomCargo() {
+        armState = ArmEnum.FRONT_BOTTOM_CARGO;
     }
 
-    public void setArmStateBackCargo() {
-        armState = ArmEnum.BACK_CARGO;
+    public void setArmStateFrontMidCargo() {
+        armState = ArmEnum.FRONT_MID_CARGO;
+    }
+
+    public void setArmStateFrontTopCargo() {
+        armState = ArmEnum.FRONT_TOP_CARGO;
+    }
+
+    public void setArmStateFrontCargoShipPort() {
+        armState = ArmEnum.FRONT_CARGO_SHIP_PORT;
+    }
+
+    public void setArmStateBackBottomCargo() {
+        armState = ArmEnum.BACK_BOTTOM_CARGO;
+    }
+
+    public void setArmStateBackMidCargo() {
+        armState = ArmEnum.BACK_MID_CARGO;
+    }
+
+    public void setArmStateBackTopCargo() {
+        armState = ArmEnum.BACK_TOP_CARGO;
+    }
+
+    public void setArmStateBackCargoShipPort() {
+        armState = ArmEnum.BACK_CARGO_SHIP_PORT;
     }
 
     public void setArmStateStorage() {
         armState = ArmEnum.STORAGE;
+    }
+
+    public void setArmStateFrontIntakingCargo() {
+        armState = ArmEnum.INTAKING_CARGO;
+    }
+
+    public void setArmStateBackTiltForIntakingCargo() {
+        armState = ArmEnum.BACK_TILT_FOR_INTAKING_CARGO;
     }
 
     public DirectionEnum getDirection() {

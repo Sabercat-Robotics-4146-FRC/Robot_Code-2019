@@ -42,6 +42,8 @@ public class Robot extends SampleRobot {
 	@Override
 	public void operatorControl() {
 
+		boolean hatchFlag = true;
+
 		while (isOperatorControl() && isEnabled()) {
 			if (!RobotMap.compressor.getCompressorNotConnectedFault()) {
 				RobotMap.compressor.setClosedLoopControl(true);
@@ -53,16 +55,29 @@ public class Robot extends SampleRobot {
 			RobotMap.timer.update();
 			RobotMap.teleopControls.update();
 
-			// RobotMap.arm.update();
-			// RobotMap.drivetrain.update();
-            // RobotMap.elevator.update();
+			RobotMap.arm.update();
+			RobotMap.drivetrain.update();
+            RobotMap.elevator.update();
 			RobotMap.intake.update(RobotMap.timer.getDT());
 			
 			ConsoleLogger.update(RobotMap.timer.getDT());
 			RobotMap.pilotController.updateRumbleBuzz(RobotMap.timer.getDT());
 			
-			if (RobotMap.pilotController.getButtonBack()) {
+			if (RobotMap.copilotController.getButtonBack()) {
 				RobotMap.elevatorFront.setSelectedSensorPosition(0);
+			}
+
+			if (RobotMap.pilotController.getDPadBool() && hatchFlag) {
+				hatchFlag = false;
+				if (RobotMap.clawSolenoid.get()) {
+					RobotMap.clawSolenoid.set(false);
+				} else {
+					RobotMap.clawSolenoid.set(true);
+				}
+			}
+
+			if (!RobotMap.pilotController.getDPadBool()) {
+				hatchFlag = true;
 			}
 
 			Dashboard.send("Elevator Pos", RobotMap.elevatorFront.getSelectedSensorPosition());

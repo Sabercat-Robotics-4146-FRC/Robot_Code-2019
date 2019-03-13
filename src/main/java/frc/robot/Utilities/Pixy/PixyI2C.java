@@ -204,6 +204,11 @@ public class PixyI2C {
 		return hasNewBlocks;
 	}
 
+	// public boolean hasValidTarget() {
+
+
+	// }
+
 	public void blocksToDashboard() {
 		if(blocks[0] != null){
 			Dashboard.send("X1", blocks[0].X);

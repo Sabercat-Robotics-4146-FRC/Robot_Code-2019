@@ -9,6 +9,7 @@ import com.ctre.phoenix.sensors.PigeonIMU;
 import edu.wpi.first.wpilibj.AnalogPotentiometer;
 import edu.wpi.first.wpilibj.Compressor;
 import edu.wpi.first.wpilibj.DigitalInput;
+import edu.wpi.first.wpilibj.DigitalOutput;
 import edu.wpi.first.wpilibj.Encoder;
 import edu.wpi.first.wpilibj.I2C;
 import edu.wpi.first.wpilibj.Solenoid;
@@ -28,65 +29,76 @@ public class RobotMap {
 	/////// Constants ///////
 	// Vision Constants
 	public static final int PIXY_UPDATE_RATE = 50; //Htz
-	public static final int LIMELIGHT_UPDATE_RATE = 90; //Htz
-	public static final double VISION_BREAK_TOLERANCE = 0;
-	public static final double VISION_kP = 0.05;
-	public static final double VISION_kI = 0.0;
-	public static final double VISION_kD = 0.0;
+	public static final double PIXY_BREAK_TOLERANCE = 0;
+	public static final double PIXY_kP = 0.05;
+	public static final double PIXY_kI = 0.0;
+	public static final double PIXY_kD = 0.0;
 	public static final int PIXY_ADDRESS = 0x54;
-	public static final int LED_ADDRESS = 0x55;
 	public static final String PIXY_NAME = "Main Pixy";
-    public static int checksumErrorCount = 0; // not actually a constant.
+	public static int checksumErrorCount = 0; // not actually a constant.
 
-	// Motion Profiling Constants
-	public final static int kSensorUnitsPerRotation = 4096; // How many sensor units per rotation using CTRE Magnetic Encoder.
-	public final static double kNeutralDeadband = 0.001; // Motor neutral dead-band, set to the minimum 0.1%.
-	public final static int kPrimaryPIDSlot = 0; // any slot [0,3]
+	public static final int LIMELIGHT_UPDATE_RATE = 90; //Htz
+	public static final double LIMELIGHT_BREAK_TOLERANCE = 0;
+	public static final double LIMELIGHT_kP = 0.05;
+	public static final double LIMELIGHT_kI = 0.0;
+	public static final double LIMELIGHT_kD = 0.0;
+	
+	public static final int LED_ADDRESS = 0x55;
 
 	//public final static Gains kGains_MotProf = new Gains( 1.0, 0.0,  0.0, 1023.0/6800.0,  400,  1.00 );
 
 	// Elevator Constants
-	public static final int FRONT_INTAKING_CARGO_HEIGHT = 0;
-	public static final int FRONT_INTAKING_HATCH_HEIGHT = 0;
-	public static final int FRONT_BOTTOM_PORT_HEIGHT = 12826;
+	public static final int FRONT_INTAKING_CARGO_HEIGHT = 0;//
+	public static final int FRONT_INTAKING_HATCH_HEIGHT = 0;//
+	public static final int FRONT_BOTTOM_PORT_HEIGHT = 10508;//
 	public static final int FRONT_SHIP_PORT_HEIGHT = 23434;
-	public static final int FRONT_MID_HATCH_HEIGHT = 39894;
-	public static final int FRONT_MID_PORT_HEIGHT = 46402;
-	public static final int FRONT_TOP_HATCH_HEIGHT = 74094;
-	public static final int FRONT_TOP_PORT_HEIGHT = 74094;
+	public static final int FRONT_MID_HATCH_HEIGHT = 38310;//
+	public static final int FRONT_MID_PORT_HEIGHT = 39890;//
+	public static final int FRONT_TOP_HATCH_HEIGHT = 77896;//
+	public static final int FRONT_TOP_PORT_HEIGHT = 74348;//
 
-	public static final int BACK_INTAKING_HATCH_HEIGHT = 12208;
-	public static final int BACK_BOTTOM_PORT_HEIGHT = 12826;
+	public static final int BACK_INTAKING_HATCH_HEIGHT = 11297;//
+	public static final int BACK_BOTTOM_PORT_HEIGHT = 12603;//
 	public static final int BACK_SHIP_PORT_HEIGHT = 23434;
-	public static final int BACK_MID_HATCH_HEIGHT = 39894;
-	public static final int BACK_MID_PORT_HEIGHT = 46402;
-	public static final int BACK_TOP_HATCH_HEIGHT = 74094;
-	public static final int BACK_TOP_PORT_HEIGHT = 74094;
+	public static final int BACK_MID_HATCH_HEIGHT = 44571;//
+	public static final int BACK_MID_PORT_HEIGHT = 54143;//
+	public static final int BACK_TOP_HATCH_HEIGHT = 76312;//
+	public static final int BACK_TOP_PORT_HEIGHT = 76125;//
 
-	public static final int ARM_OVER_HEIGHT = 35866;
+	public static final int ARM_OVER_HEIGHT = 40122; // i incresed this value
 
 	public static final int LIMELIGHT_PORT_TAPE_HEIGHT = 0;
 
-	public static final double ELEVATOR_kP = 0.04;
+	public static final int LOWER_SLOWER_HEIGHT = 10508;
+
+	public static final double ELEVATOR_kP = 0.07;
 	public static final double ELEVATOR_kI = 0.00;
-	public static final double ELEVATOR_kD = 1.0;
+	public static final double ELEVATOR_kD = 0.2;
 
-	public static final double LIMELIGHT_PORT_TAPE_HEIGHT = 0.0;
+	// Arm Constants
+	public static final int ARM_FRONT_CARGO_INTAKING_POSITION = 634; // 688 was what we did the values off of //650 // 634
+	public static final int ARM_FRONT_LEVEL_POSITION = ARM_FRONT_CARGO_INTAKING_POSITION - 5; // 683; // -5
+	public static final int ARM_FRONT_TILT_POSITION = ARM_FRONT_CARGO_INTAKING_POSITION - 100; // 588; // -100
+	public static final int ARM_BACK_LEVEL_POSITION = ARM_FRONT_CARGO_INTAKING_POSITION - 255; // 433; //-255
+	public static final int ARM_BACK_TILT_POSITION = ARM_FRONT_CARGO_INTAKING_POSITION - 255; // 463; // -225
+	public static final int ARM_FRONT_CARGO_POSITION = ARM_FRONT_CARGO_INTAKING_POSITION - 76; // 612; // -76					// bottom 644//mid628//top614
+	public static final int ARM_FRONT_BOTTOM_CARGO_POSITION = ARM_FRONT_CARGO_INTAKING_POSITION - 44; // 644; // -44
+	public static final int ARM_FRONT_MID_CARGO_POSITION =  ARM_FRONT_CARGO_INTAKING_POSITION - 60; // 628; // -60
+	public static final int ARM_FRONT_TOP_CARGO_POSITION = ARM_FRONT_CARGO_INTAKING_POSITION - 74; // 614; // -74
+	public static final int ARM_BACK_CARGO_POSITION = ARM_FRONT_CARGO_INTAKING_POSITION - 280; // 408; // -280
+	public static final int ARM_BACK_BOTTOM_CARGO_POSITION = ARM_FRONT_CARGO_INTAKING_POSITION - 280; // 408; // -280
+	public static final int ARM_BACK_MID_CARGO_POSITION = ARM_FRONT_CARGO_INTAKING_POSITION - 280; // 408; // -280
+	public static final int ARM_BACK_TOP_CARGO_POSITION = ARM_FRONT_CARGO_INTAKING_POSITION - 208; // 408; // -208
+	public static final int ARM_FRONT_CARGO_SHIP_POSITION = ARM_FRONT_CARGO_INTAKING_POSITION - 60; // 628; // -60		these are arbitrary right now
+	public static final int ARM_BACK_CARGO_SHIP_POSITION = ARM_FRONT_CARGO_INTAKING_POSITION - 280; // 408; // -280			these are arbitrary right now
 
-    // Arm Constants
-	public static final int ARM_FRONT_LEVEL_POSITION = 770;
-	public static final int ARM_FRONT_TILT_POSITION = 641;
-	public static final int ARM_BACK_LEVEL_POSITION = 510;
-	public static final int ARM_BACK_TILT_POSITION = 538;
-	public static final int ARM_FRONT_CARGO_POSITION = 0;
-	public static final int ARM_BACK_CARGO_POSITION = 0;
-	public static final int ARM_FRONT_STORAGE_POSITION = 0;
-	public static final int ARM_BACK_STORAGE_POSITION = 0;
+	public static final int ARM_FRONT_STORAGE_POSITION = ARM_FRONT_CARGO_INTAKING_POSITION - 100; // 588; // -100
+	public static final int ARM_BACK_STORAGE_POSITION = ARM_FRONT_CARGO_INTAKING_POSITION - 255; // 463; // -225
 
-	public static final int FRONT_ARM_CLEAR_VALUE = 641;
-	public static final int BACK_ARM_CLEAR_VALUE = 538;
+	public static final int FRONT_ARM_CLEAR_VALUE = ARM_FRONT_CARGO_INTAKING_POSITION - 100; // 588; // -100
+	public static final int BACK_ARM_CLEAR_VALUE = ARM_FRONT_CARGO_INTAKING_POSITION - 225; // 463; // -225
 
-	public static final int MIDDLE_ARM_VALUE = 600;
+	public static final int MIDDLE_ARM_VALUE = ARM_FRONT_CARGO_INTAKING_POSITION - 132; // 556; // -132
 
 	public static final double ARM_kP = 25.0;
 	public static final double ARM_kI = 0.0;
@@ -156,6 +168,9 @@ public class RobotMap {
 
 	public static Limelight limelight;
 
+	// Digitial Outputs Declarations
+	public static DigitalOutput pixyLEDs;
+
 	//// Sub-System Declarations ////
 	public static Arm arm;
 	public static Drivetrain drivetrain;
@@ -170,7 +185,7 @@ public class RobotMap {
 		// Utility Initilization
 		timer = new Timer();
         pilotController = new Controller(0);
-        copilotController = new Controller(0);
+        copilotController = new Controller(1);
 		pixy = new PixyI2C(PIXY_NAME, new I2C(Port.kOnboard, PIXY_ADDRESS));
 		leds = new LEDI2C(new I2C(Port.kOnboard, LED_ADDRESS));
 
@@ -276,6 +291,9 @@ public class RobotMap {
 		// pidgey = new PigeonIMU(a_talon); TODO
 
 		limelight = new Limelight();
+
+		// Digital Output Initilization
+		pixyLEDs = new DigitalOutput(7);
 
 		//// Sub-System Initilization ////
 		arm = new Arm();

@@ -19,6 +19,7 @@ public class TeleopControls {
     boolean buttonFlag;
     public boolean isUpdating = true;
     boolean ledFlag = false;
+    boolean hatchFlag = true;
 
     public void update() {
         // controlls for elevator
@@ -43,12 +44,12 @@ public class TeleopControls {
                         if (RobotMap.arm.isArmInFront()) {
                             updateDirection();
                             changeDirection();
-                            RobotMap.arm.setArmStateFrontCargo();
+                            RobotMap.arm.setArmStateFrontBottomCargo();
                             RobotMap.elevator.setLevelBottomPort();
                         } else if (RobotMap.arm.isArmInBack()) {
                             updateDirection();
                             changeDirection();
-                            RobotMap.arm.setArmStateBackCargo();
+                            RobotMap.arm.setArmStateBackBottomCargo();
                             RobotMap.elevator.setLevelBottomPort();
                         }
                     } else if (RobotMap.pilotController.getButtonB()) {      // we still need the bumper for the cargo ship heights
@@ -56,12 +57,12 @@ public class TeleopControls {
                         if (RobotMap.arm.isArmInFront()) {
                             updateDirection();
                             changeDirection();
-                            RobotMap.arm.setArmStateFrontCargo();
+                            RobotMap.arm.setArmStateFrontCargoShipPort();
                             RobotMap.elevator.setLevelShipPort();
                         } else if (RobotMap.arm.isArmInBack()) {
                             updateDirection();
                             changeDirection();
-                            RobotMap.arm.setArmStateBackCargo();
+                            RobotMap.arm.setArmStateBackCargoShipPort();
                             RobotMap.elevator.setLevelShipPort();
                         }
                     } else if (RobotMap.pilotController.getButtonX()) {
@@ -69,12 +70,12 @@ public class TeleopControls {
                         if (RobotMap.arm.isArmInFront()) {
                             updateDirection();
                             changeDirection();
-                            RobotMap.arm.setArmStateFrontCargo();
+                            RobotMap.arm.setArmStateFrontMidCargo();
                             RobotMap.elevator.setLevelMidPort();
                         } else if (RobotMap.arm.isArmInBack()) {
                             updateDirection();
                             changeDirection();
-                            RobotMap.arm.setArmStateBackCargo();
+                            RobotMap.arm.setArmStateBackMidCargo();
                             RobotMap.elevator.setLevelMidPort();
                         }
                     } else if (RobotMap.pilotController.getButtonY()) {
@@ -82,12 +83,12 @@ public class TeleopControls {
                         if (RobotMap.arm.isArmInFront()) {
                             updateDirection();
                             changeDirection();
-                            RobotMap.arm.setArmStateFrontCargo();
+                            RobotMap.arm.setArmStateFrontTopCargo();
                             RobotMap.elevator.setLevelTopPort();
                         } else if (RobotMap.arm.isArmInBack()) {
                             updateDirection();
                             changeDirection();
-                            RobotMap.arm.setArmStateBackCargo();
+                            RobotMap.arm.setArmStateBackTopCargo();
                             RobotMap.elevator.setLevelTopPort();
                         }
                     }
@@ -106,14 +107,15 @@ public class TeleopControls {
                             RobotMap.elevator.setLevelIntakingHatch();
                         }
                     } else if (RobotMap.pilotController.getButtonB()) {
-                        // switch direction and go to intaking cargo height check this so we can't
-                        // intake cargo on wrong side of drivetrain
+                        // // tilt arm up to storage 
+                        // updateDirection();
+                        // RobotMap.arm.setArmStateStorage();
                         if (RobotMap.arm.isArmInFront()) {
                             Dashboard.send("Elevetor state", "Trying to Go to Back Cargo, Not Allowed, Do Nothing");
                         } else if (RobotMap.arm.isArmInBack()) {
                             updateDirection();
                             changeDirection();
-                            RobotMap.arm.setArmStateBackTilt();
+                            RobotMap.arm.setArmStateBackTiltForIntakingCargo();
                             RobotMap.elevator.setLevelIntakingCargo();
                         }
                     } else if (RobotMap.pilotController.getButtonX()) {
@@ -164,44 +166,44 @@ public class TeleopControls {
                         // go to bottom port height
                         if (RobotMap.arm.isArmInFront()) {
                             updateDirection();
-                            RobotMap.arm.setArmStateFrontCargo();
+                            RobotMap.arm.setArmStateFrontBottomCargo();
                             RobotMap.elevator.setLevelBottomPort();
                         } else if (RobotMap.arm.isArmInBack()) {
                             updateDirection();
-                            RobotMap.arm.setArmStateBackCargo();
+                            RobotMap.arm.setArmStateBackBottomCargo();
                             RobotMap.elevator.setLevelBottomPort();
                         }
                     } else if (RobotMap.pilotController.getButtonB()) {             // we still need the bumper for the cargo ship heights
                         // go to ship port height
                         if (RobotMap.arm.isArmInFront()) {
                             updateDirection();
-                            RobotMap.arm.setArmStateFrontCargo();
+                            RobotMap.arm.setArmStateFrontCargoShipPort();
                             RobotMap.elevator.setLevelShipPort();
                         } else if (RobotMap.arm.isArmInBack()) {
                             updateDirection();
-                            RobotMap.arm.setArmStateBackCargo();
+                            RobotMap.arm.setArmStateBackCargoShipPort();
                             RobotMap.elevator.setLevelShipPort();
                         }
                     } else if (RobotMap.pilotController.getButtonX()) {
                         // go to mid port height
                         if (RobotMap.arm.isArmInFront()) {
                             updateDirection();
-                            RobotMap.arm.setArmStateFrontCargo();
+                            RobotMap.arm.setArmStateFrontMidCargo();
                             RobotMap.elevator.setLevelMidPort();
                         } else if (RobotMap.arm.isArmInBack()) {
                             updateDirection();
-                            RobotMap.arm.setArmStateBackCargo();
+                            RobotMap.arm.setArmStateBackMidCargo();
                             RobotMap.elevator.setLevelMidPort();
                         }
                     } else if (RobotMap.pilotController.getButtonY()) {
                         // go to top port height
                         if (RobotMap.arm.isArmInFront()) {
                             updateDirection();
-                            RobotMap.arm.setArmStateFrontCargo();
+                            RobotMap.arm.setArmStateFrontTopCargo();
                             RobotMap.elevator.setLevelTopPort();
                         } else if (RobotMap.arm.isArmInBack()) {
                             updateDirection();
-                            RobotMap.arm.setArmStateBackCargo();
+                            RobotMap.arm.setArmStateBackTopCargo();
                             RobotMap.elevator.setLevelTopPort();
                         }
                     }
@@ -218,11 +220,12 @@ public class TeleopControls {
                             RobotMap.elevator.setLevelIntakingHatch();
                         }
                     } else if (RobotMap.pilotController.getButtonB()) {
-                        // go to intaking cargo height check this so we can't intake cargo on wrong side
-                        // of drivetrain
+                        // // tilt arm up to storage 
+                        // updateDirection();
+                        // RobotMap.arm.setArmStateStorage();
                         if (RobotMap.arm.isArmInFront()) {
                             updateDirection();
-                            RobotMap.arm.setArmStateFrontLevel();
+                            RobotMap.arm.setArmStateFrontIntakingCargo();
                             RobotMap.elevator.setLevelIntakingCargo();
                         } else if (RobotMap.arm.isArmInBack()) {
                             Dashboard.send("Elevetor state", "Trying to Go to Back Cargo, Not Allowed, Do Nothing");
@@ -270,6 +273,7 @@ public class TeleopControls {
         // <editor-fold>
         if (RobotMap.pilotController.getButtonStart()) {
             RobotMap.limelight.setLightMode(LEDEnum.ENABLED);
+            ledFlag = false;
 
             if (RobotMap.limelight.hasValidTarget()) {
                 RobotMap.drivetrain.runVisionPID(RobotMap.pilotController.getDeadbandLeftYAxis());
@@ -278,7 +282,10 @@ public class TeleopControls {
                         RobotMap.pilotController.getDeadbandRightXAxis());
             }
         } else {
-            RobotMap.limelight.setLightMode(LEDEnum.DISABLED);
+            if (!ledFlag) {
+                RobotMap.limelight.setLightMode(LEDEnum.DISABLED);
+                ledFlag = true;
+            }
             RobotMap.drivetrain.setDrivetrainValues(RobotMap.pilotController.getDeadbandLeftYAxis(),
                     RobotMap.pilotController.getDeadbandRightXAxis());
 
@@ -296,9 +303,10 @@ public class TeleopControls {
             RobotMap.intake.setCargoRollerState(CargoRollerEnum.DISABLED);
         }
 
-        if (RobotMap.pilotController.getDPadBool()) {
-            RobotMap.intake.releaseClaw();
-        }
+        // normal hatch panal code
+        // if (RobotMap.pilotController.getDPadBool()) {
+        //     RobotMap.intake.releaseClaw();
+        // }
         // </editor-fold>
     
         // controls for EGL

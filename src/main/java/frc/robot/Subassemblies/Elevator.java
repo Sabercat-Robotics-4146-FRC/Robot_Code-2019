@@ -338,7 +338,23 @@ public class Elevator {
     }
 
     private void moveElevator(double setPoint) {
-        RobotMap.elevatorFront.set(ControlMode.Position, setPoint);
+        if (setPoint == 0) {
+            lowerElevator();
+        } else {
+            RobotMap.elevatorFront.set(ControlMode.Position, setPoint);
+        }
+    }
+
+    private void lowerElevator() {
+        if (RobotMap.elevatorLimitSwitch.get()) {
+            RobotMap.elevatorFront.set(ControlMode.PercentOutput, 0);
+        } else {
+            if (RobotMap.elevatorFront.getSelectedSensorPosition() >= RobotMap.LOWER_SLOWER_HEIGHT) {
+                RobotMap.elevatorFront.set(ControlMode.PercentOutput, -0.3);
+            } else if (RobotMap.elevatorFront.getSelectedSensorPosition() < RobotMap.LOWER_SLOWER_HEIGHT) {
+                RobotMap.elevatorFront.set(ControlMode.PercentOutput, -0.1);
+            }
+        }
     }
 
     public boolean isElevatorClear() {
