@@ -41,9 +41,7 @@ public class Timer {
 		try {
 			Thread.sleep(1);
 		} catch (InterruptedException e) {
-			// MOVE THIS TO ITERATIVE_TIMER
-			//OK
-			System.out.println("Thread.sleep was Interrupted!");
+			ConsoleLogger.error("Thread.sleep was Interrupted!");
 			e.printStackTrace();
 		}
 	}
@@ -52,7 +50,7 @@ public class Timer {
 		try {
 			Thread.sleep(i);
 		} catch (InterruptedException e) {
-			System.out.println("Thread.sleep was Interrupted!");
+			ConsoleLogger.error("Thread.sleep was Interrupted!");
 			e.printStackTrace();
 		}
 	}

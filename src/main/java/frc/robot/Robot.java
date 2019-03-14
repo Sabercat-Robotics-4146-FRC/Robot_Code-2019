@@ -41,9 +41,6 @@ public class Robot extends SampleRobot {
 	 */
 	@Override
 	public void operatorControl() {
-
-		boolean hatchFlag = true;
-
 		while (isOperatorControl() && isEnabled()) {
 			RobotMap.limelight.update();
 			RobotMap.timer.update();
@@ -57,19 +54,9 @@ public class Robot extends SampleRobot {
 			ConsoleLogger.update(RobotMap.timer.getDT());
 			RobotMap.pilotController.updateRumbleBuzz(RobotMap.timer.getDT());
 
-			if (RobotMap.pilotController.getDPadBool() && hatchFlag) {
-				hatchFlag = false;
-				if (RobotMap.clawSolenoid.get()) {
-					RobotMap.clawSolenoid.set(false);
-				} else {
-					RobotMap.clawSolenoid.set(true);
-				}
-			}
-
-			if (!RobotMap.pilotController.getDPadBool()) {
-				hatchFlag = true;
-			}
-
+			// These are not in the update loops of their coresponding assemblies
+			// because we need to view the values even when we dont want the rest
+			// of the assembly to be updating.
 			Dashboard.send("Elevator Pos", RobotMap.elevatorFront.getSelectedSensorPosition());
 			Dashboard.send("Elevator Error", RobotMap.elevatorFront.getClosedLoopError());
 			Dashboard.send("Arm Pos", RobotMap.armPivot.getSelectedSensorPosition());
@@ -86,6 +73,18 @@ public class Robot extends SampleRobot {
 	 */
 	@Override
 	public void test() {
+		System.out.println("=====================Testing Controls=====================");
+		System.out.println("Arm:\n\t- Pivot for the Arm Motor:\tLeft Joystick Y Axis");
+		System.out.println("Elevator:\n\t- Elevator up and down:\tRight Joystick Y Axis\n\t- Reset Elevator Encoder:\tBack Button");
+		System.out.println("End Game Lift:\n\t- Raiseing for EGL:\tRight Trigger\n\t- Lowering for EGL:\tLeft Trigger");
+		System.out.println("Compressor:\n\t- The compressor will run when plugged in.");
+		System.out.println("\n\n*******************");
+		System.out.println("*!!!!!!!!!!WARNING!!!!!!!!!!*");
+		System.out.println("*YOU HAVE COMPLETE CONTROL  *");
+		System.out.println("*OVER THE ROBOT! IF YOU ARE *");
+		System.out.println("*NOT CAREFUL YOU WILL BREAK *");
+		System.out.println("*THINGS!!!!!!!!!!!!!!!!!!!!!*");
+		System.out.println("*****************************");
 		while(isTest() && isEnabled()) {
 			RobotMap.timer.update();
 			ConsoleLogger.update(RobotMap.timer.getDT());

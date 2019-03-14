@@ -21,12 +21,14 @@ public class Intake {
     ClawEnum clawState;
     double dtAccumulator;
     boolean cargoRumbleFlag;
+    boolean hatchFlag;
 
     public Intake() {
        cargoRollerState = CargoRollerEnum.DISABLED;
        clawState = ClawEnum.RELEASED;
        dtAccumulator = 0;
        cargoRumbleFlag = false;
+       hatchFlag = true;
     }
 
     public void update(double dt) {
@@ -61,12 +63,21 @@ public class Intake {
         }
 
         // Hatch Manipulator
+        if (clawState == ClawEnum.HOLDING) {
+            RobotMap.clawSolenoid.set(true);
+        } else if (clawState == ClawEnum.RELEASED) {
+            RobotMap.clawSolenoid.set(false);
+        } else {
+            ConsoleLogger.error("Hatch Manipulator is in an unnacounted for state.");
+        }
+
+        // Original Code using a limit switch
+
         // if (this.dtAccumulator < RobotMap.CLAW_RELEASE_TIME) {
         //     this.dtAccumulator += dt;
         // }
 
         // if (RobotMap.hatchLimitSwitch.get() && dtAccumulator >= RobotMap.CLAW_RELEASE_TIME) {
-        //     // System.out.println("Hatch LS go!!!!!");
         //     clawState = ClawEnum.HOLDING;
         // }
 
@@ -83,9 +94,13 @@ public class Intake {
         this.cargoRollerState = cargoRollerState;
     }
 
-    public void releaseClaw() {
+    public void releaseClaw() { // Currently unused. Was used with original hatch code.
         clawState = ClawEnum.RELEASED;
         dtAccumulator = 0;
         RobotMap.pilotController.setRumbleBuzz(3, 0.1, 0.05);
+    }
+
+    public void toggleClaw() {
+        clawState = clawState == ClawEnum.RELEASED ? ClawEnum.HOLDING : ClawEnum.RELEASED;
     }
 }

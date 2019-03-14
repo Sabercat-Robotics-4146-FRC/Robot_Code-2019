@@ -303,10 +303,14 @@ public class TeleopControls {
             RobotMap.intake.setCargoRollerState(CargoRollerEnum.DISABLED);
         }
 
-        // normal hatch panal code
-        // if (RobotMap.pilotController.getDPadBool()) {
-        //     RobotMap.intake.releaseClaw();
-        // }
+        if (RobotMap.pilotController.getDPadBool() && hatchFlag) {
+            RobotMap.intake.toggleClaw();
+            hatchFlag = false;
+            
+        }
+        if (!RobotMap.pilotController.getDPadBool()) {
+            hatchFlag = true;
+        }
         // </editor-fold>
     
         // controls for EGL

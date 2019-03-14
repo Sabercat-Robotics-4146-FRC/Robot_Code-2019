@@ -331,7 +331,7 @@ public class Controller {
 		} else if(Character.toUpperCase(side) == 'R') {
 			joy.setRumble(RumbleType.kRightRumble, intensity);
 		} else {
-			System.out.println("ERROR!!: Incorrect side char given to setRumble in controller...");
+			ConsoleLogger.error("ERROR!!: Incorrect side char given to setRumble in controller...");
 		}
 	}
 	
