@@ -39,7 +39,7 @@ public class RobotMap {
 
 	public static final int LIMELIGHT_UPDATE_RATE = 90; //Htz
 	public static final double LIMELIGHT_BREAK_TOLERANCE = 0;
-	public static final double LIMELIGHT_kP = 0.05;
+	public static final double LIMELIGHT_kP = 0.16;
 	public static final double LIMELIGHT_kI = 0.0;
 	public static final double LIMELIGHT_kD = 0.0;
 	
@@ -65,30 +65,35 @@ public class RobotMap {
 	public static final int BACK_TOP_HATCH_HEIGHT = 76312;//
 	public static final int BACK_TOP_PORT_HEIGHT = 76125;//
 
-	public static final int ARM_OVER_HEIGHT = 40122; // i incresed this value
+	public static final int ARM_OVER_HEIGHT = 35122 + 5000; // WHEN SETTING THIS VALUE ADD LIKE 5000 TO THE NUMBER
 
 	public static final int LIMELIGHT_PORT_TAPE_HEIGHT = 0;
 
 	public static final int LOWER_SLOWER_HEIGHT = 10508;
 
-	public static final double ELEVATOR_kP = 0.07;
+	public static final double ELEVATOR_kP = 2.54; // when testing without the arm use p: 0.07 d: 1.0 f: 0.0
 	public static final double ELEVATOR_kI = 0.00;
-	public static final double ELEVATOR_kD = 0.2;
+	public static final double ELEVATOR_kD = 0.00;
+	public static final double ELEVATOR_kF = 1.18;
 
 	// Arm Constants
-	public static final int ARM_FRONT_CARGO_INTAKING_POSITION = 634; // 688 was what we did the values off of //650 // 634
-	public static final int ARM_FRONT_LEVEL_POSITION = ARM_FRONT_CARGO_INTAKING_POSITION - 5; // 683; // -5
-	public static final int ARM_FRONT_TILT_POSITION = ARM_FRONT_CARGO_INTAKING_POSITION - 100; // 588; // -100
-	public static final int ARM_BACK_LEVEL_POSITION = ARM_FRONT_CARGO_INTAKING_POSITION - 255; // 433; //-255
-	public static final int ARM_BACK_TILT_POSITION = ARM_FRONT_CARGO_INTAKING_POSITION - 255; // 463; // -225
+	public static final int ARM_FRONT_CARGO_INTAKING_POSITION = 627; // 688 was what we did the values off of //650 // 634
+	public static final int ARM_FRONT_LEVEL_POSITION = ARM_FRONT_CARGO_INTAKING_POSITION - 10; // 683; // -5
+	public static final int ARM_FRONT_TILT_POSITION = ARM_FRONT_CARGO_INTAKING_POSITION - 50; // 588; // -100
 	public static final int ARM_FRONT_CARGO_POSITION = ARM_FRONT_CARGO_INTAKING_POSITION - 76; // 612; // -76					// bottom 644//mid628//top614
 	public static final int ARM_FRONT_BOTTOM_CARGO_POSITION = ARM_FRONT_CARGO_INTAKING_POSITION - 44; // 644; // -44
 	public static final int ARM_FRONT_MID_CARGO_POSITION =  ARM_FRONT_CARGO_INTAKING_POSITION - 60; // 628; // -60
 	public static final int ARM_FRONT_TOP_CARGO_POSITION = ARM_FRONT_CARGO_INTAKING_POSITION - 74; // 614; // -74
+
+	public static final int ARM_BACK_LEVEL_POSITION = ARM_FRONT_CARGO_INTAKING_POSITION - 240; // 433; //-255
+	public static final int ARM_BACK_TILT_POSITION = ARM_FRONT_CARGO_INTAKING_POSITION - 255; // 463; // -225
 	public static final int ARM_BACK_CARGO_POSITION = ARM_FRONT_CARGO_INTAKING_POSITION - 280; // 408; // -280
 	public static final int ARM_BACK_BOTTOM_CARGO_POSITION = ARM_FRONT_CARGO_INTAKING_POSITION - 280; // 408; // -280
 	public static final int ARM_BACK_MID_CARGO_POSITION = ARM_FRONT_CARGO_INTAKING_POSITION - 280; // 408; // -280
-	public static final int ARM_BACK_TOP_CARGO_POSITION = ARM_FRONT_CARGO_INTAKING_POSITION - 208; // 408; // -208
+	public static final int ARM_BACK_TOP_CARGO_POSITION = ARM_FRONT_CARGO_INTAKING_POSITION - 280; // 408; // -208
+	public static final int ARM_BACK_HATCH_TOP_TILT = ARM_FRONT_CARGO_INTAKING_POSITION - 217; // 297
+
+	// these are arbitrary right now
 	public static final int ARM_FRONT_CARGO_SHIP_POSITION = ARM_FRONT_CARGO_INTAKING_POSITION - 60; // 628; // -60		these are arbitrary right now
 	public static final int ARM_BACK_CARGO_SHIP_POSITION = ARM_FRONT_CARGO_INTAKING_POSITION - 280; // 408; // -280			these are arbitrary right now
 
@@ -227,6 +232,7 @@ public class RobotMap {
 		elevatorFront.config_kP(0, ELEVATOR_kP);
 		elevatorFront.config_kI(0, ELEVATOR_kI);
 		elevatorFront.config_kD(0, ELEVATOR_kD);
+		elevatorFront.config_kP(0, ELEVATOR_kF);
 
 		armPivot = new TalonSRX(7);
 		armPivot.configFactoryDefault();

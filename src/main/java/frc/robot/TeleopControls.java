@@ -136,7 +136,7 @@ public class TeleopControls {
                         if (RobotMap.arm.isArmInFront()) {
                             updateDirection();
                             changeDirection();
-                            RobotMap.arm.setArmStateFrontTilt();
+                            RobotMap.arm.setArmStateFrontTiltForBackHatch();
                             RobotMap.elevator.setLevelTopHatch();
                         } else if (RobotMap.arm.isArmInBack()) {
                             updateDirection();
@@ -249,7 +249,7 @@ public class TeleopControls {
                             RobotMap.elevator.setLevelTopHatch();
                         } else if (RobotMap.arm.isArmInBack()) {
                             updateDirection();
-                            RobotMap.arm.setArmStateBackLevel();
+                            RobotMap.arm.setArmStateBackHatchTopTilt();
                             RobotMap.elevator.setLevelTopHatch();
                         }
                     }
@@ -271,7 +271,7 @@ public class TeleopControls {
 
         // controlls for drive train
         // <editor-fold>
-        if (RobotMap.pilotController.getButtonStart()) {
+        if (RobotMap.pilotController.getLeftStickPress()) {
             RobotMap.limelight.setLightMode(LEDEnum.ENABLED);
             ledFlag = false;
 
@@ -302,13 +302,14 @@ public class TeleopControls {
         } else {
             RobotMap.intake.setCargoRollerState(CargoRollerEnum.DISABLED);
         }
-
-        if (RobotMap.pilotController.getDPadBool() && hatchFlag) {
+        
+        // Changed from d-pad to R3 Press
+        if (/*RobotMap.pilotController.getDPadBool()*/ RobotMap.pilotController.getRightStickPress() && hatchFlag) {
             RobotMap.intake.toggleClaw();
             hatchFlag = false;
             
         }
-        if (!RobotMap.pilotController.getDPadBool()) {
+        if (!RobotMap.pilotController.getRightStickPress()/*RobotMap.pilotController.getDPadBool()*/) {
             hatchFlag = true;
         }
         // </editor-fold>

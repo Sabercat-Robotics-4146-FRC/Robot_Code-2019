@@ -9,7 +9,7 @@ public class Drivetrain {
     private double rotation = 0;
 
     private double speedModifier = 1.0; // -1 for inverted and 1 for not
-    private double rotationModifier = 0.83;
+    private double rotationModifier = 0.65;
 
     private LimelightTurningPID limelightVisionPID;
 
@@ -17,6 +17,7 @@ public class Drivetrain {
         if (Math.abs(speedModifier) != 1 || Math.abs(rotationModifier) != 1) {
             ConsoleLogger.warning("Drivetrain Modifiers are not 1 or -1. Which means its clamped.");
         }
+        
 
         limelightVisionPID = new LimelightTurningPID();
     }

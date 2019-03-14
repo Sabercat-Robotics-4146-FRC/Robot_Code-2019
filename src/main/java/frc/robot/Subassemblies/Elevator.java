@@ -71,6 +71,8 @@ public class Elevator {
                     str = ("Switching to Front, Intaking Cargo");
                     if (RobotMap.arm.isArmClear()) {
                         moveElevator(RobotMap.FRONT_INTAKING_CARGO_HEIGHT);
+                    } else if (RobotMap.elevatorFront.getSelectedSensorPosition() > RobotMap.ARM_OVER_HEIGHT) {
+                        
                     } else {
                         moveElevator(RobotMap.ARM_OVER_HEIGHT);
                     }
@@ -99,6 +101,8 @@ public class Elevator {
                     str = ("Switching to Front, Intaking Hatch");
                     if (RobotMap.arm.isArmClear()) {
                         moveElevator(RobotMap.FRONT_INTAKING_HATCH_HEIGHT);
+                    } else if (RobotMap.elevatorFront.getSelectedSensorPosition() > RobotMap.ARM_OVER_HEIGHT) {
+                        
                     } else {
                         moveElevator(RobotMap.ARM_OVER_HEIGHT);
                     }
@@ -109,6 +113,8 @@ public class Elevator {
                     str = ("Switching to Back, Intaking Hatch");
                     if (RobotMap.arm.isArmClear()) {
                         moveElevator(RobotMap.BACK_INTAKING_HATCH_HEIGHT);
+                    } else if (RobotMap.elevatorFront.getSelectedSensorPosition() > RobotMap.ARM_OVER_HEIGHT) {
+                        
                     } else {
                         moveElevator(RobotMap.ARM_OVER_HEIGHT);
                     }
@@ -135,6 +141,8 @@ public class Elevator {
                     str = ("Switching to Front, Bottom Port");
                     if (RobotMap.arm.isArmClear()) {
                         moveElevator(RobotMap.FRONT_BOTTOM_PORT_HEIGHT);
+                    } else if (RobotMap.elevatorFront.getSelectedSensorPosition() > RobotMap.ARM_OVER_HEIGHT) {
+                        
                     } else {
                         moveElevator(RobotMap.ARM_OVER_HEIGHT);
                     }
@@ -145,6 +153,8 @@ public class Elevator {
                     str = ("Switching to Back, Bottom Port");
                     if (RobotMap.arm.isArmClear()) {
                         moveElevator(RobotMap.BACK_BOTTOM_PORT_HEIGHT);
+                    } else if (RobotMap.elevatorFront.getSelectedSensorPosition() > RobotMap.ARM_OVER_HEIGHT) {
+                        
                     } else {
                         moveElevator(RobotMap.ARM_OVER_HEIGHT);
                     }
@@ -326,6 +336,15 @@ public class Elevator {
         }
 
         Dashboard.send("Elevetor state", str);
+        Dashboard.send("isElevatorClear", isElevatorClear());
+
+        if (RobotMap.elevatorFront.getSelectedSensorPosition() >= RobotMap.ARM_OVER_HEIGHT) {
+            RobotMap.drivetrain.setRotationModifier(0.6);
+            RobotMap.drivetrain.setSpeedModifier(0.6);
+        } else {
+            RobotMap.drivetrain.setRotationModifier(0.75);
+            RobotMap.drivetrain.setSpeedModifier(1.0);
+        }
     }
 
     public void updateDirection() {

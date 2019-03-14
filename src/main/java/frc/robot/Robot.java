@@ -33,7 +33,31 @@ public class Robot extends SampleRobot {
 	 */
 	@Override
 	public void autonomous() {
-		
+		while (isAutonomous() && isEnabled()) {
+			RobotMap.limelight.update();
+			RobotMap.timer.update();
+			RobotMap.teleopControls.update();
+
+			RobotMap.arm.update();
+			RobotMap.drivetrain.update();
+            RobotMap.elevator.update();
+			RobotMap.intake.update(RobotMap.timer.getDT());
+			
+			ConsoleLogger.update(RobotMap.timer.getDT());
+			RobotMap.pilotController.updateRumbleBuzz(RobotMap.timer.getDT());
+
+			// These are not in the update loops of their coresponding assemblies
+			// because we need to view the values even when we dont want the rest
+			// of the assembly to be updating.
+			Dashboard.send("Elevator Pos", RobotMap.elevatorFront.getSelectedSensorPosition());
+			Dashboard.send("Elevator Error", RobotMap.elevatorFront.getClosedLoopError());
+			Dashboard.send("Arm Pos", RobotMap.armPivot.getSelectedSensorPosition());
+			Dashboard.send("Arm Error", RobotMap.armPivot.getClosedLoopError());
+
+			Dashboard.send("Elevator LS", RobotMap.elevatorLimitSwitch.get());
+			Dashboard.send("Hatch LS", RobotMap.hatchLimitSwitch.get());
+			Dashboard.send("Cargo LS", RobotMap.cargoLimitSwitch.get());
+		}
 	}
 
 	/**
@@ -73,18 +97,18 @@ public class Robot extends SampleRobot {
 	 */
 	@Override
 	public void test() {
-		System.out.println("=====================Testing Controls=====================");
+		System.out.println("\n\n=====================Testing Controls=====================");
 		System.out.println("Arm:\n\t- Pivot for the Arm Motor:\tLeft Joystick Y Axis");
 		System.out.println("Elevator:\n\t- Elevator up and down:\tRight Joystick Y Axis\n\t- Reset Elevator Encoder:\tBack Button");
 		System.out.println("End Game Lift:\n\t- Raiseing for EGL:\tRight Trigger\n\t- Lowering for EGL:\tLeft Trigger");
 		System.out.println("Compressor:\n\t- The compressor will run when plugged in.");
-		System.out.println("\n\n*******************");
+		System.out.println("\n\n*****************************");
 		System.out.println("*!!!!!!!!!!WARNING!!!!!!!!!!*");
 		System.out.println("*YOU HAVE COMPLETE CONTROL  *");
 		System.out.println("*OVER THE ROBOT! IF YOU ARE *");
 		System.out.println("*NOT CAREFUL YOU WILL BREAK *");
 		System.out.println("*THINGS!!!!!!!!!!!!!!!!!!!!!*");
-		System.out.println("*****************************");
+		System.out.println("*****************************\n\n");
 		while(isTest() && isEnabled()) {
 			RobotMap.timer.update();
 			ConsoleLogger.update(RobotMap.timer.getDT());

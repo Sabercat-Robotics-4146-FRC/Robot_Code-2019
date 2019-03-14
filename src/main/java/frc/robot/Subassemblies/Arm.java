@@ -29,6 +29,8 @@ public class Arm {
         FRONT_CARGO_SHIP_PORT,
         BACK_CARGO_SHIP_PORT,
         BACK_TILT_FOR_INTAKING_CARGO, // this is a really stupid state to fix a problem
+        BACK_HATCH_TOP_TILT,
+        FRONT_TILT_FOR_BACK_HATCH,
         RESET
     }
 
@@ -102,6 +104,7 @@ public class Arm {
                 setArmPosition(RobotMap.ARM_FRONT_BOTTOM_CARGO_POSITION);
 
                 if (RobotMap.elevator.isElevatorClear() && changingDirectionFlag) {
+                    changingDirectionFlag = false;
                     armState = ArmEnum.BACK_BOTTOM_CARGO;
                 }
                 break;
@@ -110,6 +113,7 @@ public class Arm {
                 setArmPosition(RobotMap.ARM_FRONT_MID_CARGO_POSITION);
 
                 if (RobotMap.elevator.isElevatorClear() && changingDirectionFlag) {
+                    changingDirectionFlag = false;
                     armState = ArmEnum.BACK_MID_CARGO;
                 }
                 break;
@@ -118,6 +122,7 @@ public class Arm {
                 setArmPosition(RobotMap.ARM_FRONT_TOP_CARGO_POSITION);
 
                 if (RobotMap.elevator.isElevatorClear() && changingDirectionFlag) {
+                    changingDirectionFlag = false;
                     armState = ArmEnum.BACK_TOP_CARGO;
                 }
                 break;
@@ -134,6 +139,7 @@ public class Arm {
                 setArmPosition(RobotMap.ARM_BACK_BOTTOM_CARGO_POSITION);
 
                 if (RobotMap.elevator.isElevatorClear() && changingDirectionFlag) {
+                    changingDirectionFlag = false;
                     armState = ArmEnum.FRONT_BOTTOM_CARGO;
                 }
                 break;
@@ -142,6 +148,7 @@ public class Arm {
                 setArmPosition(RobotMap.ARM_BACK_MID_CARGO_POSITION);
 
                 if (RobotMap.elevator.isElevatorClear() && changingDirectionFlag) {
+                    changingDirectionFlag = false;
                     armState = ArmEnum.FRONT_MID_CARGO;
                 }
                 break;
@@ -150,6 +157,7 @@ public class Arm {
                 setArmPosition(RobotMap.ARM_BACK_TOP_CARGO_POSITION);
 
                 if (RobotMap.elevator.isElevatorClear() && changingDirectionFlag) {
+                    changingDirectionFlag = false;
                     armState = ArmEnum.FRONT_TOP_CARGO;
                 }
                 break;
@@ -158,6 +166,7 @@ public class Arm {
                 setArmPosition(RobotMap.ARM_FRONT_CARGO_SHIP_POSITION);
 
                 if (RobotMap.elevator.isElevatorClear() && changingDirectionFlag) {
+                    changingDirectionFlag = false;
                     armState = ArmEnum.BACK_CARGO_SHIP_PORT;
                 }
                 break;
@@ -166,8 +175,20 @@ public class Arm {
                 setArmPosition(RobotMap.ARM_BACK_CARGO_SHIP_POSITION);
 
                 if (RobotMap.elevator.isElevatorClear() && changingDirectionFlag) {
+                    changingDirectionFlag = false;
                     armState = ArmEnum.FRONT_CARGO_SHIP_PORT;
                 }
+                break;
+
+            case FRONT_TILT_FOR_BACK_HATCH:
+                setArmPosition(RobotMap.ARM_FRONT_TILT_POSITION);
+
+                if (RobotMap.elevator.isElevatorClear() && changingDirectionFlag) {
+                    armState = ArmEnum.BACK_HATCH_TOP_TILT;
+                }
+
+            case BACK_HATCH_TOP_TILT:
+                setArmPosition(RobotMap.ARM_BACK_HATCH_TOP_TILT);
                 break;
 
             case RESET:
@@ -286,6 +307,14 @@ public class Arm {
 
     public void setArmStateBackTiltForIntakingCargo() {
         armState = ArmEnum.BACK_TILT_FOR_INTAKING_CARGO;
+    }
+
+    public void setArmStateBackHatchTopTilt() {
+        armState = ArmEnum.BACK_HATCH_TOP_TILT;
+    }
+
+    public void setArmStateFrontTiltForBackHatch() {
+        armState = ArmEnum.FRONT_TILT_FOR_BACK_HATCH;
     }
 
     public DirectionEnum getDirection() {
