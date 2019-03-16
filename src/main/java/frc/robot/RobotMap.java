@@ -57,7 +57,7 @@ public class RobotMap {
 	public static final int FRONT_TOP_HATCH_HEIGHT = 77896;//
 	public static final int FRONT_TOP_PORT_HEIGHT = 74348;//
 
-	public static final int BACK_INTAKING_HATCH_HEIGHT = 11297;//
+	public static final int BACK_INTAKING_HATCH_HEIGHT = 12154; //11297;//
 	public static final int BACK_BOTTOM_PORT_HEIGHT = 12603;//
 	public static final int BACK_SHIP_PORT_HEIGHT = 23434;
 	public static final int BACK_MID_HATCH_HEIGHT = 44571;//
@@ -77,7 +77,7 @@ public class RobotMap {
     public static final double ELEVATOR_kF = 0.0;
 
 	// Arm Constants
-    public static final int ARM_FRONT_CARGO_INTAKING_POSITION = 621; // 688 was what we did the values off of //650 // 634
+    public static final int ARM_FRONT_CARGO_INTAKING_POSITION = 645; // 688 was what we did the values off of //650 // 634
 	public static final int ARM_FRONT_LEVEL_POSITION = ARM_FRONT_CARGO_INTAKING_POSITION - 10; // 683; // -5
 	public static final int ARM_FRONT_TILT_POSITION = ARM_FRONT_CARGO_INTAKING_POSITION - 50; // 588; // -100
 	public static final int ARM_FRONT_CARGO_POSITION = ARM_FRONT_CARGO_INTAKING_POSITION - 76; // 612; // -76					// bottom 644//mid628//top614
@@ -107,7 +107,7 @@ public class RobotMap {
 
 	public static final double ARM_kP = 25.0;
 	public static final double ARM_kI = 0.0;
-	public static final double ARM_kD = 0.0;
+	public static final double ARM_kD = 10.0;
 	
 	// Intake Constants
 	public static final double CARGO_ROLLER_INTAKING_SPEED = 0.7;
@@ -225,7 +225,7 @@ public class RobotMap {
 		elevatorFront.configSelectedFeedbackSensor(FeedbackDevice.CTRE_MagEncoder_Relative);
         //elevatorFront.configVoltageCompSaturation(voltage)
         elevatorFront.configPeakOutputForward(.6);
-        elevatorFront.configPeakOutputReverse(-.6);
+        elevatorFront.configPeakOutputReverse(-.4);
         elevatorFront.configNominalOutputForward(0);
         elevatorFront.configNominalOutputReverse(0);
         
