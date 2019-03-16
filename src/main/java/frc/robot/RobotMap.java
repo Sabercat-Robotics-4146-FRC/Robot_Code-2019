@@ -71,13 +71,13 @@ public class RobotMap {
 
 	public static final int LOWER_SLOWER_HEIGHT = 10508;
 
-	public static final double ELEVATOR_kP = 2.54; // when testing without the arm use p: 0.07 d: 1.0 f: 0.0
+	public static final double ELEVATOR_kP = 1.18; // when testing without the arm use p: 0.07 d: 1.0 f: 0.0
 	public static final double ELEVATOR_kI = 0.00;
 	public static final double ELEVATOR_kD = 0.00;
-	public static final double ELEVATOR_kF = 1.18;
+    public static final double ELEVATOR_kF = 0.0;
 
 	// Arm Constants
-	public static final int ARM_FRONT_CARGO_INTAKING_POSITION = 627; // 688 was what we did the values off of //650 // 634
+    public static final int ARM_FRONT_CARGO_INTAKING_POSITION = 621; // 688 was what we did the values off of //650 // 634
 	public static final int ARM_FRONT_LEVEL_POSITION = ARM_FRONT_CARGO_INTAKING_POSITION - 10; // 683; // -5
 	public static final int ARM_FRONT_TILT_POSITION = ARM_FRONT_CARGO_INTAKING_POSITION - 50; // 588; // -100
 	public static final int ARM_FRONT_CARGO_POSITION = ARM_FRONT_CARGO_INTAKING_POSITION - 76; // 612; // -76					// bottom 644//mid628//top614
@@ -103,7 +103,7 @@ public class RobotMap {
 	public static final int FRONT_ARM_CLEAR_VALUE = ARM_FRONT_CARGO_INTAKING_POSITION - 100; // 588; // -100
 	public static final int BACK_ARM_CLEAR_VALUE = ARM_FRONT_CARGO_INTAKING_POSITION - 225; // 463; // -225
 
-	public static final int MIDDLE_ARM_VALUE = ARM_FRONT_CARGO_INTAKING_POSITION - 132; // 556; // -132
+	public static final int MIDDLE_ARM_VALUE = ARM_FRONT_CARGO_INTAKING_POSITION - 213; // 556; // -132
 
 	public static final double ARM_kP = 25.0;
 	public static final double ARM_kI = 0.0;
@@ -218,12 +218,17 @@ public class RobotMap {
 		
 		elevatorFront = new TalonSRX(5);
 		elevatorBack = new TalonSRX(6);
-
+        
 		elevatorFront.configFactoryDefault();
 		elevatorBack.configFactoryDefault();
         elevatorBack.follow(elevatorFront);
-        
 		elevatorFront.configSelectedFeedbackSensor(FeedbackDevice.CTRE_MagEncoder_Relative);
+        //elevatorFront.configVoltageCompSaturation(voltage)
+        elevatorFront.configPeakOutputForward(.6);
+        elevatorFront.configPeakOutputReverse(-.6);
+        elevatorFront.configNominalOutputForward(0);
+        elevatorFront.configNominalOutputReverse(0);
+        
 
 		elevatorFront.setInverted(true);
 		elevatorBack.setInverted(true);
@@ -232,7 +237,7 @@ public class RobotMap {
 		elevatorFront.config_kP(0, ELEVATOR_kP);
 		elevatorFront.config_kI(0, ELEVATOR_kI);
 		elevatorFront.config_kD(0, ELEVATOR_kD);
-		elevatorFront.config_kP(0, ELEVATOR_kF);
+		elevatorFront.config_kF(0, ELEVATOR_kF);
 
 		armPivot = new TalonSRX(7);
 		armPivot.configFactoryDefault();
@@ -242,7 +247,8 @@ public class RobotMap {
 
 		armPivot.config_kP(0, ARM_kP);
 		armPivot.config_kI(0, ARM_kI);
-		armPivot.config_kD(0, ARM_kD);
+        armPivot.config_kD(0, ARM_kD);
+        
 
 		cargoRoller = new TalonSRX(8);
 		cargoRoller.configFactoryDefault();

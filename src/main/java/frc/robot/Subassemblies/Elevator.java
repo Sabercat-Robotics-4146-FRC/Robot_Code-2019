@@ -370,7 +370,7 @@ public class Elevator {
             if (RobotMap.elevatorFront.getSelectedSensorPosition() >= RobotMap.LOWER_SLOWER_HEIGHT) {
                 RobotMap.elevatorFront.set(ControlMode.PercentOutput, -0.3);
             } else if (RobotMap.elevatorFront.getSelectedSensorPosition() < RobotMap.LOWER_SLOWER_HEIGHT) {
-                RobotMap.elevatorFront.set(ControlMode.PercentOutput, -0.1);
+                RobotMap.elevatorFront.set(ControlMode.PercentOutput, -0.2);
             }
         }
     }

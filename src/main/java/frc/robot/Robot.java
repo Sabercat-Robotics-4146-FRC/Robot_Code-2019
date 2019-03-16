@@ -24,7 +24,7 @@ public class Robot extends SampleRobot {
         RobotMap.init(); // Instantiates things to be used from RobotMap.
         //CameraServer.getInstance().startAutomaticCapture();
 		UsbCamera cameraOne = CameraServer.getInstance().startAutomaticCapture(0);
-		UsbCamera cameraTwo =CameraServer.getInstance().startAutomaticCapture(1);
+		UsbCamera cameraTwo = CameraServer.getInstance().startAutomaticCapture(1);
 	}
 
 	/**

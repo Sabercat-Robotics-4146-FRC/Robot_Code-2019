@@ -31,6 +31,10 @@ public class TeleopControls {
                 buttonFlag = false;
                 setIsUpdating(true);
 
+                // |
+                // |
+                // V This code is broken.
+                
                 // makes sure that the direction the code thinks the arm is at is the right direction
                 if (RobotMap.arm.isArmInFront()) {
                     setDirectionFront();

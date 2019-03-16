@@ -1,5 +1,7 @@
 package frc.robot.Subassemblies;
 
+import com.sun.jdi.Value;
+
 import frc.robot.RobotMap;
 import frc.robot.Utilities.ConsoleLogger;
 import frc.robot.Utilities.PID.LimelightTurningPID;
@@ -31,10 +33,22 @@ public class Drivetrain {
         this.limelightVisionPID.flush();
     }
 
+
+    // temp code
+    private double clamp(double value, double clamp_value) {
+        if (value > clamp_value) {
+            return clamp_value;
+            
+        }
+        if(value < -clamp_value) {
+            return -clamp_value;
+        }
+        return value;
+    }
     public void runVisionPID(double speed) {
         this.limelightVisionPID.update(RobotMap.timer.getDT());
         this.speed = speed;
-        this.rotation = limelightVisionPID.get();
+        this.rotation = clamp(limelightVisionPID.get(), 0.45);
     }
 
     public void setDrivetrainValues(double speed, double rotation) {
