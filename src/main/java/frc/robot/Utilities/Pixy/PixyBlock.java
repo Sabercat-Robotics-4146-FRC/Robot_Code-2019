@@ -2,6 +2,7 @@ package frc.robot.Utilities.Pixy;
 
 
 import frc.robot.RobotMap;
+import frc.robot.Utilities.ConsoleLogger;
 import frc.robot.Utilities.Dashboard;
 
 public class PixyBlock {
@@ -54,7 +55,7 @@ public class PixyBlock {
 
 	public boolean checkChecksumError() {
 		if(this.Checksum != getSum()) {
-			//Logger.error("CHECKSUM DATA DOES NOT CHECKOUT!!!!!!!!!!!!!!!!");
+			ConsoleLogger.error("CHECKSUM DATA DOES NOT CHECKOUT!!!!!!!!!!!!!!!!");
 			RobotMap.checksumErrorCount++;
 			Dashboard.send("checksumErrorCount", RobotMap.checksumErrorCount);
 			zero();

@@ -39,46 +39,60 @@ public class RobotMap {
     public static int checksumErrorCount = 0; // not actually a constant.
     public static final boolean syncLEDsWithRumble = true;
 
-	// Motion Profiling Constants
-	public final static int kSensorUnitsPerRotation = 4096; // How many sensor units per rotation using CTRE Magnetic Encoder.
-	public final static double kNeutralDeadband = 0.001; // Motor neutral dead-band, set to the minimum 0.1%.
-	public final static int kPrimaryPIDSlot = 0; // any slot [0,3]
-
-	//public final static Gains kGains_MotProf = new Gains( 1.0, 0.0,  0.0, 1023.0/6800.0,  400,  1.00 );
-
 	// Elevator Constants
-	public static final int FRONT_TOP_PORT_HEIGHT = 0;
-	public static final int FRONT_TOP_HATCH_HEIGHT = 0;
-	public static final int FRONT_MID_PORT_HEIGHT = 0;
-	public static final int FRONT_MID_HATCH_HEIGHT = 0;
-	public static final int FRONT_SHIP_PORT_HEIGHT = 0;
-	public static final int FRONT_BOTTOM_PORT_HEIGHT = 0;
-	public static final int FRONT_INTAKING_HATCH_HEIGHT = 0;
-	public static final int FRONT_INTAKING_CARGO_HEIGHT = 0; // (Front only)
-	public static final int FRONT_STORAGE_HEIGHT = 0;
+	public static final int ELEVATOR_FRONT_TOP_PORT_HEIGHT = 0;
+	public static final int ELEVATOR_FRONT_TOP_HATCH_HEIGHT = 0;
+	public static final int ELEVATOR_FRONT_MID_PORT_HEIGHT = 0;
+	public static final int ELEVATOR_FRONT_MID_HATCH_HEIGHT = 0;
+	public static final int ELEVATOR_FRONT_SHIP_PORT_HEIGHT = 0;
+	public static final int ELEVATOR_FRONT_BOTTOM_PORT_HEIGHT = 0;
+	public static final int ELEVATOR_FRONT_INTAKING_HATCH_HEIGHT = 0;
+	public static final int ELEVATOR_FRONT_INTAKING_CARGO_HEIGHT = 0; // (Front only)
+	public static final int ELEVATOR_FRONT_STORAGE_HEIGHT = 0;
 
-	public static final int BACK_TOP_PORT_HEIGHT = 0;
-	public static final int BACK_TOP_HATCH_HEIGHT = 0;
-	public static final int BACK_MID_PORT_HEIGHT = 0;
-	public static final int BACK_MID_HATCH_HEIGHT = 0;
-	public static final int BACK_SHIP_PORT_HEIGHT = 0;
-	public static final int BACK_BOTTOM_PORT_HEIGHT = 0;
-	public static final int BACK_INTAKING_HATCH_HEIGHT = 0;
-	public static final int BACK_STORAGE_HEIGHT = 0;
+	public static final int ELEVATOR_BACK_TOP_PORT_HEIGHT = 0;
+	public static final int ELEVATOR_BACK_TOP_HATCH_HEIGHT = 0;
+	public static final int ELEVATOR_BACK_MID_PORT_HEIGHT = 0;
+	public static final int ELEVATOR_BACK_MID_HATCH_HEIGHT = 0;
+	public static final int ELEVATOR_BACK_SHIP_PORT_HEIGHT = 0;
+	public static final int ELEVATOR_BACK_BOTTOM_PORT_HEIGHT = 0;
+	public static final int ELEVATOR_BACK_INTAKING_HATCH_HEIGHT = 0;
+	public static final int ELEVATOR_BACK_STORAGE_HEIGHT = 0;
 
-	public static final int ELEVATOR_CLEAR_HEIGHT = 0;
+    public static final int ELEVATOR_CLEAR_HEIGHT = 0;
+    public static final int ELEVATOR_FRONT_TRANSITION_POSITION = 0;
+    public static final int ELEVATOR_BACK_TRANSITION_POSITION = 0;
+
 
 	public static final double LIMELIGHT_PORT_TAPE_HEIGHT = 0.0;
 
     // Arm Constants
-	public static final double ARM_FRONT_LEVEL_POSITION = 0.0;
-	public static final double ARM_FRONT_TILT_POSITION = 0.0;
-	public static final double ARM_BACK_LEVEL_POSITION = 0.0;
-	public static final double ARM_BACK_TILT_POSITION = 0.0;
+	public static final int ARM_FRONT_TOP_PORT_POSITION = 0;
+	public static final int ARM_FRONT_TOP_HATCH_POSITION = 0;
+	public static final int ARM_FRONT_MID_PORT_POSITION = 0;
+	public static final int ARM_FRONT_MID_HATCH_POSITION = 0;
+	public static final int ARM_FRONT_SHIP_PORT_POSITION = 0;
+	public static final int ARM_FRONT_BOTTOM_PORT_POSITION = 0;
+	public static final int ARM_FRONT_INTAKING_HATCH_POSITION = 0;
+	public static final int ARM_FRONT_INTAKING_CARGO_POSITION = 0; // (Front only)
+	public static final int ARM_FRONT_STORAGE_POSITION = 0;
+
+	public static final int ARM_BACK_TOP_PORT_POSITION = 0;
+	public static final int ARM_BACK_TOP_HATCH_POSITION = 0;
+	public static final int ARM_BACK_MID_PORT_POSITION = 0;
+	public static final int ARM_BACK_MID_HATCH_POSITION = 0;
+	public static final int ARM_BACK_SHIP_PORT_POSITION = 0;
+	public static final int ARM_BACK_BOTTOM_PORT_POSITION = 0;
+	public static final int ARM_BACK_INTAKING_HATCH_POSITION = 0;
+	public static final int ARM_BACK_STORAGE_POSITION = 0;
 	
-	public static final double FRONT_ARM_CLEAR_VALUE = 0.0;
-	public static final double BACK_ARM_CLEAR_VALUE = 0.0;
-	
+	public static final int FRONT_ARM_CLEAR_VALUE = 0;
+    public static final int BACK_ARM_CLEAR_VALUE = 0;
+    
+    public static final int ARM_FRONT_TRANSITION_POSITION = 0;
+    public static final int ARM_BACK_TRANSITION_POSITION = 0;
+
+    
 	// Intake Constants
 	public static final double CARGO_ROLLER_INTAKING_SPEED = 0.7;
 	public static final double CARGO_ROLLER_OUTPUTTING_SPEED = -0.8;
@@ -144,10 +158,9 @@ public class RobotMap {
 	public static Limelight limelight;
 
 	//// Sub-System Declarations ////
-	public static Arm arm;
 	public static Drivetrain drivetrain;
 	public static EndGameLift egl;
-	public static Elevator elevator;
+	public static ElevatorAndArm elevatorAndArm;
     public static Intake intake;
     
 	public static void init() { // This is to be called in robitInit and instantiates stuff.
@@ -250,10 +263,9 @@ public class RobotMap {
 		limelight = new Limelight();
 
 		//// Sub-System Initilization ////
-		arm = new Arm();
 		drivetrain = new Drivetrain();
 		egl = new EndGameLift();
-		elevator = new Elevator();
+		elevatorAndArm = new ElevatorAndArm();
 		intake = new Intake();
 	}
 }
