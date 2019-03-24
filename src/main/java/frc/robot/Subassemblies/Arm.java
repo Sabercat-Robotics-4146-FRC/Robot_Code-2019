@@ -59,7 +59,7 @@ public class Arm {
 
     // Testers
 
-    public boolean isArmClear() { // tests if the arm is forward or backwards enough to clear the top of the elevator.
+    public boolean isClear() { // tests if the arm is forward or backwards enough to clear the top of the elevator.
         return RobotMap.armPivot.getSelectedSensorPosition() > RobotMap.FRONT_ARM_CLEAR_VALUE &&
                 RobotMap.armPivot.getSelectedSensorPosition() < RobotMap.BACK_ARM_CLEAR_VALUE; // TODO check pot polarity
     }

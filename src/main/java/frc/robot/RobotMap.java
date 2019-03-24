@@ -47,23 +47,26 @@ public class RobotMap {
 	//public final static Gains kGains_MotProf = new Gains( 1.0, 0.0,  0.0, 1023.0/6800.0,  400,  1.00 );
 
 	// Elevator Constants
-	public static final double FRONT_INTAKING_CARGO_HEIGHT = 0.0;
-	public static final double FRONT_INTAKING_HATCH_HEIGHT = 0.0;
-	public static final double FRONT_BOTTOM_PORT_HEIGHT = 0.0;
-	public static final double FRONT_SHIP_PORT_HEIGHT = 0.0;
-	public static final double FRONT_MID_HATCH_HEIGHT = 0.0;
-	public static final double FRONT_MID_PORT_HEIGHT = 0.0;
-	public static final double FRONT_TOP_HATCH_HEIGHT = 0.0;
-	public static final double FRONT_TOP_PORT_HEIGHT = 0.0;
-	public static final double BACK_INTAKING_HATCH_HEIGHT = 0.0;
-	public static final double BACK_BOTTOM_PORT_HEIGHT = 0.0;
-	public static final double BACK_SHIP_PORT_HEIGHT = 0.0;
-	public static final double BACK_MID_HATCH_HEIGHT = 0.0;
-	public static final double BACK_MID_PORT_HEIGHT = 0.0;
-	public static final double BACK_TOP_HATCH_HEIGHT = 0.0;
-	public static final double BACK_TOP_PORT_HEIGHT = 0.0;
+	public static final int FRONT_TOP_PORT_HEIGHT = 0;
+	public static final int FRONT_TOP_HATCH_HEIGHT = 0;
+	public static final int FRONT_MID_PORT_HEIGHT = 0;
+	public static final int FRONT_MID_HATCH_HEIGHT = 0;
+	public static final int FRONT_SHIP_PORT_HEIGHT = 0;
+	public static final int FRONT_BOTTOM_PORT_HEIGHT = 0;
+	public static final int FRONT_INTAKING_HATCH_HEIGHT = 0;
+	public static final int FRONT_INTAKING_CARGO_HEIGHT = 0; // (Front only)
+	public static final int FRONT_STORAGE_HEIGHT = 0;
 
-	public static final double ARM_OVER_HEIGHT = 0.0;
+	public static final int BACK_TOP_PORT_HEIGHT = 0;
+	public static final int BACK_TOP_HATCH_HEIGHT = 0;
+	public static final int BACK_MID_PORT_HEIGHT = 0;
+	public static final int BACK_MID_HATCH_HEIGHT = 0;
+	public static final int BACK_SHIP_PORT_HEIGHT = 0;
+	public static final int BACK_BOTTOM_PORT_HEIGHT = 0;
+	public static final int BACK_INTAKING_HATCH_HEIGHT = 0;
+	public static final int BACK_STORAGE_HEIGHT = 0;
+
+	public static final int ELEVATOR_CLEAR_HEIGHT = 0;
 
 	public static final double LIMELIGHT_PORT_TAPE_HEIGHT = 0.0;
 
