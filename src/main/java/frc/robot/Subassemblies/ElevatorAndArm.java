@@ -31,7 +31,9 @@ public class ElevatorAndArm {
         FRONT_TRANSITION(RobotMap.ELEVATOR_FRONT_TRANSITION_POSITION, RobotMap.ARM_FRONT_TRANSITION_POSITION, Side.FRONT),
         FLIPPING_TO_FRONT_TRANSITION(),
         FLIPPING_TO_BACK_TRANSITION(),
-        BACK_TRANSITION(RobotMap.ELEVATOR_BACK_TRANSITION_POSITION, RobotMap.ARM_BACK_TRANSITION_POSITION, Side.BACK);
+        BACK_TRANSITION(RobotMap.ELEVATOR_BACK_TRANSITION_POSITION, RobotMap.ARM_BACK_TRANSITION_POSITION, Side.BACK),
+
+        IDLE();
 
         public enum Side {
             FRONT,
@@ -69,12 +71,14 @@ public class ElevatorAndArm {
         }
     }
 
-    ScoringPosition scoringState;
+    ScoringPosition desiredState;
+    ScoringPosition actualState;
 
     boolean limitSwitchPressedFlag;
 
     public ElevatorAndArm() {
-        scoringState = ScoringPosition.FRONT_STORAGE;
+        desiredState = ScoringPosition.IDLE;
+        actualState = ScoringPosition.IDLE;
 
         limitSwitchPressedFlag = false;
     }
@@ -86,19 +90,43 @@ public class ElevatorAndArm {
     // Setters
 
     public void setScoringPosition(ScoringPosition state) {
-        scoringState = state;
+        desiredState = state;
     }
 
     // Getters
+    public Side getDesiredSide() {
+        return desiredState.getSide();
+    }
 
-    public Side getSide() {
-        return scoringState.getSide();
+    public Side getActualSide() {
+        return actualState.getSide();
     }
 
     // Utilities
 
-    private void moveElevator(double position) {
+    private void moveElevator(int position) {
         RobotMap.elevatorFront.set(ControlMode.Position, position);
+    }
+
+    private void moveArm(int position) {
+        RobotMap.armPivot.set(ControlMode.Position, position);
+    }
+
+    private void move(int elevatorPosition, int armPosition){
+        moveElevator(elevatorPosition);
+        moveArm(armPosition);
+    }
+
+    private int getElevatorPosition() {
+        return RobotMap.elevatorFront.getSelectedSensorPosition();
+    }
+
+    private int getArmPosition() {
+        return RobotMap.armPivot.getSelectedSensorPosition();
+    }
+
+    public boolean isSameSide(ScoringPosition stateOne, ScoringPosition stateTwo) {
+        return stateOne.getSide() == stateTwo.getSide();
     }
 
 }
