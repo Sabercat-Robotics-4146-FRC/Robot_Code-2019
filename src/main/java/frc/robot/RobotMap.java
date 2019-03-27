@@ -25,7 +25,7 @@ import frc.robot.Utilities.Pixy.*;
 public class RobotMap {
 	public static Robot ROBOT;
 	public static TeleopControls teleopControls;
-	
+
 	/////// Constants ///////
 	// Vision Constants
 	public static final int PIXY_UPDATE_RATE = 50; //Htz
@@ -42,32 +42,36 @@ public class RobotMap {
 	public static final double LIMELIGHT_kP = 0.16;
 	public static final double LIMELIGHT_kI = 0.0;
 	public static final double LIMELIGHT_kD = 0.0;
-	
+
 	public static final int LED_ADDRESS = 0x55;
 
 	//public final static Gains kGains_MotProf = new Gains( 1.0, 0.0,  0.0, 1023.0/6800.0,  400,  1.00 );
 
 	// Elevator Constants
-	public static final int FRONT_INTAKING_CARGO_HEIGHT = 0;//
-	public static final int FRONT_INTAKING_HATCH_HEIGHT = 0;//
-	public static final int FRONT_BOTTOM_PORT_HEIGHT = 10508;//
-	public static final int FRONT_SHIP_PORT_HEIGHT = 23434;
-	public static final int FRONT_MID_HATCH_HEIGHT = 38310;//
-	public static final int FRONT_MID_PORT_HEIGHT = 39890;//
-	public static final int FRONT_TOP_HATCH_HEIGHT = 77896;//
-	public static final int FRONT_TOP_PORT_HEIGHT = 74348;//
+	public static final int ELEVATOR_FRONT_TOP_PORT_HEIGHT = 0;
+	public static final int ELEVATOR_FRONT_TOP_HATCH_HEIGHT = 0;
+	public static final int ELEVATOR_FRONT_MID_PORT_HEIGHT = 0;
+	public static final int ELEVATOR_FRONT_MID_HATCH_HEIGHT = 0;
+	public static final int ELEVATOR_FRONT_SHIP_PORT_HEIGHT = 0;
+	public static final int ELEVATOR_FRONT_BOTTOM_PORT_HEIGHT = 0;
+	public static final int ELEVATOR_FRONT_INTAKING_HATCH_HEIGHT = 0;
+	public static final int ELEVATOR_FRONT_INTAKING_CARGO_HEIGHT = 0; // (Front only)
+	public static final int ELEVATOR_FRONT_STORAGE_HEIGHT = 0;
 
-	public static final int BACK_INTAKING_HATCH_HEIGHT = 12154; //11297;//
-	public static final int BACK_BOTTOM_PORT_HEIGHT = 12603;//
-	public static final int BACK_SHIP_PORT_HEIGHT = 23434;
-	public static final int BACK_MID_HATCH_HEIGHT = 44571;//
-	public static final int BACK_MID_PORT_HEIGHT = 54143;//
-	public static final int BACK_TOP_HATCH_HEIGHT = 76312;//
-	public static final int BACK_TOP_PORT_HEIGHT = 76125;//
+	public static final int ELEVATOR_BACK_TOP_PORT_HEIGHT = 0;
+	public static final int ELEVATOR_BACK_TOP_HATCH_HEIGHT = 0;
+	public static final int ELEVATOR_BACK_MID_PORT_HEIGHT = 0;
+	public static final int ELEVATOR_BACK_MID_HATCH_HEIGHT = 0;
+	public static final int ELEVATOR_BACK_SHIP_PORT_HEIGHT = 0;
+	public static final int ELEVATOR_BACK_BOTTOM_PORT_HEIGHT = 0;
+	public static final int ELEVATOR_BACK_INTAKING_HATCH_HEIGHT = 0;
+	public static final int ELEVATOR_BACK_STORAGE_HEIGHT = 0;
 
-	public static final int ARM_OVER_HEIGHT = 35122 + 5000; // WHEN SETTING THIS VALUE ADD LIKE 5000 TO THE NUMBER
+	public static final int ELEVATOR_CLEAR_HEIGHT = 0;
+ 	public static final int ELEVATOR_FRONT_TRANSITION_POSITION = 0;
+ 	public static final int ELEVATOR_BACK_TRANSITION_POSITION = 0;
 
-	public static final int LIMELIGHT_PORT_TAPE_HEIGHT = 0;
+	public static final double LIMELIGHT_PORT_TAPE_HEIGHT = 0.0;
 
 	public static final int LOWER_SLOWER_HEIGHT = 10508;
 
@@ -77,28 +81,32 @@ public class RobotMap {
     public static final double ELEVATOR_kF = 0.0;
 
 	// Arm Constants
-    public static final int ARM_FRONT_CARGO_INTAKING_POSITION = 645; // 688 was what we did the values off of //650 // 634
-	public static final int ARM_FRONT_LEVEL_POSITION = ARM_FRONT_CARGO_INTAKING_POSITION - 10; // 683; // -5
-	public static final int ARM_FRONT_TILT_POSITION = ARM_FRONT_CARGO_INTAKING_POSITION - 50; // 588; // -100
-	public static final int ARM_FRONT_CARGO_POSITION = ARM_FRONT_CARGO_INTAKING_POSITION - 76; // 612; // -76					// bottom 644//mid628//top614
-	public static final int ARM_FRONT_BOTTOM_CARGO_POSITION = ARM_FRONT_CARGO_INTAKING_POSITION - 44; // 644; // -44
-	public static final int ARM_FRONT_MID_CARGO_POSITION =  ARM_FRONT_CARGO_INTAKING_POSITION - 60; // 628; // -60
-	public static final int ARM_FRONT_TOP_CARGO_POSITION = ARM_FRONT_CARGO_INTAKING_POSITION - 74; // 614; // -74
+	public static final int ARM_FRONT_TOP_PORT_POSITION = 0;
+	public static final int ARM_FRONT_TOP_HATCH_POSITION = 0;
+	public static final int ARM_FRONT_MID_PORT_POSITION = 0;
+	public static final int ARM_FRONT_MID_HATCH_POSITION = 0;
+	public static final int ARM_FRONT_SHIP_PORT_POSITION = 0;
+	public static final int ARM_FRONT_BOTTOM_PORT_POSITION = 0;
+	public static final int ARM_FRONT_INTAKING_HATCH_POSITION = 0;
+	public static final int ARM_FRONT_INTAKING_CARGO_POSITION = 0; // (Front only)
+	public static final int ARM_FRONT_STORAGE_POSITION = 0;
 
-	public static final int ARM_BACK_LEVEL_POSITION = ARM_FRONT_CARGO_INTAKING_POSITION - 240; // 433; //-255
-	public static final int ARM_BACK_TILT_POSITION = ARM_FRONT_CARGO_INTAKING_POSITION - 255; // 463; // -225
-	public static final int ARM_BACK_CARGO_POSITION = ARM_FRONT_CARGO_INTAKING_POSITION - 280; // 408; // -280
-	public static final int ARM_BACK_BOTTOM_CARGO_POSITION = ARM_FRONT_CARGO_INTAKING_POSITION - 280; // 408; // -280
-	public static final int ARM_BACK_MID_CARGO_POSITION = ARM_FRONT_CARGO_INTAKING_POSITION - 280; // 408; // -280
-	public static final int ARM_BACK_TOP_CARGO_POSITION = ARM_FRONT_CARGO_INTAKING_POSITION - 280; // 408; // -208
-	public static final int ARM_BACK_HATCH_TOP_TILT = ARM_FRONT_CARGO_INTAKING_POSITION - 217; // 297
+	public static final int ARM_BACK_TOP_PORT_POSITION = 0;
+	public static final int ARM_BACK_TOP_HATCH_POSITION = 0;
+	public static final int ARM_BACK_MID_PORT_POSITION = 0;
+	public static final int ARM_BACK_MID_HATCH_POSITION = 0;
+	public static final int ARM_BACK_SHIP_PORT_POSITION = 0;
+	public static final int ARM_BACK_BOTTOM_PORT_POSITION = 0;
+	public static final int ARM_BACK_INTAKING_HATCH_POSITION = 0;
+	public static final int ARM_BACK_STORAGE_POSITION = 0;
+
+	public static final int FRONT_ARM_CLEAR_VALUE = 0;
+	public static final int BACK_ARM_CLEAR_VALUE = 0;
+
+	public static final int ARM_FRONT_TRANSITION_POSITION = 0;
+	public static final int ARM_BACK_TRANSITION_POSITION = 0;
 
 	// these are arbitrary right now
-	public static final int ARM_FRONT_CARGO_SHIP_POSITION = ARM_FRONT_CARGO_INTAKING_POSITION - 60; // 628; // -60		these are arbitrary right now
-	public static final int ARM_BACK_CARGO_SHIP_POSITION = ARM_FRONT_CARGO_INTAKING_POSITION - 280; // 408; // -280			these are arbitrary right now
-
-	public static final int ARM_FRONT_STORAGE_POSITION = ARM_FRONT_CARGO_INTAKING_POSITION - 100; // 588; // -100
-	public static final int ARM_BACK_STORAGE_POSITION = ARM_FRONT_CARGO_INTAKING_POSITION - 255; // 463; // -225
 
 	public static final int FRONT_ARM_CLEAR_VALUE = ARM_FRONT_CARGO_INTAKING_POSITION - 100; // 588; // -100
 	public static final int BACK_ARM_CLEAR_VALUE = ARM_FRONT_CARGO_INTAKING_POSITION - 225; // 463; // -225
@@ -108,12 +116,12 @@ public class RobotMap {
 	public static final double ARM_kP = 25.0;
 	public static final double ARM_kI = 0.0;
 	public static final double ARM_kD = 10.0;
-	
+
 	// Intake Constants
 	public static final double CARGO_ROLLER_INTAKING_SPEED = 0.7;
 	public static final double CARGO_ROLLER_OUTPUTTING_SPEED = -0.8;
     public static final double CLAW_RELEASE_TIME = 1.0;
-    
+
     // End Game Lift Constants
     public static final double EGL_UPPER_SOFT_STOP = 5.0;
     public static final double EGL_LOWER_SOFT_STOP = 1.0;
@@ -133,7 +141,7 @@ public class RobotMap {
 	public static WPI_TalonSRX driveLeftBack;
 	public static WPI_TalonSRX driveRightFront;
 	public static WPI_TalonSRX driveRightBack;
-	
+
 	public static TalonSRX elevatorFront;
 	public static TalonSRX elevatorBack;
 	public static TalonSRX armPivot;
@@ -177,12 +185,11 @@ public class RobotMap {
 	public static DigitalOutput pixyLEDs;
 
 	//// Sub-System Declarations ////
-	public static Arm arm;
 	public static Drivetrain drivetrain;
 	public static EndGameLift egl;
-	public static Elevator elevator;
-    public static Intake intake;
-    
+	public static ElevatorAndArm elevatorAndArm;
+  public static Intake intake;
+
 	public static void init() { // This is to be called in robitInit and instantiates stuff.
 		/////// Initilizing ///////
 		teleopControls = new TeleopControls(); // move this
@@ -209,31 +216,31 @@ public class RobotMap {
 		driveRightFront.setSafetyEnabled(false);
 		driveRightBack.setSafetyEnabled(false);
 		driveRightFront.setInverted(true); // Inverted for the drive
-        driveRightBack.setInverted(true);
-        
-        driveLeftFront.setNeutralMode(NeutralMode.Brake);
-        driveLeftBack.setNeutralMode(NeutralMode.Brake);
-        driveRightFront.setNeutralMode(NeutralMode.Brake);
-        driveRightBack.setNeutralMode(NeutralMode.Brake);
-		
+    driveRightBack.setInverted(true);
+
+    driveLeftFront.setNeutralMode(NeutralMode.Brake);
+    driveLeftBack.setNeutralMode(NeutralMode.Brake);
+    driveRightFront.setNeutralMode(NeutralMode.Brake);
+    driveRightBack.setNeutralMode(NeutralMode.Brake);
+
 		elevatorFront = new TalonSRX(5);
 		elevatorBack = new TalonSRX(6);
-        
+
 		elevatorFront.configFactoryDefault();
 		elevatorBack.configFactoryDefault();
-        elevatorBack.follow(elevatorFront);
+    elevatorBack.follow(elevatorFront);
 		elevatorFront.configSelectedFeedbackSensor(FeedbackDevice.CTRE_MagEncoder_Relative);
-        //elevatorFront.configVoltageCompSaturation(voltage)
-        elevatorFront.configPeakOutputForward(.6);
-        elevatorFront.configPeakOutputReverse(-.4);
-        elevatorFront.configNominalOutputForward(0);
-        elevatorFront.configNominalOutputReverse(0);
-        
+    //elevatorFront.configVoltageCompSaturation(voltage)
+    elevatorFront.configPeakOutputForward(.6);
+    elevatorFront.configPeakOutputReverse(-.4);
+    elevatorFront.configNominalOutputForward(0);
+    elevatorFront.configNominalOutputReverse(0);
+
 
 		elevatorFront.setInverted(true);
 		elevatorBack.setInverted(true);
 		elevatorFront.setSensorPhase(true);
-		
+
 		elevatorFront.config_kP(0, ELEVATOR_kP);
 		elevatorFront.config_kI(0, ELEVATOR_kI);
 		elevatorFront.config_kD(0, ELEVATOR_kD);
@@ -248,7 +255,7 @@ public class RobotMap {
 		armPivot.config_kP(0, ARM_kP);
 		armPivot.config_kI(0, ARM_kI);
         armPivot.config_kD(0, ARM_kD);
-        
+
 
 		cargoRoller = new TalonSRX(8);
 		cargoRoller.configFactoryDefault();
@@ -308,10 +315,9 @@ public class RobotMap {
 		pixyLEDs = new DigitalOutput(7);
 
 		//// Sub-System Initilization ////
-		arm = new Arm();
 		drivetrain = new Drivetrain();
 		egl = new EndGameLift();
-		elevator = new Elevator();
+		elevatorAndArm = new ElevatorAndArm();
 		intake = new Intake();
 	}
 }

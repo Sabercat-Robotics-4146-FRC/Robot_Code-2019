@@ -1,280 +1,149 @@
 package frc.robot;
 
-import frc.robot.Subassemblies.Arm.ArmEnum;
 import frc.robot.Subassemblies.Intake.CargoRollerEnum;
 import frc.robot.Utilities.Dashboard;
 import frc.robot.Utilities.Limelight.LEDEnum;
-import frc.robot.Subassemblies.Arm.DirectionEnum;
+import frc.robot.Subassemblies.ElevatorAndArm.ScoringPosition;
 
 public class TeleopControls {
 
-    public enum TCDirectionEnum {
-        FRONT,
-        BACK
-    }
-
-    TCDirectionEnum direction = TCDirectionEnum.FRONT;
-    TCDirectionEnum lastDirection = TCDirectionEnum.FRONT;
-
-    boolean buttonFlag;
-    public boolean isUpdating = true;
-    boolean ledFlag = false;
-    boolean hatchFlag = true;
-
     public void update() {
         // controlls for elevator
-        // <editor-fold>
-        if (RobotMap.pilotController.getRightBumper()) { // switch the direction of the arm
-            if ((RobotMap.pilotController.getButtonA() || RobotMap.pilotController.getButtonB()
-                    || RobotMap.pilotController.getButtonX() || RobotMap.pilotController.getButtonY())
-                    && buttonFlag) {
-                buttonFlag = false;
-                setIsUpdating(true);
-
-                // |
-                // |
-                // V This code is broken.
-                
-                // makes sure that the direction the code thinks the arm is at is the right direction
-                if (RobotMap.arm.isArmInFront()) {
-                    setDirectionFront();
-                } else if (RobotMap.arm.isArmInBack()) {
-                    setDirectionBack();
+        if (RobotMap.pilotController.getRightBumper()) { // Switching Sides
+                    if (RobotMap.pilotController.getLeftBumper()) { // Port Height
+                        if (RobotMap.pilotController.getButtonY()) {
+                            if (RobotMap.elevatorAndArm.getSide() == ScoringPosition.Side.FRONT) {
+                                RobotMap.elevatorAndArm.setScoringPosition(ScoringPosition.BACK_TOP_ROCKET_PORT);
+                            } else if(RobotMap.elevatorAndArm.getSide() == ScoringPosition.Side.BACK) {
+                                RobotMap.elevatorAndArm.setScoringPosition(ScoringPosition.FRONT_TOP_ROCKET_PORT);
+                            }
+                        } else if (RobotMap.pilotController.getButtonX()) {
+                            if (RobotMap.elevatorAndArm.getSide() == ScoringPosition.Side.FRONT) {
+                                RobotMap.elevatorAndArm.setScoringPosition(ScoringPosition.BACK_MID_ROCKET_PORT);
+                            } else if (RobotMap.elevatorAndArm.getSide() == ScoringPosition.Side.BACK) {
+                                RobotMap.elevatorAndArm.setScoringPosition(ScoringPosition.FRONT_MID_ROCKET_PORT);
+                            }
+                        } else if (RobotMap.pilotController.getButtonB()) {
+                            if (RobotMap.elevatorAndArm.getSide() == ScoringPosition.Side.FRONT) {
+                                RobotMap.elevatorAndArm.setScoringPosition(ScoringPosition.BACK_CARGO_SHIP_PORT);
+                            } else if (RobotMap.elevatorAndArm.getSide() == ScoringPosition.Side.BACK) {
+                                RobotMap.elevatorAndArm.setScoringPosition(ScoringPosition.FRONT_CARGO_SHIP_PORT);
+                            }
+                        } else if (RobotMap.pilotController.getButtonA()) {
+                            if (RobotMap.elevatorAndArm.getSide() == ScoringPosition.Side.FRONT) {
+                                RobotMap.elevatorAndArm.setScoringPosition(ScoringPosition.BACK_BOTTOM_ROCKET_PORT);
+                            } else if (RobotMap.elevatorAndArm.getSide() == ScoringPosition.Side.BACK) {
+                                RobotMap.elevatorAndArm.setScoringPosition(ScoringPosition.FRONT_BOTTOM_ROCKET_PORT);
+                            }
+                        } else if (RobotMap.pilotController.getButtonBack()) {
+                            if (RobotMap.elevatorAndArm.getSide() == ScoringPosition.Side.FRONT) {
+                                RobotMap.elevatorAndArm.setScoringPosition(ScoringPosition.BACK_STORAGE);
+                            } else if (RobotMap.elevatorAndArm.getSide() == ScoringPosition.Side.BACK) {
+                                RobotMap.elevatorAndArm.setScoringPosition(ScoringPosition.FRONT_STORAGE);
+                            }
+                        }
+                    } else { // Not A Port Height. Hatch Height
+                        if (RobotMap.pilotController.getButtonY()) {
+                            if (RobotMap.elevatorAndArm.getSide() == ScoringPosition.Side.FRONT) {
+                                RobotMap.elevatorAndArm.setScoringPosition(ScoringPosition.BACK_TOP_ROCKET_HATCH);
+                            } else if (RobotMap.elevatorAndArm.getSide() == ScoringPosition.Side.BACK) {
+                                RobotMap.elevatorAndArm.setScoringPosition(ScoringPosition.FRONT_TOP_ROCKET_HATCH);
+                            }
+                        } else if (RobotMap.pilotController.getButtonX()) {
+                            if ( RobotMap.elevatorAndArm.getSide() == ScoringPosition.Side.FRONT) {
+                                RobotMap.elevatorAndArm.setScoringPosition(ScoringPosition.BACK_MID_ROCKET_HATCH);
+                            } else if (RobotMap.elevatorAndArm.getSide() == ScoringPosition.Side.BACK) {
+                                RobotMap.elevatorAndArm.setScoringPosition(ScoringPosition.FRONT_MID_ROCKET_HATCH);
+                            }
+                        } else if (RobotMap.pilotController.getButtonA()) {
+                            if (RobotMap.elevatorAndArm.getSide() == ScoringPosition.Side.FRONT) {
+                                RobotMap.elevatorAndArm.setScoringPosition(ScoringPosition.BACK_INTAKING_ROCKET_HATCH);
+                            } else if (RobotMap.elevatorAndArm.getSide() == ScoringPosition.Side.BACK) {
+                                RobotMap.elevatorAndArm.setScoringPosition(ScoringPosition.FRONT_INTAKING_ROCKET_HATCH);
+                            }
+                        } else if (RobotMap.pilotController.getButtonB()) {
+                            if (RobotMap.elevatorAndArm.getSide() == ScoringPosition.Side.FRONT) {
+                                ConsoleLogger.warning("Tried to intake cargo from back. Not allowed.");
+                            } else if (RobotMap.elevatorAndArm.getSide() == ScoringPosition.Side.BACK) {
+                                RobotMap.elevatorAndArm.setScoringPosition(ScoringPosition.INTAKING_CARGO);
+                            }
+                        } else if (RobotMap.pilotController.getButtonBack()) {
+                            if (RobotMap.elevatorAndArm.getSide() == ScoringPosition.Side.FRONT) {
+                                RobotMap.elevatorAndArm.setScoringPosition(ScoringPosition.BACK_STORAGE);
+                            } else if (RobotMap.elevatorAndArm.getSide() == ScoringPosition.Side.BACK) {
+                                RobotMap.elevatorAndArm.setScoringPosition(ScoringPosition.FRONT_STORAGE);
+                            }
+                        }
+                    }
+                } else { // Not Switching Sides
+                    if (RobotMap.pilotController.getLeftBumper()) { // Port Height
+                        if (RobotMap.pilotController.getButtonY()) {
+                            if (RobotMap.elevatorAndArm.getSide() == ScoringPosition.Side.FRONT) {
+                                RobotMap.elevatorAndArm.setScoringPosition(ScoringPosition.FRONT_TOP_ROCKET_PORT);
+                            } else if (RobotMap.elevatorAndArm.getSide() == ScoringPosition.Side.BACK) {
+                                RobotMap.elevatorAndArm.setScoringPosition(ScoringPosition.BACK_TOP_ROCKET_PORT);
+                            }
+                        } else if (RobotMap.pilotController.getButtonX()) {
+                            if (RobotMap.elevatorAndArm.getSide() == ScoringPosition.Side.FRONT) {
+                                RobotMap.elevatorAndArm.setScoringPosition(ScoringPosition.FRONT_MID_ROCKET_PORT);
+                            } else if (RobotMap.elevatorAndArm.getSide() == ScoringPosition.Side.BACK) {
+                                RobotMap.elevatorAndArm.setScoringPosition(ScoringPosition.BACK_MID_ROCKET_PORT);
+                            }
+                        } else if (RobotMap.pilotController.getButtonB()) {
+                            if (RobotMap.elevatorAndArm.getSide() == ScoringPosition.Side.FRONT) {
+                                RobotMap.elevatorAndArm.setScoringPosition(ScoringPosition.FRONT_CARGO_SHIP_PORT);
+                            } else if (RobotMap.elevatorAndArm.getSide() == ScoringPosition.Side.BACK) {
+                                RobotMap.elevatorAndArm.setScoringPosition(ScoringPosition.BACK_CARGO_SHIP_PORT);
+                            }
+                        } else if (RobotMap.pilotController.getButtonA()) {
+                            if (RobotMap.elevatorAndArm.getSide() == ScoringPosition.Side.FRONT) {
+                                RobotMap.elevatorAndArm.setScoringPosition(ScoringPosition.FRONT_BOTTOM_ROCKET_PORT);
+                            } else if (RobotMap.elevatorAndArm.getSide() == ScoringPosition.Side.BACK) {
+                                RobotMap.elevatorAndArm.setScoringPosition(ScoringPosition.BACK_BOTTOM_ROCKET_PORT);
+                            }
+                        } else if (RobotMap.pilotController.getButtonBack()) {
+                            if (RobotMap.elevatorAndArm.getSide() == ScoringPosition.Side.FRONT) {
+                                RobotMap.elevatorAndArm.setScoringPosition(ScoringPosition.FRONT_STORAGE);
+                            } else if (RobotMap.elevatorAndArm.getSide() == ScoringPosition.Side.BACK) {
+                                RobotMap.elevatorAndArm.setScoringPosition(ScoringPosition.BACK_STORAGE);
+                            }
+                        }
+                    } else { // Not A Port Height. Hatch Height
+                        if (RobotMap.pilotController.getButtonY()) {
+                            if (RobotMap.elevatorAndArm.getSide() == ScoringPosition.Side.FRONT) {
+                                RobotMap.elevatorAndArm.setScoringPosition(ScoringPosition.FRONT_TOP_ROCKET_HATCH);
+                            } else if (RobotMap.elevatorAndArm.getSide() == ScoringPosition.Side.BACK) {
+                                RobotMap.elevatorAndArm.setScoringPosition(ScoringPosition.BACK_TOP_ROCKET_HATCH);
+                            }
+                        } else if (RobotMap.pilotController.getButtonX()) {
+                            if (RobotMap.elevatorAndArm.getSide() == ScoringPosition.Side.FRONT) {
+                                RobotMap.elevatorAndArm.setScoringPosition(ScoringPosition.FRONT_MID_ROCKET_HATCH);
+                            } else if (RobotMap.elevatorAndArm.getSide() == ScoringPosition.Side.BACK) {
+                                RobotMap.elevatorAndArm.setScoringPosition(ScoringPosition.BACK_MID_ROCKET_HATCH);
+                            }
+                        } else if (RobotMap.pilotController.getButtonA()) {
+                            if (RobotMap.elevatorAndArm.getSide() == ScoringPosition.Side.FRONT) {
+                                RobotMap.elevatorAndArm.setScoringPosition(ScoringPosition.FRONT_INTAKING_ROCKET_HATCH);
+                            } else if (RobotMap.elevatorAndArm.getSide() == ScoringPosition.Side.BACK) {
+                                RobotMap.elevatorAndArm.setScoringPosition(ScoringPosition.BACK_INTAKING_ROCKET_HATCH);
+                            }
+                        } else if (RobotMap.pilotController.getButtonB()) {
+                            if (RobotMap.elevatorAndArm.getSide() == ScoringPosition.Side.FRONT) {
+                                RobotMap.elevatorAndArm.setScoringPosition(ScoringPosition.INTAKING_CARGO);
+                            } else if (RobotMap.elevatorAndArm.getSide() == ScoringPosition.Side.BACK) {
+                                ConsoleLogger.warning("Tried to intake cargo from back. Not allowed.");
+                            }
+                        } else if (RobotMap.pilotController.getButtonBack()) {
+                            if (RobotMap.elevatorAndArm.getSide() == ScoringPosition.Side.FRONT) {
+                                RobotMap.elevatorAndArm.setScoringPosition(ScoringPosition.FRONT_STORAGE);
+                            } else if (RobotMap.elevatorAndArm.getSide() == ScoringPosition.Side.BACK) {
+                                RobotMap.elevatorAndArm.setScoringPosition(ScoringPosition.BACK_STORAGE);
+                            }
+                        }
+                    }
                 }
-
-                if (RobotMap.pilotController.getLeftBumper()) { // going to a port height
-                    if (RobotMap.pilotController.getButtonA()) {
-                        // switch the direction and go to bottom port height.
-                        if (RobotMap.arm.isArmInFront()) {
-                            updateDirection();
-                            changeDirection();
-                            RobotMap.arm.setArmStateFrontBottomCargo();
-                            RobotMap.elevator.setLevelBottomPort();
-                        } else if (RobotMap.arm.isArmInBack()) {
-                            updateDirection();
-                            changeDirection();
-                            RobotMap.arm.setArmStateBackBottomCargo();
-                            RobotMap.elevator.setLevelBottomPort();
-                        }
-                    } else if (RobotMap.pilotController.getButtonB()) {      // we still need the bumper for the cargo ship heights
-                        // switch direction and going to ship port height
-                        if (RobotMap.arm.isArmInFront()) {
-                            updateDirection();
-                            changeDirection();
-                            RobotMap.arm.setArmStateFrontCargoShipPort();
-                            RobotMap.elevator.setLevelShipPort();
-                        } else if (RobotMap.arm.isArmInBack()) {
-                            updateDirection();
-                            changeDirection();
-                            RobotMap.arm.setArmStateBackCargoShipPort();
-                            RobotMap.elevator.setLevelShipPort();
-                        }
-                    } else if (RobotMap.pilotController.getButtonX()) {
-                        // switch direction and going to mid port height
-                        if (RobotMap.arm.isArmInFront()) {
-                            updateDirection();
-                            changeDirection();
-                            RobotMap.arm.setArmStateFrontMidCargo();
-                            RobotMap.elevator.setLevelMidPort();
-                        } else if (RobotMap.arm.isArmInBack()) {
-                            updateDirection();
-                            changeDirection();
-                            RobotMap.arm.setArmStateBackMidCargo();
-                            RobotMap.elevator.setLevelMidPort();
-                        }
-                    } else if (RobotMap.pilotController.getButtonY()) {
-                        // switch direction and goin to top port height
-                        if (RobotMap.arm.isArmInFront()) {
-                            updateDirection();
-                            changeDirection();
-                            RobotMap.arm.setArmStateFrontTopCargo();
-                            RobotMap.elevator.setLevelTopPort();
-                        } else if (RobotMap.arm.isArmInBack()) {
-                            updateDirection();
-                            changeDirection();
-                            RobotMap.arm.setArmStateBackTopCargo();
-                            RobotMap.elevator.setLevelTopPort();
-                        }
-                    }
-                } else { // going to a hatch height
-                    if (RobotMap.pilotController.getButtonA()) {
-                        // switch direction and go to intaking hatch height
-                        if (RobotMap.arm.isArmInFront()) {
-                            updateDirection();
-                            changeDirection();
-                            RobotMap.arm.setArmStateFrontTilt();
-                            RobotMap.elevator.setLevelIntakingHatch();
-                        } else if (RobotMap.arm.isArmInBack()) {
-                            updateDirection();
-                            changeDirection();
-                            RobotMap.arm.setArmStateBackTilt();
-                            RobotMap.elevator.setLevelIntakingHatch();
-                        }
-                    } else if (RobotMap.pilotController.getButtonB()) {
-                        // // tilt arm up to storage 
-                        // updateDirection();
-                        // RobotMap.arm.setArmStateStorage();
-                        if (RobotMap.arm.isArmInFront()) {
-                            Dashboard.send("Elevetor state", "Trying to Go to Back Cargo, Not Allowed, Do Nothing");
-                        } else if (RobotMap.arm.isArmInBack()) {
-                            updateDirection();
-                            changeDirection();
-                            RobotMap.arm.setArmStateBackTiltForIntakingCargo();
-                            RobotMap.elevator.setLevelIntakingCargo();
-                        }
-                    } else if (RobotMap.pilotController.getButtonX()) {
-                        // switch direction and go to mid hatch height
-                        if (RobotMap.arm.isArmInFront()) {
-                            updateDirection();
-                            changeDirection();
-                            RobotMap.arm.setArmStateFrontTilt();
-                            RobotMap.elevator.setLevelMidHatch();
-                        } else if (RobotMap.arm.isArmInBack()) {
-                            updateDirection();
-                            changeDirection();
-                            RobotMap.arm.setArmStateBackTilt();
-                            RobotMap.elevator.setLevelMidHatch();
-                        }
-                    } else if (RobotMap.pilotController.getButtonY()) {
-                        // switch direction and go to top hatch height
-                        if (RobotMap.arm.isArmInFront()) {
-                            updateDirection();
-                            changeDirection();
-                            RobotMap.arm.setArmStateFrontTiltForBackHatch();
-                            RobotMap.elevator.setLevelTopHatch();
-                        } else if (RobotMap.arm.isArmInBack()) {
-                            updateDirection();
-                            changeDirection();
-                            RobotMap.arm.setArmStateBackTilt();
-                            RobotMap.elevator.setLevelTopHatch();
-                        }
-                    }
-                } // port 
-            }
-        } else { // staying on the same side of the elevator
-            if ((RobotMap.pilotController.getButtonA() || RobotMap.pilotController.getButtonB()
-                    || RobotMap.pilotController.getButtonX() || RobotMap.pilotController.getButtonY())
-                    && buttonFlag) {
-                buttonFlag = false;
-                setIsUpdating(true);
-                
-                // makes sure that the direction the code thinks the arm is at is the right direction
-                if (RobotMap.arm.isArmInFront()) {
-                    setDirectionFront();
-                } else if (RobotMap.arm.isArmInBack()) {
-                    setDirectionBack();
-                }
-
-                if (RobotMap.pilotController.getLeftBumper()) { // going to a port height
-                    if (RobotMap.pilotController.getButtonA()) {
-                        // go to bottom port height
-                        if (RobotMap.arm.isArmInFront()) {
-                            updateDirection();
-                            RobotMap.arm.setArmStateFrontBottomCargo();
-                            RobotMap.elevator.setLevelBottomPort();
-                        } else if (RobotMap.arm.isArmInBack()) {
-                            updateDirection();
-                            RobotMap.arm.setArmStateBackBottomCargo();
-                            RobotMap.elevator.setLevelBottomPort();
-                        }
-                    } else if (RobotMap.pilotController.getButtonB()) {             // we still need the bumper for the cargo ship heights
-                        // go to ship port height
-                        if (RobotMap.arm.isArmInFront()) {
-                            updateDirection();
-                            RobotMap.arm.setArmStateFrontCargoShipPort();
-                            RobotMap.elevator.setLevelShipPort();
-                        } else if (RobotMap.arm.isArmInBack()) {
-                            updateDirection();
-                            RobotMap.arm.setArmStateBackCargoShipPort();
-                            RobotMap.elevator.setLevelShipPort();
-                        }
-                    } else if (RobotMap.pilotController.getButtonX()) {
-                        // go to mid port height
-                        if (RobotMap.arm.isArmInFront()) {
-                            updateDirection();
-                            RobotMap.arm.setArmStateFrontMidCargo();
-                            RobotMap.elevator.setLevelMidPort();
-                        } else if (RobotMap.arm.isArmInBack()) {
-                            updateDirection();
-                            RobotMap.arm.setArmStateBackMidCargo();
-                            RobotMap.elevator.setLevelMidPort();
-                        }
-                    } else if (RobotMap.pilotController.getButtonY()) {
-                        // go to top port height
-                        if (RobotMap.arm.isArmInFront()) {
-                            updateDirection();
-                            RobotMap.arm.setArmStateFrontTopCargo();
-                            RobotMap.elevator.setLevelTopPort();
-                        } else if (RobotMap.arm.isArmInBack()) {
-                            updateDirection();
-                            RobotMap.arm.setArmStateBackTopCargo();
-                            RobotMap.elevator.setLevelTopPort();
-                        }
-                    }
-                } else { // go to hatch height
-                    if (RobotMap.pilotController.getButtonA()) {
-                        // go to intaking hatch height
-                        if (RobotMap.arm.isArmInFront()) {
-                            updateDirection();
-                            RobotMap.arm.setArmStateFrontLevel();
-                            RobotMap.elevator.setLevelIntakingHatch();
-                        } else if (RobotMap.arm.isArmInBack()) {
-                            updateDirection();
-                            RobotMap.arm.setArmStateBackLevel();
-                            RobotMap.elevator.setLevelIntakingHatch();
-                        }
-                    } else if (RobotMap.pilotController.getButtonB()) {
-                        // // tilt arm up to storage 
-                        // updateDirection();
-                        // RobotMap.arm.setArmStateStorage();
-                        if (RobotMap.arm.isArmInFront()) {
-                            updateDirection();
-                            RobotMap.arm.setArmStateFrontIntakingCargo();
-                            RobotMap.elevator.setLevelIntakingCargo();
-                        } else if (RobotMap.arm.isArmInBack()) {
-                            Dashboard.send("Elevetor state", "Trying to Go to Back Cargo, Not Allowed, Do Nothing");
-                        }
-                    } else if (RobotMap.pilotController.getButtonX()) {
-                        // go to mid hatch height
-                        if (RobotMap.arm.isArmInFront()) {
-                            updateDirection();
-                            RobotMap.arm.setArmStateFrontLevel();
-                            RobotMap.elevator.setLevelMidHatch();
-                        } else if (RobotMap.arm.isArmInBack()) {
-                            updateDirection();
-                            RobotMap.arm.setArmStateBackLevel();
-                            RobotMap.elevator.setLevelMidHatch();
-                        }
-                    } else if (RobotMap.pilotController.getButtonY()) {
-                        // go to top hatch height
-                        if (RobotMap.arm.isArmInFront()) {
-                            updateDirection();
-                            RobotMap.arm.setArmStateFrontLevel();
-                            RobotMap.elevator.setLevelTopHatch();
-                        } else if (RobotMap.arm.isArmInBack()) {
-                            updateDirection();
-                            RobotMap.arm.setArmStateBackHatchTopTilt();
-                            RobotMap.elevator.setLevelTopHatch();
-                        }
-                    }
-                } // port 
-            }
-        }
-
-        if (!RobotMap.pilotController.getButtonA() && !RobotMap.pilotController.getButtonB()
-                && !RobotMap.pilotController.getButtonX() && !RobotMap.pilotController.getButtonY()) {
-            buttonFlag = true;
-        }
-
-        // controlls for arm storage
-        if (RobotMap.pilotController.getButtonBack()) {
-            RobotMap.arm.setArmStateStorage();
-        }
-
-        // </editor-fold>
 
         // controlls for drive train
-        // <editor-fold>
         if (RobotMap.pilotController.getLeftStickPress()) {
             RobotMap.limelight.setLightMode(LEDEnum.ENABLED);
             ledFlag = false;
@@ -306,18 +175,18 @@ public class TeleopControls {
         } else {
             RobotMap.intake.setCargoRollerState(CargoRollerEnum.DISABLED);
         }
-        
+
         // Changed from d-pad to R3 Press
         if (/*RobotMap.pilotController.getDPadBool()*/ RobotMap.pilotController.getRightStickPress() && hatchFlag) {
             RobotMap.intake.toggleClaw();
             hatchFlag = false;
-            
+
         }
         if (!RobotMap.pilotController.getRightStickPress()/*RobotMap.pilotController.getDPadBool()*/) {
             hatchFlag = true;
         }
         // </editor-fold>
-    
+
         // controls for EGL
         // <editor-fold>
         if (RobotMap.copilotController.getRightBumper()) {
@@ -326,34 +195,6 @@ public class TeleopControls {
             RobotMap.egl.lowerRobot();
         }
         // </editor-fold>
-    }
-
-    public boolean getIsUpdating() {
-        return isUpdating;
-    }
-
-    public void setIsUpdating(boolean isUpdating) {
-        this.isUpdating = isUpdating;
-    }
-
-    public void updateDirection() {
-        RobotMap.arm.updateDirection();
-        RobotMap.elevator.updateDirection();
-    }
-
-    public void changeDirection() {
-        RobotMap.arm.changeDirection();
-        RobotMap.elevator.changeDirection();
-    }
-
-    public void setDirectionFront() {
-        RobotMap.arm.setDirectionFront();
-        RobotMap.elevator.setDirectionFront();
-    }
-
-    public void setDirectionBack() {
-        RobotMap.arm.setDirectionBack();
-        RobotMap.elevator.setDirectionBack();
     }
 
 }

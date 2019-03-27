@@ -1,7 +1,5 @@
 package frc.robot.Subassemblies;
 
-import com.sun.jdi.Value;
-
 import frc.robot.RobotMap;
 import frc.robot.Utilities.ConsoleLogger;
 import frc.robot.Utilities.PID.LimelightTurningPID;
@@ -19,7 +17,7 @@ public class Drivetrain {
         if (Math.abs(speedModifier) != 1 || Math.abs(rotationModifier) != 1) {
             ConsoleLogger.warning("Drivetrain Modifiers are not 1 or -1. Which means its clamped.");
         }
-        
+
 
         limelightVisionPID = new LimelightTurningPID();
     }
@@ -38,7 +36,7 @@ public class Drivetrain {
     private double clamp(double value, double clamp_value) {
         if (value > clamp_value) {
             return clamp_value;
-            
+
         }
         if(value < -clamp_value) {
             return -clamp_value;
