@@ -28,7 +28,7 @@ public class RobotMap {
 
 	/////// Constants ///////
 	// Vision Constants
-	public static final int PIXY_UPDATE_RATE = 50; //Htz
+	public static final int PIXY_UPDATE_RATE = 50; // Htz
 	public static final double PIXY_BREAK_TOLERANCE = 0;
 	public static final double PIXY_kP = 0.05;
 	public static final double PIXY_kI = 0.0;
@@ -37,7 +37,7 @@ public class RobotMap {
 	public static final String PIXY_NAME = "Main Pixy";
 	public static int checksumErrorCount = 0; // not actually a constant.
 
-	public static final int LIMELIGHT_UPDATE_RATE = 90; //Htz
+	public static final int LIMELIGHT_UPDATE_RATE = 90; // Htz
 	public static final double LIMELIGHT_BREAK_TOLERANCE = 0;
 	public static final double LIMELIGHT_kP = 0.16;
 	public static final double LIMELIGHT_kI = 0.0;
@@ -45,7 +45,8 @@ public class RobotMap {
 
 	public static final int LED_ADDRESS = 0x55;
 
-	//public final static Gains kGains_MotProf = new Gains( 1.0, 0.0,  0.0, 1023.0/6800.0,  400,  1.00 );
+	// public final static Gains kGains_MotProf = new Gains( 1.0, 0.0, 0.0,
+	// 1023.0/6800.0, 400, 1.00 );
 
 	// Elevator Constants
 	public static final int ELEVATOR_FRONT_TOP_PORT_HEIGHT = 0;
@@ -67,9 +68,10 @@ public class RobotMap {
 	public static final int ELEVATOR_BACK_INTAKING_HATCH_HEIGHT = 0;
 	public static final int ELEVATOR_BACK_STORAGE_HEIGHT = 0;
 
-	public static final int ELEVATOR_CLEAR_HEIGHT = 0;
- 	public static final int ELEVATOR_FRONT_TRANSITION_POSITION = 0;
- 	public static final int ELEVATOR_BACK_TRANSITION_POSITION = 0;
+	public static final int ELEVATOR_CLEAR_FOR_ARM_HEIGHT = 0; // This should be smaller than that VVV
+	public static final int ELEVATOR_TRANSITION_POSITION = 0; // This should be bigger than this ^^^
+
+	public static final int ELEVATOR_TOLERENCE = 0;
 
 	public static final double LIMELIGHT_PORT_TAPE_HEIGHT = 0.0;
 
@@ -78,7 +80,7 @@ public class RobotMap {
 	public static final double ELEVATOR_kP = 1.18; // when testing without the arm use p: 0.07 d: 1.0 f: 0.0
 	public static final double ELEVATOR_kI = 0.00;
 	public static final double ELEVATOR_kD = 0.00;
-    public static final double ELEVATOR_kF = 0.0;
+	public static final double ELEVATOR_kF = 0.0;
 
 	// Arm Constants
 	public static final int ARM_FRONT_TOP_PORT_POSITION = 0;
@@ -100,18 +102,15 @@ public class RobotMap {
 	public static final int ARM_BACK_INTAKING_HATCH_POSITION = 0;
 	public static final int ARM_BACK_STORAGE_POSITION = 0;
 
-	public static final int FRONT_ARM_CLEAR_VALUE = 0;
-	public static final int BACK_ARM_CLEAR_VALUE = 0;
+	public static final int FRONT_ARM_CLEAR_POSITION = 0;
+	public static final int BACK_ARM_CLEAR_POSITION = 0;
+	public static final int ARM_HALF_WAY_POSITION = 0;
+
 
 	public static final int ARM_FRONT_TRANSITION_POSITION = 0;
 	public static final int ARM_BACK_TRANSITION_POSITION = 0;
 
-	// these are arbitrary right now
-
-	public static final int FRONT_ARM_CLEAR_VALUE = ARM_FRONT_CARGO_INTAKING_POSITION - 100; // 588; // -100
-	public static final int BACK_ARM_CLEAR_VALUE = ARM_FRONT_CARGO_INTAKING_POSITION - 225; // 463; // -225
-
-	public static final int MIDDLE_ARM_VALUE = ARM_FRONT_CARGO_INTAKING_POSITION - 213; // 556; // -132
+	public static final int ARM_TOLERENCE = 0;
 
 	public static final double ARM_kP = 25.0;
 	public static final double ARM_kI = 0.0;
@@ -120,19 +119,19 @@ public class RobotMap {
 	// Intake Constants
 	public static final double CARGO_ROLLER_INTAKING_SPEED = 0.7;
 	public static final double CARGO_ROLLER_OUTPUTTING_SPEED = -0.8;
-    public static final double CLAW_RELEASE_TIME = 1.0;
+	public static final double CLAW_RELEASE_TIME = 1.0;
 
-    // End Game Lift Constants
-    public static final double EGL_UPPER_SOFT_STOP = 5.0;
-    public static final double EGL_LOWER_SOFT_STOP = 1.0;
-    public static final double ELG_RAISING_SPEED = 8.0;
-    public static final double ELG_LOWERING_SPEED = 5.0;
+	// End Game Lift Constants
+	public static final double EGL_UPPER_SOFT_STOP = 5.0;
+	public static final double EGL_LOWER_SOFT_STOP = 1.0;
+	public static final double ELG_RAISING_SPEED = 8.0;
+	public static final double ELG_LOWERING_SPEED = 5.0;
 
 	/////// Declaring ///////
 	// Utility Declatations
 	public static Timer timer;
-    public static Controller pilotController;
-    public static Controller copilotController;
+	public static Controller pilotController;
+	public static Controller copilotController;
 	public static PixyI2C pixy;
 	public static LEDI2C leds;
 
@@ -188,7 +187,7 @@ public class RobotMap {
 	public static Drivetrain drivetrain;
 	public static EndGameLift egl;
 	public static ElevatorAndArm elevatorAndArm;
-  public static Intake intake;
+	public static Intake intake;
 
 	public static void init() { // This is to be called in robitInit and instantiates stuff.
 		/////// Initilizing ///////
@@ -196,8 +195,8 @@ public class RobotMap {
 
 		// Utility Initilization
 		timer = new Timer();
-        pilotController = new Controller(0);
-        copilotController = new Controller(1);
+		pilotController = new Controller(0);
+		copilotController = new Controller(1);
 		pixy = new PixyI2C(PIXY_NAME, new I2C(Port.kOnboard, PIXY_ADDRESS));
 		leds = new LEDI2C(new I2C(Port.kOnboard, LED_ADDRESS));
 
@@ -211,31 +210,32 @@ public class RobotMap {
 		driveLeftBack.configFactoryDefault();
 		driveRightFront.configFactoryDefault();
 		driveRightBack.configFactoryDefault();
+
 		driveLeftFront.setSafetyEnabled(false);
 		driveLeftBack.setSafetyEnabled(false);
 		driveRightFront.setSafetyEnabled(false);
 		driveRightBack.setSafetyEnabled(false);
-		driveRightFront.setInverted(true); // Inverted for the drive
-    driveRightBack.setInverted(true);
 
-    driveLeftFront.setNeutralMode(NeutralMode.Brake);
-    driveLeftBack.setNeutralMode(NeutralMode.Brake);
-    driveRightFront.setNeutralMode(NeutralMode.Brake);
-    driveRightBack.setNeutralMode(NeutralMode.Brake);
+		driveRightFront.setInverted(true); // Inverted for the drive
+		driveRightBack.setInverted(true);
+
+		driveLeftFront.setNeutralMode(NeutralMode.Brake);
+		driveLeftBack.setNeutralMode(NeutralMode.Brake);
+		driveRightFront.setNeutralMode(NeutralMode.Brake);
+		driveRightBack.setNeutralMode(NeutralMode.Brake);
 
 		elevatorFront = new TalonSRX(5);
 		elevatorBack = new TalonSRX(6);
 
 		elevatorFront.configFactoryDefault();
 		elevatorBack.configFactoryDefault();
-    elevatorBack.follow(elevatorFront);
+		elevatorBack.follow(elevatorFront);
 		elevatorFront.configSelectedFeedbackSensor(FeedbackDevice.CTRE_MagEncoder_Relative);
-    //elevatorFront.configVoltageCompSaturation(voltage)
-    elevatorFront.configPeakOutputForward(.6);
-    elevatorFront.configPeakOutputReverse(-.4);
-    elevatorFront.configNominalOutputForward(0);
-    elevatorFront.configNominalOutputReverse(0);
-
+		// elevatorFront.configVoltageCompSaturation(voltage)
+		elevatorFront.configPeakOutputForward(.6);
+		elevatorFront.configPeakOutputReverse(-.4);
+		elevatorFront.configNominalOutputForward(0);
+		elevatorFront.configNominalOutputReverse(0);
 
 		elevatorFront.setInverted(true);
 		elevatorBack.setInverted(true);
@@ -254,8 +254,7 @@ public class RobotMap {
 
 		armPivot.config_kP(0, ARM_kP);
 		armPivot.config_kI(0, ARM_kI);
-        armPivot.config_kD(0, ARM_kD);
-
+		armPivot.config_kD(0, ARM_kD);
 
 		cargoRoller = new TalonSRX(8);
 		cargoRoller.configFactoryDefault();

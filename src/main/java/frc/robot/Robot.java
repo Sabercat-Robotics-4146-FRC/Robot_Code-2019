@@ -38,9 +38,8 @@ public class Robot extends SampleRobot {
 			RobotMap.timer.update();
 			RobotMap.teleopControls.update();
 
-			RobotMap.arm.update();
 			RobotMap.drivetrain.update();
-            RobotMap.elevator.update();
+            RobotMap.elevatorAndArm.update();
 			RobotMap.intake.update(RobotMap.timer.getDT());
 			
 			ConsoleLogger.update(RobotMap.timer.getDT());
@@ -70,9 +69,8 @@ public class Robot extends SampleRobot {
 			RobotMap.timer.update();
 			RobotMap.teleopControls.update();
 
-			RobotMap.arm.update();
 			RobotMap.drivetrain.update();
-            RobotMap.elevator.update();
+            RobotMap.elevatorAndArm.update();
 			RobotMap.intake.update(RobotMap.timer.getDT());
 			
 			ConsoleLogger.update(RobotMap.timer.getDT());

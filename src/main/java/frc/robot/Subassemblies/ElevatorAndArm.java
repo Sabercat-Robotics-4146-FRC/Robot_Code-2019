@@ -28,12 +28,11 @@ public class ElevatorAndArm {
         BACK_INTAKING_ROCKET_HATCH(RobotMap.ELEVATOR_BACK_INTAKING_HATCH_HEIGHT, RobotMap.ARM_BACK_INTAKING_HATCH_POSITION, Side.BACK),
         BACK_STORAGE(RobotMap.ELEVATOR_BACK_STORAGE_HEIGHT, RobotMap.ARM_BACK_STORAGE_POSITION, Side.BACK),
 
-        FRONT_TRANSITION(RobotMap.ELEVATOR_FRONT_TRANSITION_POSITION, RobotMap.ARM_FRONT_TRANSITION_POSITION, Side.FRONT),
-        FLIPPING_TO_FRONT_TRANSITION(),
-        FLIPPING_TO_BACK_TRANSITION(),
-        BACK_TRANSITION(RobotMap.ELEVATOR_BACK_TRANSITION_POSITION, RobotMap.ARM_BACK_TRANSITION_POSITION, Side.BACK),
-
+        TRANSITION_FRONT(RobotMap.ELEVATOR_TRANSITION_POSITION, RobotMap.ARM_FRONT_TRANSITION_POSITION, Side.FRONT),
+        TRANSITION_BACK(RobotMap.ELEVATOR_TRANSITION_POSITION, RobotMap.ARM_BACK_TRANSITION_POSITION, Side.BACK),
         IDLE();
+        // Something to note. If IDLE has a get method called from
+        // it they will throw a null pointer exception. So don't.
 
         public enum Side {
             FRONT,
@@ -65,41 +64,104 @@ public class ElevatorAndArm {
             return side;
         }
 
+        public boolean isFrontSide() {
+            return side == Side.FRONT;
+        }
+
+        public boolean isBackSide() {
+            return side == Side.BACK;
+        }
+
         @Override
         public String toString() {
             return super.toString().replace("_", " ");
         }
     }
 
-    ScoringPosition desiredState;
-    ScoringPosition actualState;
+    ScoringPosition finalState;
+    ScoringPosition currentState;
 
     boolean limitSwitchPressedFlag;
 
     public ElevatorAndArm() {
-        desiredState = ScoringPosition.IDLE;
-        actualState = ScoringPosition.IDLE;
+        finalState = ScoringPosition.IDLE;
+        currentState = ScoringPosition.IDLE;
 
         limitSwitchPressedFlag = false;
     }
 
     public void update() {
+        switch(currentState) {
+            case IDLE:
+                if (finalState == ScoringPosition.IDLE) {
+                    holdArmAndElevator();
+                } else if (isArmPhisicalyInFront()) { // TODO check polarity
+                    if (finalState.isFrontSide()) {
+                        currentState = finalState;
+                    } else { // Arm needs to switch sides
+                        currentState = ScoringPosition.TRANSITION_FRONT;
+                    }
+                } else { // arm is in back
+                    if (finalState.isBackSide()) {
+                        currentState = finalState;
+                    } else { // Arm needs to switch sides
+                        currentState = ScoringPosition.TRANSITION_BACK;
+                    }
+                }
+                break;
+            case TRANSITION_FRONT:
+                if(!isPhysicallyHere(currentState)) {
+                    move(currentState);
+                } else if(finalState.isFrontSide()) {
+                    if (isArmClearForElevator() && isArmPhisicalyInFront()) {
+                        currentState = finalState;
+                    }
+                } else {
+                    currentState = ScoringPosition.TRANSITION_BACK;
+                }
+                break;
+            case TRANSITION_BACK:
+                if(!isPhysicallyHere(currentState)) {
+                    move(currentState);
+                } else if(finalState.isBackSide()) {
+                        currentState = finalState;
+                } else {
+                    currentState = ScoringPosition.TRANSITION_FRONT;
+                }
+                break;
+            default: // State is an actual scoring position
+                if(currentState == finalState) {
+                    move(currentState);
+                } else if(isSameSide(finalState, currentState)) {
+                        currentState = finalState;
+                        move(currentState);
+                } else if(currentState.getSide() == ScoringPosition.Side.FRONT) {
+                    currentState = ScoringPosition.TRANSITION_FRONT;
+                } else {
+                    currentState = ScoringPosition.TRANSITION_BACK;
+                }
+
+        }
+
+        Dashboard.send("Actual State", currentState.toString());
+        Dashboard.send("Final State", finalState.toString());
+        Dashboard.send("Arm Is Physically In Front", isArmPhisicalyInFront());
 
     }
 
     // Setters
 
     public void setScoringPosition(ScoringPosition state) {
-        desiredState = state;
+        finalState = state;
     }
 
     // Getters
     public Side getDesiredSide() {
-        return desiredState.getSide();
+        return finalState.getSide();
     }
 
     public Side getActualSide() {
-        return actualState.getSide();
+        return currentState.getSide();
     }
 
     // Utilities
@@ -117,6 +179,24 @@ public class ElevatorAndArm {
         moveArm(armPosition);
     }
 
+    private void move(ScoringPosition position) {
+        if ((position != ScoringPosition.TRANSITION_BACK && position != ScoringPosition.TRANSITION_FRONT && position != ScoringPosition.IDLE) &&
+                !isSameSide(currentState, position)) {
+            currentState = ScoringPosition.IDLE;
+            finalState = ScoringPosition.IDLE;
+            RobotMap.pilotController.setRumbleBuzz(5, 0.3, 0.3);
+        } else {
+            moveElevator(position.getElevatorSetpoint());
+            moveArm(position.getArmSetpoint());
+        }
+
+    }
+
+    private void holdArmAndElevator() {
+        moveElevator(RobotMap.elevatorFront.getSelectedSensorPosition());
+        moveArm(RobotMap.armPivot.getSelectedSensorPosition());
+    }
+
     private int getElevatorPosition() {
         return RobotMap.elevatorFront.getSelectedSensorPosition();
     }
@@ -129,4 +209,26 @@ public class ElevatorAndArm {
         return stateOne.getSide() == stateTwo.getSide();
     }
 
+    public boolean isArmPhisicalyInFront() {
+        return getArmPosition() < RobotMap.ARM_HALF_WAY_POSITION;
+    }
+
+    public boolean isPhysicallyHere(ScoringPosition state) {
+        return inTolerance(RobotMap.elevatorFront.getSelectedSensorPosition(), state.getElevatorSetpoint(), RobotMap.ELEVATOR_TOLERENCE) &&
+                inTolerance(RobotMap.armPivot.getSelectedSensorPosition(), state.getArmSetpoint(), RobotMap.ARM_TOLERENCE);
+    }
+
+    public boolean inTolerance(int physicalValue, int wantedValue, int tolerence) {
+        return physicalValue <= wantedValue + tolerence &&
+                physicalValue >= wantedValue - tolerence;
+    } 
+
+    public boolean isElevatorClearForArm() {
+        return RobotMap.elevatorFront.getSelectedSensorPosition() > RobotMap.ELEVATOR_CLEAR_FOR_ARM_HEIGHT;
+    }
+
+    public boolean isArmClearForElevator() {
+        return RobotMap.armPivot.getSelectedSensorPosition() > RobotMap.FRONT_ARM_CLEAR_POSITION ||
+                RobotMap.armPivot.getSelectedSensorPosition() < RobotMap.BACK_ARM_CLEAR_POSITION;
+    }
 }
