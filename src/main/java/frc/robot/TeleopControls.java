@@ -9,143 +9,155 @@ import frc.robot.Subassemblies.ElevatorAndArm.ScoringPosition;
 public class TeleopControls {
     boolean ledFlag = false;
     boolean hatchFlag = true;
+    boolean buttonFlag = false;
 
     public void update() {
         // controlls for elevator
-        if (RobotMap.pilotController.getRightBumper()) { // Switching Sides
-                    if (RobotMap.pilotController.getLeftBumper()) { // Port Height
-                        if (RobotMap.pilotController.getButtonY()) {
-                            if (RobotMap.elevatorAndArm.getActualSide() == ScoringPosition.Side.FRONT) {
-                                RobotMap.elevatorAndArm.setScoringPosition(ScoringPosition.BACK_TOP_ROCKET_PORT);
-                            } else if(RobotMap.elevatorAndArm.getActualSide() == ScoringPosition.Side.BACK) {
-                                RobotMap.elevatorAndArm.setScoringPosition(ScoringPosition.FRONT_TOP_ROCKET_PORT);
-                            }
-                        } else if (RobotMap.pilotController.getButtonX()) {
-                            if (RobotMap.elevatorAndArm.getActualSide() == ScoringPosition.Side.FRONT) {
-                                RobotMap.elevatorAndArm.setScoringPosition(ScoringPosition.BACK_MID_ROCKET_PORT);
-                            } else if (RobotMap.elevatorAndArm.getActualSide() == ScoringPosition.Side.BACK) {
-                                RobotMap.elevatorAndArm.setScoringPosition(ScoringPosition.FRONT_MID_ROCKET_PORT);
-                            }
-                        } else if (RobotMap.pilotController.getButtonB()) {
-                            if (RobotMap.elevatorAndArm.getActualSide() == ScoringPosition.Side.FRONT) {
-                                RobotMap.elevatorAndArm.setScoringPosition(ScoringPosition.BACK_CARGO_SHIP_PORT);
-                            } else if (RobotMap.elevatorAndArm.getActualSide() == ScoringPosition.Side.BACK) {
-                                RobotMap.elevatorAndArm.setScoringPosition(ScoringPosition.FRONT_CARGO_SHIP_PORT);
-                            }
-                        } else if (RobotMap.pilotController.getButtonA()) {
-                            if (RobotMap.elevatorAndArm.getActualSide() == ScoringPosition.Side.FRONT) {
-                                RobotMap.elevatorAndArm.setScoringPosition(ScoringPosition.BACK_BOTTOM_ROCKET_PORT);
-                            } else if (RobotMap.elevatorAndArm.getActualSide() == ScoringPosition.Side.BACK) {
-                                RobotMap.elevatorAndArm.setScoringPosition(ScoringPosition.FRONT_BOTTOM_ROCKET_PORT);
-                            }
-                        } else if (RobotMap.pilotController.getButtonBack()) {
-                            if (RobotMap.elevatorAndArm.getActualSide() == ScoringPosition.Side.FRONT) {
-                                RobotMap.elevatorAndArm.setScoringPosition(ScoringPosition.BACK_STORAGE);
-                            } else if (RobotMap.elevatorAndArm.getActualSide() == ScoringPosition.Side.BACK) {
-                                RobotMap.elevatorAndArm.setScoringPosition(ScoringPosition.FRONT_STORAGE);
-                            }
+        if ((RobotMap.pilotController.getButtonA() || RobotMap.pilotController.getButtonB() || 
+                RobotMap.pilotController.getButtonX() || RobotMap.pilotController.getButtonY() || 
+                RobotMap.pilotController.getButtonBack()) && !buttonFlag) {
+            buttonFlag = true;
+            
+            if (RobotMap.pilotController.getRightBumper()) { // Switching Sides
+                if (RobotMap.pilotController.getLeftBumper()) { // Port Height
+                    if (RobotMap.pilotController.getButtonY()) {
+                        if (RobotMap.elevatorAndArm.isArmPhisicalyInFront()) {
+                            RobotMap.elevatorAndArm.setScoringPosition(ScoringPosition.BACK_TOP_ROCKET_PORT);
+                        } else if(RobotMap.elevatorAndArm.isArmPhisicalyInBack()) {
+                            RobotMap.elevatorAndArm.setScoringPosition(ScoringPosition.FRONT_TOP_ROCKET_PORT);
                         }
-                    } else { // Not A Port Height. Hatch Height
-                        if (RobotMap.pilotController.getButtonY()) {
-                            if (RobotMap.elevatorAndArm.getActualSide() == ScoringPosition.Side.FRONT) {
-                                RobotMap.elevatorAndArm.setScoringPosition(ScoringPosition.BACK_TOP_ROCKET_HATCH);
-                            } else if (RobotMap.elevatorAndArm.getActualSide() == ScoringPosition.Side.BACK) {
-                                RobotMap.elevatorAndArm.setScoringPosition(ScoringPosition.FRONT_TOP_ROCKET_HATCH);
-                            }
-                        } else if (RobotMap.pilotController.getButtonX()) {
-                            if ( RobotMap.elevatorAndArm.getActualSide() == ScoringPosition.Side.FRONT) {
-                                RobotMap.elevatorAndArm.setScoringPosition(ScoringPosition.BACK_MID_ROCKET_HATCH);
-                            } else if (RobotMap.elevatorAndArm.getActualSide() == ScoringPosition.Side.BACK) {
-                                RobotMap.elevatorAndArm.setScoringPosition(ScoringPosition.FRONT_MID_ROCKET_HATCH);
-                            }
-                        } else if (RobotMap.pilotController.getButtonA()) {
-                            if (RobotMap.elevatorAndArm.getActualSide() == ScoringPosition.Side.FRONT) {
-                                RobotMap.elevatorAndArm.setScoringPosition(ScoringPosition.BACK_INTAKING_ROCKET_HATCH);
-                            } else if (RobotMap.elevatorAndArm.getActualSide() == ScoringPosition.Side.BACK) {
-                                RobotMap.elevatorAndArm.setScoringPosition(ScoringPosition.FRONT_INTAKING_ROCKET_HATCH);
-                            }
-                        } else if (RobotMap.pilotController.getButtonB()) {
-                            if (RobotMap.elevatorAndArm.getActualSide() == ScoringPosition.Side.FRONT) {
-                                ConsoleLogger.warning("Tried to intake cargo from back. Not allowed.");
-                            } else if (RobotMap.elevatorAndArm.getActualSide() == ScoringPosition.Side.BACK) {
-                                RobotMap.elevatorAndArm.setScoringPosition(ScoringPosition.INTAKING_CARGO);
-                            }
-                        } else if (RobotMap.pilotController.getButtonBack()) {
-                            if (RobotMap.elevatorAndArm.getActualSide() == ScoringPosition.Side.FRONT) {
-                                RobotMap.elevatorAndArm.setScoringPosition(ScoringPosition.BACK_STORAGE);
-                            } else if (RobotMap.elevatorAndArm.getActualSide() == ScoringPosition.Side.BACK) {
-                                RobotMap.elevatorAndArm.setScoringPosition(ScoringPosition.FRONT_STORAGE);
-                            }
+                    } else if (RobotMap.pilotController.getButtonX()) {
+                        if (RobotMap.elevatorAndArm.isArmPhisicalyInFront()) {
+                            RobotMap.elevatorAndArm.setScoringPosition(ScoringPosition.BACK_MID_ROCKET_PORT);
+                        } else if (RobotMap.elevatorAndArm.isArmPhisicalyInBack()) {
+                            RobotMap.elevatorAndArm.setScoringPosition(ScoringPosition.FRONT_MID_ROCKET_PORT);
+                        }
+                    } else if (RobotMap.pilotController.getButtonB()) {
+                        if (RobotMap.elevatorAndArm.isArmPhisicalyInFront()) {
+                            RobotMap.elevatorAndArm.setScoringPosition(ScoringPosition.BACK_CARGO_SHIP_PORT);
+                        } else if (RobotMap.elevatorAndArm.isArmPhisicalyInBack()) {
+                            RobotMap.elevatorAndArm.setScoringPosition(ScoringPosition.FRONT_CARGO_SHIP_PORT);
+                        }
+                    } else if (RobotMap.pilotController.getButtonA()) {
+                        if (RobotMap.elevatorAndArm.isArmPhisicalyInFront()) {
+                            RobotMap.elevatorAndArm.setScoringPosition(ScoringPosition.BACK_BOTTOM_ROCKET_PORT);
+                        } else if (RobotMap.elevatorAndArm.isArmPhisicalyInBack()) {
+                            RobotMap.elevatorAndArm.setScoringPosition(ScoringPosition.FRONT_BOTTOM_ROCKET_PORT);
+                        }
+                    } else if (RobotMap.pilotController.getButtonBack()) {
+                        if (RobotMap.elevatorAndArm.isArmPhisicalyInFront()) {
+                            RobotMap.elevatorAndArm.setScoringPosition(ScoringPosition.BACK_STORAGE);
+                        } else if (RobotMap.elevatorAndArm.isArmPhisicalyInBack()) {
+                            RobotMap.elevatorAndArm.setScoringPosition(ScoringPosition.FRONT_STORAGE);
                         }
                     }
-                } else { // Not Switching Sides
-                    if (RobotMap.pilotController.getLeftBumper()) { // Port Height
-                        if (RobotMap.pilotController.getButtonY()) {
-                            if (RobotMap.elevatorAndArm.getActualSide() == ScoringPosition.Side.FRONT) {
-                                RobotMap.elevatorAndArm.setScoringPosition(ScoringPosition.FRONT_TOP_ROCKET_PORT);
-                            } else if (RobotMap.elevatorAndArm.getActualSide() == ScoringPosition.Side.BACK) {
-                                RobotMap.elevatorAndArm.setScoringPosition(ScoringPosition.BACK_TOP_ROCKET_PORT);
-                            }
-                        } else if (RobotMap.pilotController.getButtonX()) {
-                            if (RobotMap.elevatorAndArm.getActualSide() == ScoringPosition.Side.FRONT) {
-                                RobotMap.elevatorAndArm.setScoringPosition(ScoringPosition.FRONT_MID_ROCKET_PORT);
-                            } else if (RobotMap.elevatorAndArm.getActualSide() == ScoringPosition.Side.BACK) {
-                                RobotMap.elevatorAndArm.setScoringPosition(ScoringPosition.BACK_MID_ROCKET_PORT);
-                            }
-                        } else if (RobotMap.pilotController.getButtonB()) {
-                            if (RobotMap.elevatorAndArm.getActualSide() == ScoringPosition.Side.FRONT) {
-                                RobotMap.elevatorAndArm.setScoringPosition(ScoringPosition.FRONT_CARGO_SHIP_PORT);
-                            } else if (RobotMap.elevatorAndArm.getActualSide() == ScoringPosition.Side.BACK) {
-                                RobotMap.elevatorAndArm.setScoringPosition(ScoringPosition.BACK_CARGO_SHIP_PORT);
-                            }
-                        } else if (RobotMap.pilotController.getButtonA()) {
-                            if (RobotMap.elevatorAndArm.getActualSide() == ScoringPosition.Side.FRONT) {
-                                RobotMap.elevatorAndArm.setScoringPosition(ScoringPosition.FRONT_BOTTOM_ROCKET_PORT);
-                            } else if (RobotMap.elevatorAndArm.getActualSide() == ScoringPosition.Side.BACK) {
-                                RobotMap.elevatorAndArm.setScoringPosition(ScoringPosition.BACK_BOTTOM_ROCKET_PORT);
-                            }
-                        } else if (RobotMap.pilotController.getButtonBack()) {
-                            if (RobotMap.elevatorAndArm.getActualSide() == ScoringPosition.Side.FRONT) {
-                                RobotMap.elevatorAndArm.setScoringPosition(ScoringPosition.FRONT_STORAGE);
-                            } else if (RobotMap.elevatorAndArm.getActualSide() == ScoringPosition.Side.BACK) {
-                                RobotMap.elevatorAndArm.setScoringPosition(ScoringPosition.BACK_STORAGE);
-                            }
+                } else { // Not A Port Height. Hatch Height
+                    if (RobotMap.pilotController.getButtonY()) {
+                        if (RobotMap.elevatorAndArm.isArmPhisicalyInFront()) {
+                            RobotMap.elevatorAndArm.setScoringPosition(ScoringPosition.BACK_TOP_ROCKET_HATCH);
+                        } else if (RobotMap.elevatorAndArm.isArmPhisicalyInBack()) {
+                            RobotMap.elevatorAndArm.setScoringPosition(ScoringPosition.FRONT_TOP_ROCKET_HATCH);
                         }
-                    } else { // Not A Port Height. Hatch Height
-                        if (RobotMap.pilotController.getButtonY()) {
-                            if (RobotMap.elevatorAndArm.getActualSide() == ScoringPosition.Side.FRONT) {
-                                RobotMap.elevatorAndArm.setScoringPosition(ScoringPosition.FRONT_TOP_ROCKET_HATCH);
-                            } else if (RobotMap.elevatorAndArm.getActualSide() == ScoringPosition.Side.BACK) {
-                                RobotMap.elevatorAndArm.setScoringPosition(ScoringPosition.BACK_TOP_ROCKET_HATCH);
-                            }
-                        } else if (RobotMap.pilotController.getButtonX()) {
-                            if (RobotMap.elevatorAndArm.getActualSide() == ScoringPosition.Side.FRONT) {
-                                RobotMap.elevatorAndArm.setScoringPosition(ScoringPosition.FRONT_MID_ROCKET_HATCH);
-                            } else if (RobotMap.elevatorAndArm.getActualSide() == ScoringPosition.Side.BACK) {
-                                RobotMap.elevatorAndArm.setScoringPosition(ScoringPosition.BACK_MID_ROCKET_HATCH);
-                            }
-                        } else if (RobotMap.pilotController.getButtonA()) {
-                            if (RobotMap.elevatorAndArm.getActualSide() == ScoringPosition.Side.FRONT) {
-                                RobotMap.elevatorAndArm.setScoringPosition(ScoringPosition.FRONT_INTAKING_ROCKET_HATCH);
-                            } else if (RobotMap.elevatorAndArm.getActualSide() == ScoringPosition.Side.BACK) {
-                                RobotMap.elevatorAndArm.setScoringPosition(ScoringPosition.BACK_INTAKING_ROCKET_HATCH);
-                            }
-                        } else if (RobotMap.pilotController.getButtonB()) {
-                            if (RobotMap.elevatorAndArm.getActualSide() == ScoringPosition.Side.FRONT) {
-                                RobotMap.elevatorAndArm.setScoringPosition(ScoringPosition.INTAKING_CARGO);
-                            } else if (RobotMap.elevatorAndArm.getActualSide() == ScoringPosition.Side.BACK) {
-                                ConsoleLogger.warning("Tried to intake cargo from back. Not allowed.");
-                            }
-                        } else if (RobotMap.pilotController.getButtonBack()) {
-                            if (RobotMap.elevatorAndArm.getActualSide() == ScoringPosition.Side.FRONT) {
-                                RobotMap.elevatorAndArm.setScoringPosition(ScoringPosition.FRONT_STORAGE);
-                            } else if (RobotMap.elevatorAndArm.getActualSide() == ScoringPosition.Side.BACK) {
-                                RobotMap.elevatorAndArm.setScoringPosition(ScoringPosition.BACK_STORAGE);
-                            }
+                    } else if (RobotMap.pilotController.getButtonX()) {
+                        if ( RobotMap.elevatorAndArm.isArmPhisicalyInFront()) {
+                            RobotMap.elevatorAndArm.setScoringPosition(ScoringPosition.BACK_MID_ROCKET_HATCH);
+                        } else if (RobotMap.elevatorAndArm.isArmPhisicalyInBack()) {
+                            RobotMap.elevatorAndArm.setScoringPosition(ScoringPosition.FRONT_MID_ROCKET_HATCH);
+                        }
+                    } else if (RobotMap.pilotController.getButtonA()) {
+                        if (RobotMap.elevatorAndArm.isArmPhisicalyInFront()) {
+                            RobotMap.elevatorAndArm.setScoringPosition(ScoringPosition.BACK_INTAKING_ROCKET_HATCH);
+                        } else if (RobotMap.elevatorAndArm.isArmPhisicalyInBack()) {
+                            RobotMap.elevatorAndArm.setScoringPosition(ScoringPosition.FRONT_INTAKING_ROCKET_HATCH);
+                        }
+                    } else if (RobotMap.pilotController.getButtonB()) {
+                        if (RobotMap.elevatorAndArm.isArmPhisicalyInFront()) {
+                            ConsoleLogger.warning("Tried to intake cargo from back. Not allowed.");
+                        } else if (RobotMap.elevatorAndArm.isArmPhisicalyInBack()) {
+                            RobotMap.elevatorAndArm.setScoringPosition(ScoringPosition.INTAKING_CARGO);
+                        }
+                    } else if (RobotMap.pilotController.getButtonBack()) {
+                        if (RobotMap.elevatorAndArm.isArmPhisicalyInFront()) {
+                            RobotMap.elevatorAndArm.setScoringPosition(ScoringPosition.BACK_STORAGE);
+                        } else if (RobotMap.elevatorAndArm.isArmPhisicalyInBack()) {
+                            RobotMap.elevatorAndArm.setScoringPosition(ScoringPosition.FRONT_STORAGE);
                         }
                     }
                 }
+            } else { // Not Switching Sides
+                if (RobotMap.pilotController.getLeftBumper()) { // Port Height
+                    if (RobotMap.pilotController.getButtonY()) {
+                        if (RobotMap.elevatorAndArm.isArmPhisicalyInFront()) {
+                            RobotMap.elevatorAndArm.setScoringPosition(ScoringPosition.FRONT_TOP_ROCKET_PORT);
+                        } else if (RobotMap.elevatorAndArm.isArmPhisicalyInBack()) {
+                            RobotMap.elevatorAndArm.setScoringPosition(ScoringPosition.BACK_TOP_ROCKET_PORT);
+                        }
+                    } else if (RobotMap.pilotController.getButtonX()) {
+                        if (RobotMap.elevatorAndArm.isArmPhisicalyInFront()) {
+                            RobotMap.elevatorAndArm.setScoringPosition(ScoringPosition.FRONT_MID_ROCKET_PORT);
+                        } else if (RobotMap.elevatorAndArm.isArmPhisicalyInBack()) {
+                            RobotMap.elevatorAndArm.setScoringPosition(ScoringPosition.BACK_MID_ROCKET_PORT);
+                        }
+                    } else if (RobotMap.pilotController.getButtonB()) {
+                        if (RobotMap.elevatorAndArm.isArmPhisicalyInFront()) {
+                            RobotMap.elevatorAndArm.setScoringPosition(ScoringPosition.FRONT_CARGO_SHIP_PORT);
+                        } else if (RobotMap.elevatorAndArm.isArmPhisicalyInBack()) {
+                            RobotMap.elevatorAndArm.setScoringPosition(ScoringPosition.BACK_CARGO_SHIP_PORT);
+                        }
+                    } else if (RobotMap.pilotController.getButtonA()) {
+                        if (RobotMap.elevatorAndArm.isArmPhisicalyInFront()) {
+                            RobotMap.elevatorAndArm.setScoringPosition(ScoringPosition.FRONT_BOTTOM_ROCKET_PORT);
+                        } else if (RobotMap.elevatorAndArm.isArmPhisicalyInBack()) {
+                            RobotMap.elevatorAndArm.setScoringPosition(ScoringPosition.BACK_BOTTOM_ROCKET_PORT);
+                        }
+                    } else if (RobotMap.pilotController.getButtonBack()) {
+                        if (RobotMap.elevatorAndArm.isArmPhisicalyInFront()) {
+                            RobotMap.elevatorAndArm.setScoringPosition(ScoringPosition.FRONT_STORAGE);
+                        } else if (RobotMap.elevatorAndArm.isArmPhisicalyInBack()) {
+                            RobotMap.elevatorAndArm.setScoringPosition(ScoringPosition.BACK_STORAGE);
+                        }
+                    }
+                } else { // Not A Port Height. Hatch Height
+                    if (RobotMap.pilotController.getButtonY()) {
+                        if (RobotMap.elevatorAndArm.isArmPhisicalyInFront()) {
+                            RobotMap.elevatorAndArm.setScoringPosition(ScoringPosition.FRONT_TOP_ROCKET_HATCH);
+                        } else if (RobotMap.elevatorAndArm.isArmPhisicalyInBack()) {
+                            RobotMap.elevatorAndArm.setScoringPosition(ScoringPosition.BACK_TOP_ROCKET_HATCH);
+                        }
+                    } else if (RobotMap.pilotController.getButtonX()) {
+                        if (RobotMap.elevatorAndArm.isArmPhisicalyInFront()) {
+                            RobotMap.elevatorAndArm.setScoringPosition(ScoringPosition.FRONT_MID_ROCKET_HATCH);
+                        } else if (RobotMap.elevatorAndArm.isArmPhisicalyInBack()) {
+                            RobotMap.elevatorAndArm.setScoringPosition(ScoringPosition.BACK_MID_ROCKET_HATCH);
+                        }
+                    } else if (RobotMap.pilotController.getButtonA()) {
+                        if (RobotMap.elevatorAndArm.isArmPhisicalyInFront()) {
+                            RobotMap.elevatorAndArm.setScoringPosition(ScoringPosition.FRONT_INTAKING_ROCKET_HATCH);
+                        } else if (RobotMap.elevatorAndArm.isArmPhisicalyInBack()) {
+                            RobotMap.elevatorAndArm.setScoringPosition(ScoringPosition.BACK_INTAKING_ROCKET_HATCH);
+                        }
+                    } else if (RobotMap.pilotController.getButtonB()) {
+                        if (RobotMap.elevatorAndArm.isArmPhisicalyInFront()) {
+                            RobotMap.elevatorAndArm.setScoringPosition(ScoringPosition.INTAKING_CARGO);
+                        } else if (RobotMap.elevatorAndArm.isArmPhisicalyInBack()) {
+                            ConsoleLogger.warning("Tried to intake cargo from back. Not allowed.");
+                        }
+                    } else if (RobotMap.pilotController.getButtonBack()) {
+                        if (RobotMap.elevatorAndArm.isArmPhisicalyInFront()) {
+                            RobotMap.elevatorAndArm.setScoringPosition(ScoringPosition.FRONT_STORAGE);
+                        } else if (RobotMap.elevatorAndArm.isArmPhisicalyInBack()) {
+                            RobotMap.elevatorAndArm.setScoringPosition(ScoringPosition.BACK_STORAGE);
+                        }
+                    }
+                }
+            }
+        } 
 
+        if (!RobotMap.pilotController.getButtonA() && !RobotMap.pilotController.getButtonB() && 
+                !RobotMap.pilotController.getButtonX() && !RobotMap.pilotController.getButtonY() && 
+                !RobotMap.pilotController.getButtonBack()) {
+            buttonFlag = false;
+        }
         // controlls for drive train
         if (RobotMap.pilotController.getLeftStickPress()) {
             RobotMap.limelight.setLightMode(LEDEnum.ENABLED);

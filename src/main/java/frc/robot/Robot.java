@@ -6,6 +6,7 @@ import com.ctre.phoenix.motorcontrol.ControlMode;
 import edu.wpi.cscore.UsbCamera;
 import edu.wpi.first.cameraserver.CameraServer;
 import edu.wpi.first.wpilibj.SampleRobot;
+import frc.robot.Subassemblies.ElevatorAndArm.ScoringPosition;
 import frc.robot.Utilities.ConsoleLogger;
 import frc.robot.Utilities.Dashboard;
 import frc.robot.Utilities.Limelight.LEDEnum;
@@ -23,8 +24,8 @@ public class Robot extends SampleRobot {
 	public void robotInit() {
         RobotMap.init(); // Instantiates things to be used from RobotMap.
         //CameraServer.getInstance().startAutomaticCapture();
-		UsbCamera cameraOne = CameraServer.getInstance().startAutomaticCapture(0);
-		UsbCamera cameraTwo = CameraServer.getInstance().startAutomaticCapture(1);
+		// UsbCamera cameraOne = CameraServer.getInstance().startAutomaticCapture(0);
+		// UsbCamera cameraTwo = CameraServer.getInstance().startAutomaticCapture(1);
 	}
 
 	/**
@@ -55,7 +56,10 @@ public class Robot extends SampleRobot {
 
 			Dashboard.send("Elevator LS", RobotMap.elevatorLimitSwitch.get());
 			Dashboard.send("Hatch LS", RobotMap.hatchLimitSwitch.get());
-			Dashboard.send("Cargo LS", RobotMap.cargoLimitSwitch.get());
+            Dashboard.send("Cargo LS", RobotMap.cargoLimitSwitch.get());
+            
+            Dashboard.send("Actual State", RobotMap.elevatorAndArm.getCurrentState().toString());
+            Dashboard.send("Final State", RobotMap.elevatorAndArm.getFinalState().toString());
 		}
 	}
 
@@ -64,6 +68,7 @@ public class Robot extends SampleRobot {
 	 */
 	@Override
 	public void operatorControl() {
+        RobotMap.elevatorAndArm.setFinalAndCurrentStates(ScoringPosition.IDLE);
 		while (isOperatorControl() && isEnabled()) {
 			RobotMap.limelight.update();
 			RobotMap.timer.update();
@@ -86,7 +91,11 @@ public class Robot extends SampleRobot {
 
 			Dashboard.send("Elevator LS", RobotMap.elevatorLimitSwitch.get());
 			Dashboard.send("Hatch LS", RobotMap.hatchLimitSwitch.get());
-			Dashboard.send("Cargo LS", RobotMap.cargoLimitSwitch.get());
+            Dashboard.send("Cargo LS", RobotMap.cargoLimitSwitch.get());
+            
+            // Dashboard.send("Actual State", RobotMap.elevatorAndArm.getCurrentState().toString());
+            // Dashboard.send("Final State", RobotMap.elevatorAndArm.getFinalState().toString());
+
 		}
 	}
 

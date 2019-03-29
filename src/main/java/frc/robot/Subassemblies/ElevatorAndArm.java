@@ -111,6 +111,7 @@ public class ElevatorAndArm {
                 break;
             case TRANSITION_FRONT:
                 if(!isPhysicallyHere(currentState)) {
+
                     move(currentState);
                 } else if(finalState.isFrontSide()) {
                     if (isArmClearForElevator() && isArmPhisicalyInFront()) {
@@ -143,6 +144,16 @@ public class ElevatorAndArm {
 
         }
 
+        if (RobotMap.elevatorLimitSwitch.get() && !limitSwitchPressedFlag) {
+            ConsoleLogger.debug("Elevator limit switch pressed, resetting elevator encoder.");
+            RobotMap.elevatorFront.setSelectedSensorPosition(0);
+            limitSwitchPressedFlag = true;
+        }
+
+        if (!RobotMap.elevatorLimitSwitch.get()) {
+            limitSwitchPressedFlag = false;
+        }
+
         Dashboard.send("Actual State", currentState.toString());
         Dashboard.send("Final State", finalState.toString());
         Dashboard.send("Arm Is Physically In Front", isArmPhisicalyInFront());
@@ -160,7 +171,7 @@ public class ElevatorAndArm {
         return finalState.getSide();
     }
 
-    public Side getActualSide() {
+    public Side getCurrentSide() {
         return currentState.getSide();
     }
 
@@ -205,17 +216,37 @@ public class ElevatorAndArm {
         return RobotMap.armPivot.getSelectedSensorPosition();
     }
 
+    public ScoringPosition getCurrentState() {
+        return currentState;
+    }
+
+    public ScoringPosition getFinalState() {
+        return finalState;
+    }
+
     public boolean isSameSide(ScoringPosition stateOne, ScoringPosition stateTwo) {
         return stateOne.getSide() == stateTwo.getSide();
     }
 
     public boolean isArmPhisicalyInFront() {
-        return getArmPosition() < RobotMap.ARM_HALF_WAY_POSITION;
+        return getArmPosition() > RobotMap.ARM_HALF_WAY_POSITION;
+    }
+
+    public boolean isArmPhisicalyInBack() {
+        return getArmPosition() <= RobotMap.ARM_HALF_WAY_POSITION;
     }
 
     public boolean isPhysicallyHere(ScoringPosition state) {
         return inTolerance(RobotMap.elevatorFront.getSelectedSensorPosition(), state.getElevatorSetpoint(), RobotMap.ELEVATOR_TOLERENCE) &&
                 inTolerance(RobotMap.armPivot.getSelectedSensorPosition(), state.getArmSetpoint(), RobotMap.ARM_TOLERENCE);
+    }
+
+    public boolean isElevatorPhysicallyGreaterThan(int position) {
+        return RobotMap.elevatorFront.getSelectedSensorPosition() > position;
+    }
+
+    public boolean isArmPhysicallyHere(int position) {
+        return inTolerance(RobotMap.armPivot.getSelectedSensorPosition(), position, RobotMap.ARM_TOLERENCE);
     }
 
     public boolean inTolerance(int physicalValue, int wantedValue, int tolerence) {
@@ -228,7 +259,12 @@ public class ElevatorAndArm {
     }
 
     public boolean isArmClearForElevator() {
-        return RobotMap.armPivot.getSelectedSensorPosition() > RobotMap.FRONT_ARM_CLEAR_POSITION ||
-                RobotMap.armPivot.getSelectedSensorPosition() < RobotMap.BACK_ARM_CLEAR_POSITION;
+        return RobotMap.armPivot.getSelectedSensorPosition() > RobotMap.FRONT_ARM_DANGER_ZONE_POSITION ||
+                RobotMap.armPivot.getSelectedSensorPosition() < RobotMap.BACK_ARM_DANGER_ZONE_POSITION;
+    }
+
+    public void setFinalAndCurrentStates(ScoringPosition state) {
+        finalState = state;
+        currentState = state;
     }
 }

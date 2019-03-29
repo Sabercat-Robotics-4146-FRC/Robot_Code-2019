@@ -49,29 +49,29 @@ public class RobotMap {
 	// 1023.0/6800.0, 400, 1.00 );
 
 	// Elevator Constants
-	public static final int ELEVATOR_FRONT_TOP_PORT_HEIGHT = 0;
-	public static final int ELEVATOR_FRONT_TOP_HATCH_HEIGHT = 0;
-	public static final int ELEVATOR_FRONT_MID_PORT_HEIGHT = 0;
-	public static final int ELEVATOR_FRONT_MID_HATCH_HEIGHT = 0;
-	public static final int ELEVATOR_FRONT_SHIP_PORT_HEIGHT = 0;
-	public static final int ELEVATOR_FRONT_BOTTOM_PORT_HEIGHT = 0;
+	public static final int ELEVATOR_FRONT_TOP_PORT_HEIGHT = 74348;
+	public static final int ELEVATOR_FRONT_TOP_HATCH_HEIGHT = 77896;
+	public static final int ELEVATOR_FRONT_MID_PORT_HEIGHT = 39890;
+	public static final int ELEVATOR_FRONT_MID_HATCH_HEIGHT = 38310;
+	public static final int ELEVATOR_FRONT_SHIP_PORT_HEIGHT = 23434;
+	public static final int ELEVATOR_FRONT_BOTTOM_PORT_HEIGHT = 10508;
 	public static final int ELEVATOR_FRONT_INTAKING_HATCH_HEIGHT = 0;
 	public static final int ELEVATOR_FRONT_INTAKING_CARGO_HEIGHT = 0; // (Front only)
 	public static final int ELEVATOR_FRONT_STORAGE_HEIGHT = 0;
 
-	public static final int ELEVATOR_BACK_TOP_PORT_HEIGHT = 0;
-	public static final int ELEVATOR_BACK_TOP_HATCH_HEIGHT = 0;
-	public static final int ELEVATOR_BACK_MID_PORT_HEIGHT = 0;
-	public static final int ELEVATOR_BACK_MID_HATCH_HEIGHT = 0;
-	public static final int ELEVATOR_BACK_SHIP_PORT_HEIGHT = 0;
-	public static final int ELEVATOR_BACK_BOTTOM_PORT_HEIGHT = 0;
-	public static final int ELEVATOR_BACK_INTAKING_HATCH_HEIGHT = 0;
+	public static final int ELEVATOR_BACK_TOP_PORT_HEIGHT = 76125;
+	public static final int ELEVATOR_BACK_TOP_HATCH_HEIGHT = 76312;
+	public static final int ELEVATOR_BACK_MID_PORT_HEIGHT = 54143;
+	public static final int ELEVATOR_BACK_MID_HATCH_HEIGHT = 44571;
+	public static final int ELEVATOR_BACK_SHIP_PORT_HEIGHT = 23434;
+	public static final int ELEVATOR_BACK_BOTTOM_PORT_HEIGHT = 12603;
+	public static final int ELEVATOR_BACK_INTAKING_HATCH_HEIGHT = 12154;
 	public static final int ELEVATOR_BACK_STORAGE_HEIGHT = 0;
 
-	public static final int ELEVATOR_CLEAR_FOR_ARM_HEIGHT = 0; // This should be smaller than that VVV
-	public static final int ELEVATOR_TRANSITION_POSITION = 0; // This should be bigger than this ^^^
+	public static final int ELEVATOR_CLEAR_FOR_ARM_HEIGHT = 35122; // This should be smaller than that VVV
+	public static final int ELEVATOR_TRANSITION_POSITION = 40122; // This should be bigger than this ^^^
 
-	public static final int ELEVATOR_TOLERENCE = 0;
+	public static final int ELEVATOR_TOLERENCE = 2000;
 
 	public static final double LIMELIGHT_PORT_TAPE_HEIGHT = 0.0;
 
@@ -83,34 +83,35 @@ public class RobotMap {
 	public static final double ELEVATOR_kF = 0.0;
 
 	// Arm Constants
-	public static final int ARM_FRONT_TOP_PORT_POSITION = 0;
-	public static final int ARM_FRONT_TOP_HATCH_POSITION = 0;
-	public static final int ARM_FRONT_MID_PORT_POSITION = 0;
-	public static final int ARM_FRONT_MID_HATCH_POSITION = 0;
-	public static final int ARM_FRONT_SHIP_PORT_POSITION = 0;
-	public static final int ARM_FRONT_BOTTOM_PORT_POSITION = 0;
-	public static final int ARM_FRONT_INTAKING_HATCH_POSITION = 0;
-	public static final int ARM_FRONT_INTAKING_CARGO_POSITION = 0; // (Front only)
-	public static final int ARM_FRONT_STORAGE_POSITION = 0;
+    public static final int ARM_FRONT_INTAKING_CARGO_POSITION = 730; // (Front only)
 
-	public static final int ARM_BACK_TOP_PORT_POSITION = 0;
-	public static final int ARM_BACK_TOP_HATCH_POSITION = 0;
-	public static final int ARM_BACK_MID_PORT_POSITION = 0;
-	public static final int ARM_BACK_MID_HATCH_POSITION = 0;
-	public static final int ARM_BACK_SHIP_PORT_POSITION = 0;
-	public static final int ARM_BACK_BOTTOM_PORT_POSITION = 0;
-	public static final int ARM_BACK_INTAKING_HATCH_POSITION = 0;
-	public static final int ARM_BACK_STORAGE_POSITION = 0;
+    public static final int ARM_FRONT_TOP_PORT_POSITION = ARM_FRONT_INTAKING_CARGO_POSITION - 74;
+	public static final int ARM_FRONT_TOP_HATCH_POSITION = ARM_FRONT_INTAKING_CARGO_POSITION - 10;
+	public static final int ARM_FRONT_MID_PORT_POSITION = ARM_FRONT_INTAKING_CARGO_POSITION - 60;
+	public static final int ARM_FRONT_MID_HATCH_POSITION = ARM_FRONT_INTAKING_CARGO_POSITION - 10;
+	public static final int ARM_FRONT_SHIP_PORT_POSITION = ARM_FRONT_INTAKING_CARGO_POSITION - 76;
+	public static final int ARM_FRONT_BOTTOM_PORT_POSITION = ARM_FRONT_INTAKING_CARGO_POSITION - 44;
+	public static final int ARM_FRONT_INTAKING_HATCH_POSITION = ARM_FRONT_INTAKING_CARGO_POSITION - 10;
+	public static final int ARM_FRONT_STORAGE_POSITION = ARM_FRONT_INTAKING_CARGO_POSITION - 112;
 
-	public static final int FRONT_ARM_CLEAR_POSITION = 0;
-	public static final int BACK_ARM_CLEAR_POSITION = 0;
-	public static final int ARM_HALF_WAY_POSITION = 0;
+	public static final int ARM_BACK_TOP_PORT_POSITION = ARM_FRONT_INTAKING_CARGO_POSITION - 280;
+	public static final int ARM_BACK_TOP_HATCH_POSITION = ARM_FRONT_INTAKING_CARGO_POSITION - 240;
+	public static final int ARM_BACK_MID_PORT_POSITION = ARM_FRONT_INTAKING_CARGO_POSITION - 280;
+	public static final int ARM_BACK_MID_HATCH_POSITION = ARM_FRONT_INTAKING_CARGO_POSITION - 240;
+	public static final int ARM_BACK_SHIP_PORT_POSITION = ARM_FRONT_INTAKING_CARGO_POSITION - 280;
+	public static final int ARM_BACK_BOTTOM_PORT_POSITION = ARM_FRONT_INTAKING_CARGO_POSITION - 280;
+	public static final int ARM_BACK_INTAKING_HATCH_POSITION = ARM_FRONT_INTAKING_CARGO_POSITION - 240;
+	public static final int ARM_BACK_STORAGE_POSITION = ARM_FRONT_INTAKING_CARGO_POSITION - 233;
+
+	public static final int FRONT_ARM_DANGER_ZONE_POSITION = ARM_FRONT_INTAKING_CARGO_POSITION - 120;
+	public static final int BACK_ARM_DANGER_ZONE_POSITION = ARM_FRONT_INTAKING_CARGO_POSITION - 229;
+	public static final int ARM_HALF_WAY_POSITION = ARM_FRONT_INTAKING_CARGO_POSITION - 138;
 
 
-	public static final int ARM_FRONT_TRANSITION_POSITION = 0;
-	public static final int ARM_BACK_TRANSITION_POSITION = 0;
+	public static final int ARM_FRONT_TRANSITION_POSITION = ARM_FRONT_INTAKING_CARGO_POSITION - 115;
+	public static final int ARM_BACK_TRANSITION_POSITION = ARM_FRONT_INTAKING_CARGO_POSITION - 240;
 
-	public static final int ARM_TOLERENCE = 0;
+	public static final int ARM_TOLERENCE = 3;
 
 	public static final double ARM_kP = 25.0;
 	public static final double ARM_kI = 0.0;
