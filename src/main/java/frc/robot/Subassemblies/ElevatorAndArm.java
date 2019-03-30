@@ -110,9 +110,16 @@ public class ElevatorAndArm {
                 }
                 break;
             case TRANSITION_FRONT:
-                if(!isPhysicallyHere(currentState)) {
-
-                    move(currentState);
+                // if (!isPhysicallyHere(currentState)) {
+                //     move(currentState);
+                
+                if(!isArmPhysicallyHere(currentState.armSetpoint) 
+                    || !isElevatorPhysicallyGreaterThan(RobotMap.ELEVATOR_CLEAR_FOR_ARM_HEIGHT)) {
+                    if (finalState.elevatorSetpoint > currentState.elevatorSetpoint) {
+                        move(finalState.elevatorSetpoint, currentState.armSetpoint);
+                    } else {
+                        move(currentState);
+                    }
                 } else if(finalState.isFrontSide()) {
                     if (isArmClearForElevator() && isArmPhisicalyInFront()) {
                         currentState = finalState;
@@ -122,10 +129,20 @@ public class ElevatorAndArm {
                 }
                 break;
             case TRANSITION_BACK:
-                if(!isPhysicallyHere(currentState)) {
-                    move(currentState);
+                // if (!isPhysicallyHere(currentState)) {
+                //     move(currentState);
+
+                if(!isArmPhysicallyHere(currentState.armSetpoint) 
+                    || !isElevatorPhysicallyGreaterThan(RobotMap.ELEVATOR_CLEAR_FOR_ARM_HEIGHT)) {
+                    if (finalState.elevatorSetpoint > currentState.elevatorSetpoint) {
+                        move(finalState.elevatorSetpoint, currentState.armSetpoint);
+                    } else {
+                        move(currentState);
+                    }
                 } else if(finalState.isBackSide()) {
+                    if (isArmClearForElevator() && isArmPhisicalyInBack()) {
                         currentState = finalState;
+                    }
                 } else {
                     currentState = ScoringPosition.TRANSITION_FRONT;
                 }
@@ -178,7 +195,23 @@ public class ElevatorAndArm {
     // Utilities
 
     private void moveElevator(int position) {
-        RobotMap.elevatorFront.set(ControlMode.Position, position);
+        if (position == 0) {
+            lowerElevatorSlowly();
+        } else {
+            RobotMap.elevatorFront.set(ControlMode.Position, position);
+        }
+    }
+
+    private void lowerElevatorSlowly() {
+        if (RobotMap.elevatorLimitSwitch.get()) {
+            RobotMap.elevatorFront.set(ControlMode.PercentOutput, 0);
+        } else {
+            if (RobotMap.elevatorFront.getSelectedSensorPosition() >= RobotMap.LOWER_SLOWER_HEIGHT) {
+                RobotMap.elevatorFront.set(ControlMode.PercentOutput, -0.3);
+            } else if (RobotMap.elevatorFront.getSelectedSensorPosition() < RobotMap.LOWER_SLOWER_HEIGHT) {
+                RobotMap.elevatorFront.set(ControlMode.PercentOutput, -0.2);
+            }
+        }
     }
 
     private void moveArm(int position) {

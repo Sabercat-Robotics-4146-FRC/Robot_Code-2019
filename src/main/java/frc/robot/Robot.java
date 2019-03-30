@@ -79,7 +79,10 @@ public class Robot extends SampleRobot {
 			RobotMap.intake.update(RobotMap.timer.getDT());
 			
 			ConsoleLogger.update(RobotMap.timer.getDT());
-			RobotMap.pilotController.updateRumbleBuzz(RobotMap.timer.getDT());
+            RobotMap.pilotController.updateRumbleBuzz(RobotMap.timer.getDT());
+            
+            // RobotMap.elevatorFront.set(ControlMode.PercentOutput, RobotMap.pilotController.getLeftTrigger()
+            // - RobotMap.pilotController.getRightTrigger());
 
 			// These are not in the update loops of their coresponding assemblies
 			// because we need to view the values even when we dont want the rest
