@@ -49,10 +49,10 @@ public class RobotMap {
 	// 1023.0/6800.0, 400, 1.00 );
 
 	// Elevator Constants
-	public static final int ELEVATOR_FRONT_TOP_PORT_HEIGHT = 74348;
-	public static final int ELEVATOR_FRONT_TOP_HATCH_HEIGHT = 77896;
-	public static final int ELEVATOR_FRONT_MID_PORT_HEIGHT = 39890;
-	public static final int ELEVATOR_FRONT_MID_HATCH_HEIGHT = 38310;
+	public static final int ELEVATOR_FRONT_TOP_PORT_HEIGHT = 76348; // 74348;
+	public static final int ELEVATOR_FRONT_TOP_HATCH_HEIGHT = 81896; // 77896;
+	public static final int ELEVATOR_FRONT_MID_PORT_HEIGHT = 41890; // 39890;
+	public static final int ELEVATOR_FRONT_MID_HATCH_HEIGHT = 42285; //38310;
 	public static final int ELEVATOR_FRONT_SHIP_PORT_HEIGHT = 23434;
 	public static final int ELEVATOR_FRONT_BOTTOM_PORT_HEIGHT = 10508;
 	public static final int ELEVATOR_FRONT_INTAKING_HATCH_HEIGHT = 0;
@@ -65,7 +65,7 @@ public class RobotMap {
 	public static final int ELEVATOR_BACK_MID_HATCH_HEIGHT = 44571;
 	public static final int ELEVATOR_BACK_SHIP_PORT_HEIGHT = 23434;
 	public static final int ELEVATOR_BACK_BOTTOM_PORT_HEIGHT = 12603;
-	public static final int ELEVATOR_BACK_INTAKING_HATCH_HEIGHT = 12154;
+	public static final int ELEVATOR_BACK_INTAKING_HATCH_HEIGHT = 10580;
 	public static final int ELEVATOR_BACK_STORAGE_HEIGHT = 0;
 
 	public static final int ELEVATOR_CLEAR_FOR_ARM_HEIGHT = 35122; // This should be smaller than that VVV
@@ -83,7 +83,7 @@ public class RobotMap {
 	public static final double ELEVATOR_kF = 0.0;
 
 	// Arm Constants
-    public static final int ARM_FRONT_INTAKING_CARGO_POSITION = 730; // (Front only)
+    public static final int ARM_FRONT_INTAKING_CARGO_POSITION = 720; // (Front only)
 
     public static final int ARM_FRONT_TOP_PORT_POSITION = ARM_FRONT_INTAKING_CARGO_POSITION - 74;
 	public static final int ARM_FRONT_TOP_HATCH_POSITION = ARM_FRONT_INTAKING_CARGO_POSITION - 10;
@@ -100,7 +100,7 @@ public class RobotMap {
 	public static final int ARM_BACK_MID_HATCH_POSITION = ARM_FRONT_INTAKING_CARGO_POSITION - 240;
 	public static final int ARM_BACK_SHIP_PORT_POSITION = ARM_FRONT_INTAKING_CARGO_POSITION - 280;
 	public static final int ARM_BACK_BOTTOM_PORT_POSITION = ARM_FRONT_INTAKING_CARGO_POSITION - 280;
-	public static final int ARM_BACK_INTAKING_HATCH_POSITION = ARM_FRONT_INTAKING_CARGO_POSITION - 240;
+	public static final int ARM_BACK_INTAKING_HATCH_POSITION = ARM_FRONT_INTAKING_CARGO_POSITION - 251;
 	public static final int ARM_BACK_STORAGE_POSITION = ARM_FRONT_INTAKING_CARGO_POSITION - 233;
 
 	public static final int FRONT_ARM_DANGER_ZONE_POSITION = ARM_FRONT_INTAKING_CARGO_POSITION - 120;
@@ -108,8 +108,8 @@ public class RobotMap {
 	public static final int ARM_HALF_WAY_POSITION = ARM_FRONT_INTAKING_CARGO_POSITION - 138;
 
 
-	public static final int ARM_FRONT_TRANSITION_POSITION = ARM_FRONT_INTAKING_CARGO_POSITION - 115;
-	public static final int ARM_BACK_TRANSITION_POSITION = ARM_FRONT_INTAKING_CARGO_POSITION - 240;
+	public static final int ARM_FRONT_TRANSITION_POSITION = ARM_FRONT_INTAKING_CARGO_POSITION - 100; // was 115 intake hit elevator
+	public static final int ARM_BACK_TRANSITION_POSITION = ARM_FRONT_INTAKING_CARGO_POSITION - 260; // was 240 intake hit elevator
 
 	public static final int ARM_TOLERENCE = 3;
 
@@ -233,8 +233,8 @@ public class RobotMap {
 		elevatorBack.follow(elevatorFront);
 		elevatorFront.configSelectedFeedbackSensor(FeedbackDevice.CTRE_MagEncoder_Relative);
 		// elevatorFront.configVoltageCompSaturation(voltage)
-		elevatorFront.configPeakOutputForward(.6);
-		elevatorFront.configPeakOutputReverse(-.4);
+		elevatorFront.configPeakOutputForward(.8);
+		elevatorFront.configPeakOutputReverse(-.30);
 		elevatorFront.configNominalOutputForward(0);
 		elevatorFront.configNominalOutputReverse(0);
 

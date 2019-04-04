@@ -34,6 +34,10 @@ public class Robot extends SampleRobot {
 	 */
 	@Override
 	public void autonomous() {
+
+        
+        RobotMap.elevatorAndArm.setScoringPosition(ScoringPosition.FRONT_STORAGE);
+
 		while (isAutonomous() && isEnabled()) {
 			RobotMap.limelight.update();
 			RobotMap.timer.update();
@@ -75,14 +79,12 @@ public class Robot extends SampleRobot {
 			RobotMap.teleopControls.update();
 
 			RobotMap.drivetrain.update();
+            
             RobotMap.elevatorAndArm.update();
-			RobotMap.intake.update(RobotMap.timer.getDT());
+            RobotMap.intake.update(RobotMap.timer.getDT());
 			
 			ConsoleLogger.update(RobotMap.timer.getDT());
             RobotMap.pilotController.updateRumbleBuzz(RobotMap.timer.getDT());
-            
-            // RobotMap.elevatorFront.set(ControlMode.PercentOutput, RobotMap.pilotController.getLeftTrigger()
-            // - RobotMap.pilotController.getRightTrigger());
 
 			// These are not in the update loops of their coresponding assemblies
 			// because we need to view the values even when we dont want the rest

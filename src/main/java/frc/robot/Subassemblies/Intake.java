@@ -25,7 +25,7 @@ public class Intake {
 
     public Intake() {
        cargoRollerState = CargoRollerEnum.DISABLED;
-       clawState = ClawEnum.HOLDING;
+       clawState = ClawEnum.RELEASED;
        dtAccumulator = 0;
        cargoRumbleFlag = false;
        hatchFlag = true;
