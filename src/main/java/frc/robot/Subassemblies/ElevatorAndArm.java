@@ -94,7 +94,8 @@ public class ElevatorAndArm {
         switch(currentState) {
             case IDLE:
                 if (finalState == ScoringPosition.IDLE) {
-                    holdArmAndElevator();
+                    // holdArmAndElevator();
+                    disableArmAndElevator();
                 } else if (isArmPhisicalyInFront()) { // TODO check polarity
                     if (finalState.isFrontSide()) {
                         currentState = finalState;
@@ -239,6 +240,11 @@ public class ElevatorAndArm {
     private void holdArmAndElevator() {
         moveElevator(RobotMap.elevatorFront.getSelectedSensorPosition());
         moveArm(RobotMap.armPivot.getSelectedSensorPosition());
+    }
+
+    private void disableArmAndElevator() {
+        RobotMap.elevatorFront.set(ControlMode.PercentOutput, 0);
+        RobotMap.armPivot.set(ControlMode.PercentOutput, 0);
     }
 
     private int getElevatorPosition() {

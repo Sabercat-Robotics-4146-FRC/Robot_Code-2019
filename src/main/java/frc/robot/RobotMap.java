@@ -83,7 +83,7 @@ public class RobotMap {
 	public static final double ELEVATOR_kF = 0.0;
 
 	// Arm Constants
-    public static final int ARM_FRONT_INTAKING_CARGO_POSITION = 720; // (Front only)
+	public static final int ARM_FRONT_INTAKING_CARGO_POSITION = 706; // (Front only)
 
     public static final int ARM_FRONT_TOP_PORT_POSITION = ARM_FRONT_INTAKING_CARGO_POSITION - 74;
 	public static final int ARM_FRONT_TOP_HATCH_POSITION = ARM_FRONT_INTAKING_CARGO_POSITION - 10;
