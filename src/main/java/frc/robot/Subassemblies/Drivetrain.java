@@ -46,7 +46,7 @@ public class Drivetrain {
     public void runVisionPID(double speed) {
         this.limelightVisionPID.update(RobotMap.timer.getDT());
         this.speed = speed;
-        this.rotation = clamp(limelightVisionPID.get(), 0.45);
+        this.rotation = clamp(limelightVisionPID.get(), RobotMap.LIMELIGHT_VISION_CLAMP);
     }
 
     public void setDrivetrainValues(double speed, double rotation) {

@@ -121,4 +121,8 @@ public abstract class PID {
     public double get() {
         return output;
     }
+
+    public double getKp() {
+        return Kp;
+    }
 }

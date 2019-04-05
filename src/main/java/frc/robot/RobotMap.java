@@ -39,7 +39,8 @@ public class RobotMap {
 
 	public static final int LIMELIGHT_UPDATE_RATE = 90; // Htz
 	public static final double LIMELIGHT_BREAK_TOLERANCE = 0;
-	public static final double LIMELIGHT_kP = 0.16;
+	public static final double LIMELIGHT_VISION_CLAMP = 1.0;
+	public static final double LIMELIGHT_kP = 0.2; // 0.16;
 	public static final double LIMELIGHT_kI = 0.0;
 	public static final double LIMELIGHT_kD = 0.0;
 
@@ -65,7 +66,7 @@ public class RobotMap {
 	public static final int ELEVATOR_BACK_MID_HATCH_HEIGHT = 44571;
 	public static final int ELEVATOR_BACK_SHIP_PORT_HEIGHT = 23434;
 	public static final int ELEVATOR_BACK_BOTTOM_PORT_HEIGHT = 12603;
-	public static final int ELEVATOR_BACK_INTAKING_HATCH_HEIGHT = 10580;
+	public static final int ELEVATOR_BACK_INTAKING_HATCH_HEIGHT = 11849;
 	public static final int ELEVATOR_BACK_STORAGE_HEIGHT = 0;
 
 	public static final int ELEVATOR_CLEAR_FOR_ARM_HEIGHT = 35122; // This should be smaller than that VVV
