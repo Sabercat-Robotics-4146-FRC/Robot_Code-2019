@@ -91,6 +91,8 @@ public class Robot extends SampleRobot {
 			// of the assembly to be updating.
 			Dashboard.send("Elevator Pos", RobotMap.elevatorFront.getSelectedSensorPosition());
 			Dashboard.send("Elevator Error", RobotMap.elevatorFront.getClosedLoopError());
+			Dashboard.send("Elevator Motor has Power", RobotMap.elevatorFront.getMotorOutputVoltage());
+			
 			Dashboard.send("Arm Pos", RobotMap.armPivot.getSelectedSensorPosition());
 			Dashboard.send("Arm Error", RobotMap.armPivot.getClosedLoopError());
 
