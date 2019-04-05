@@ -40,7 +40,7 @@ public class RobotMap {
 	public static final int LIMELIGHT_UPDATE_RATE = 90; // Htz
 	public static final double LIMELIGHT_BREAK_TOLERANCE = 0;
 	public static final double LIMELIGHT_VISION_CLAMP = 1.0;
-	public static final double LIMELIGHT_kP = 0.2; // 0.16;
+	public static final double LIMELIGHT_kP = 0.18; // 0.16;
 	public static final double LIMELIGHT_kI = 0.0;
 	public static final double LIMELIGHT_kD = 0.0;
 
@@ -51,9 +51,9 @@ public class RobotMap {
 
     // Elevator Constants
 	public static final int ELEVATOR_FRONT_TOP_PORT_HEIGHT = 76348; // 74348;
-	public static final int ELEVATOR_FRONT_TOP_HATCH_HEIGHT = 81896; // 77896;
+	public static final int ELEVATOR_FRONT_TOP_HATCH_HEIGHT = 79896; // 77896;
 	public static final int ELEVATOR_FRONT_MID_PORT_HEIGHT = 41890; // 39890;
-	public static final int ELEVATOR_FRONT_MID_HATCH_HEIGHT = 42285; //38310;
+	public static final int ELEVATOR_FRONT_MID_HATCH_HEIGHT = 40285; //38310;
 	public static final int ELEVATOR_FRONT_SHIP_PORT_HEIGHT = 23434;
 	public static final int ELEVATOR_FRONT_BOTTOM_PORT_HEIGHT = 10508;
 	public static final int ELEVATOR_FRONT_INTAKING_HATCH_HEIGHT = 0;
@@ -86,7 +86,7 @@ public class RobotMap {
     // Arm Constants
     public static int armOffset = 0;
 
-    public static final int ARM_FRONT_INTAKING_CARGO_POSITION = 720; // (Front only)
+    public static final int ARM_FRONT_INTAKING_CARGO_POSITION = 681; // (Front only)
 
     public static final int ARM_FRONT_TOP_PORT_POSITION = ARM_FRONT_INTAKING_CARGO_POSITION - 74;
 	public static final int ARM_FRONT_TOP_HATCH_POSITION = ARM_FRONT_INTAKING_CARGO_POSITION - 10;

@@ -25,7 +25,7 @@ public class Robot extends SampleRobot {
         RobotMap.init(); // Instantiates things to be used from RobotMap.
         //CameraServer.getInstance().startAutomaticCapture();
 		UsbCamera cameraOne = CameraServer.getInstance().startAutomaticCapture(0);
-		UsbCamera cameraTwo = CameraServer.getInstance().startAutomaticCapture(1);
+		// UsbCamera cameraTwo = CameraServer.getInstance().startAutomaticCapture(1);
 	}
 
 	/**
@@ -95,7 +95,8 @@ public class Robot extends SampleRobot {
 			Dashboard.send("Elevator Motor has Power", RobotMap.elevatorFront.getMotorOutputVoltage());
 			
 			Dashboard.send("Arm Pos", RobotMap.armPivot.getSelectedSensorPosition());
-			Dashboard.send("Arm Error", RobotMap.armPivot.getClosedLoopError());
+            Dashboard.send("Arm Error", RobotMap.armPivot.getClosedLoopError());
+            Dashboard.send("Arm Offset", RobotMap.armOffset);
 
 			Dashboard.send("Elevator LS", RobotMap.elevatorLimitSwitch.get());
 			Dashboard.send("Hatch LS", RobotMap.hatchLimitSwitch.get());
