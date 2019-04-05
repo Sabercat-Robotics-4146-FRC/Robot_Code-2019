@@ -96,8 +96,8 @@ public class Robot extends SampleRobot {
 
 			Dashboard.send("Elevator LS", RobotMap.elevatorLimitSwitch.get());
 			Dashboard.send("Hatch LS", RobotMap.hatchLimitSwitch.get());
-            Dashboard.send("Cargo LS", RobotMap.cargoLimitSwitch.get());
-            
+			Dashboard.send("Cargo LS", RobotMap.cargoLimitSwitch.get());
+			
             // Dashboard.send("Actual State", RobotMap.elevatorAndArm.getCurrentState().toString());
             // Dashboard.send("Final State", RobotMap.elevatorAndArm.getFinalState().toString());
 

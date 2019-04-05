@@ -39,7 +39,8 @@ public class RobotMap {
 
 	public static final int LIMELIGHT_UPDATE_RATE = 90; // Htz
 	public static final double LIMELIGHT_BREAK_TOLERANCE = 0;
-	public static final double LIMELIGHT_kP = 0.16;
+	public static final double LIMELIGHT_VISION_CLAMP = 1.0;
+	public static final double LIMELIGHT_kP = 0.2; // 0.16;
 	public static final double LIMELIGHT_kI = 0.0;
 	public static final double LIMELIGHT_kD = 0.0;
 
