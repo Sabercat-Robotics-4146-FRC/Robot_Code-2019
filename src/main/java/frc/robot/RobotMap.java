@@ -48,7 +48,7 @@ public class RobotMap {
 	// public final static Gains kGains_MotProf = new Gains( 1.0, 0.0, 0.0,
 	// 1023.0/6800.0, 400, 1.00 );
 
-	// Elevator Constants
+    // Elevator Constants
 	public static final int ELEVATOR_FRONT_TOP_PORT_HEIGHT = 76348; // 74348;
 	public static final int ELEVATOR_FRONT_TOP_HATCH_HEIGHT = 81896; // 77896;
 	public static final int ELEVATOR_FRONT_MID_PORT_HEIGHT = 41890; // 39890;
@@ -82,7 +82,9 @@ public class RobotMap {
 	public static final double ELEVATOR_kD = 0.00;
 	public static final double ELEVATOR_kF = 0.0;
 
-	// Arm Constants
+    // Arm Constants
+    public static int armOffset = 0;
+
     public static final int ARM_FRONT_INTAKING_CARGO_POSITION = 720; // (Front only)
 
     public static final int ARM_FRONT_TOP_PORT_POSITION = ARM_FRONT_INTAKING_CARGO_POSITION - 74;

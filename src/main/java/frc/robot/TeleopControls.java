@@ -10,6 +10,7 @@ public class TeleopControls {
     boolean ledFlag = false;
     boolean hatchFlag = true;
     boolean buttonFlag = false;
+    boolean armOffsetFlag = false;
 
     public void update() {
         // controlls for elevator
@@ -151,13 +152,32 @@ public class TeleopControls {
                     }
                 }
             }
-        } 
+        }
 
         if (!RobotMap.pilotController.getButtonA() && !RobotMap.pilotController.getButtonB() && 
                 !RobotMap.pilotController.getButtonX() && !RobotMap.pilotController.getButtonY() && 
                 !RobotMap.pilotController.getButtonBack()) {
             buttonFlag = false;
         }
+
+        // Arm offsett setting code
+
+        if (!armOffsetFlag && RobotMap.copilotController.getRightBumper()) {
+            armOffsetFlag = true;
+            RobotMap.armOffset += 5;
+        } else if (!armOffsetFlag && RobotMap.copilotController.getLeftBumper()) {
+            armOffsetFlag = true;
+            RobotMap.armOffset -= 5;
+        }
+
+        if (!RobotMap.copilotController.getRightBumper() && !RobotMap.copilotController.getLeftBumper()) {
+            armOffsetFlag = false;
+        }
+
+        if (RobotMap.copilotController.getButtonB()) {
+            RobotMap.armOffset = 0;
+        }
+
         // controlls for drive train
         if (RobotMap.pilotController.getLeftStickPress()) {
             RobotMap.limelight.setLightMode(LEDEnum.ENABLED);
@@ -204,11 +224,11 @@ public class TeleopControls {
 
         // controls for EGL
         // <editor-fold>
-        if (RobotMap.copilotController.getRightBumper()) {
-            RobotMap.egl.raiseRobot();
-        } else if (RobotMap.copilotController.getLeftBumper()) {
-            RobotMap.egl.lowerRobot();
-        }
+        // if (RobotMap.copilotController.getRightBumper()) {
+        //     RobotMap.egl.raiseRobot();
+        // } else if (RobotMap.copilotController.getLeftBumper()) {
+        //     RobotMap.egl.lowerRobot();
+        // }
         // </editor-fold>
     }
 

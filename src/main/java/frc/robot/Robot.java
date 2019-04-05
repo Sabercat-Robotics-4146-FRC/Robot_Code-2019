@@ -35,7 +35,7 @@ public class Robot extends SampleRobot {
 	@Override
 	public void autonomous() {
 
-        
+
         RobotMap.elevatorAndArm.setScoringPosition(ScoringPosition.FRONT_STORAGE);
 
 		while (isAutonomous() && isEnabled()) {
@@ -56,7 +56,8 @@ public class Robot extends SampleRobot {
 			Dashboard.send("Elevator Pos", RobotMap.elevatorFront.getSelectedSensorPosition());
 			Dashboard.send("Elevator Error", RobotMap.elevatorFront.getClosedLoopError());
 			Dashboard.send("Arm Pos", RobotMap.armPivot.getSelectedSensorPosition());
-			Dashboard.send("Arm Error", RobotMap.armPivot.getClosedLoopError());
+            Dashboard.send("Arm Error", RobotMap.armPivot.getClosedLoopError());
+            Dashboard.send("Arm Offset", RobotMap.armOffset);
 
 			Dashboard.send("Elevator LS", RobotMap.elevatorLimitSwitch.get());
 			Dashboard.send("Hatch LS", RobotMap.hatchLimitSwitch.get());

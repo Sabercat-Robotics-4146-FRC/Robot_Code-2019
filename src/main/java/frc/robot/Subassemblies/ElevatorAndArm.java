@@ -215,7 +215,7 @@ public class ElevatorAndArm {
     }
 
     private void moveArm(int position) {
-        RobotMap.armPivot.set(ControlMode.Position, position);
+        RobotMap.armPivot.set(ControlMode.Position, position + RobotMap.armOffset);
     }
 
     private void move(int elevatorPosition, int armPosition){
