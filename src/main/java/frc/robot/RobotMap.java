@@ -86,7 +86,7 @@ public class RobotMap {
     // Arm Constants
     public static int armOffset = 0;
 
-    public static final int ARM_FRONT_INTAKING_CARGO_POSITION = 681; // (Front only)
+    public static final int ARM_FRONT_INTAKING_CARGO_POSITION = 651; // (Front only)
 
     public static final int ARM_FRONT_TOP_PORT_POSITION = ARM_FRONT_INTAKING_CARGO_POSITION - 74;
 	public static final int ARM_FRONT_TOP_HATCH_POSITION = ARM_FRONT_INTAKING_CARGO_POSITION - 10;
@@ -239,7 +239,15 @@ public class RobotMap {
 		elevatorFront.configPeakOutputForward(.8);
 		elevatorFront.configPeakOutputReverse(-.30);
 		elevatorFront.configNominalOutputForward(0);
-		elevatorFront.configNominalOutputReverse(0);
+        elevatorFront.configNominalOutputReverse(0);
+
+        elevatorBack.configPeakOutputForward(.8);
+		elevatorBack.configPeakOutputReverse(-.30);
+		elevatorBack.configNominalOutputForward(0);
+        elevatorBack.configNominalOutputReverse(0);
+        
+        //elevatorFront.configPeakCurrentLimit(40);
+
 
 		elevatorFront.setInverted(true);
 		elevatorBack.setInverted(true);
