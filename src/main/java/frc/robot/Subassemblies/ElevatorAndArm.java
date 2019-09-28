@@ -94,8 +94,8 @@ public class ElevatorAndArm {
         switch(currentState) {
             case IDLE:
                 if (finalState == ScoringPosition.IDLE) {
-                    // holdArmAndElevator();
-                    disableArmAndElevator();
+                    holdArmAndElevator();
+                    // disableArmAndElevator();
                 } else if (isArmPhisicalyInFront()) { // TODO check polarity
                     if (finalState.isFrontSide()) {
                         currentState = finalState;
