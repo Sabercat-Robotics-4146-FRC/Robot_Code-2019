@@ -82,6 +82,7 @@ public class ElevatorAndArm {
     ScoringPosition currentState;
 
     boolean limitSwitchPressedFlag;
+    boolean manualMode = false;
 
     public ElevatorAndArm() {
         finalState = ScoringPosition.IDLE;
@@ -113,8 +114,8 @@ public class ElevatorAndArm {
             case TRANSITION_FRONT:
                 // if (!isPhysicallyHere(currentState)) {
                 //     move(currentState);
-                
-                if(!isArmPhysicallyHere(currentState.armSetpoint) 
+
+                if(!isArmPhysicallyHere(currentState.armSetpoint)
                     || !isElevatorPhysicallyGreaterThan(RobotMap.ELEVATOR_CLEAR_FOR_ARM_HEIGHT)) {
                     if (finalState.elevatorSetpoint > currentState.elevatorSetpoint) {
                         move(finalState.elevatorSetpoint, currentState.armSetpoint);
@@ -133,7 +134,7 @@ public class ElevatorAndArm {
                 // if (!isPhysicallyHere(currentState)) {
                 //     move(currentState);
 
-                if(!isArmPhysicallyHere(currentState.armSetpoint) 
+                if(!isArmPhysicallyHere(currentState.armSetpoint)
                     || !isElevatorPhysicallyGreaterThan(RobotMap.ELEVATOR_CLEAR_FOR_ARM_HEIGHT)) {
                     if (finalState.elevatorSetpoint > currentState.elevatorSetpoint) {
                         move(finalState.elevatorSetpoint, currentState.armSetpoint);
@@ -198,7 +199,7 @@ public class ElevatorAndArm {
     private void moveElevator(int position) {
         if (position == 0) {
             lowerElevatorSlowly();
-        } else {
+          } else {
             RobotMap.elevatorFront.set(ControlMode.Position, position);
         }
     }
@@ -219,7 +220,7 @@ public class ElevatorAndArm {
         RobotMap.armPivot.set(ControlMode.Position, position + RobotMap.armOffset);
     }
 
-    private void move(int elevatorPosition, int armPosition){
+    public void move(int elevatorPosition, int armPosition){
         moveElevator(elevatorPosition);
         moveArm(armPosition);
     }
@@ -247,11 +248,11 @@ public class ElevatorAndArm {
         RobotMap.armPivot.set(ControlMode.PercentOutput, 0);
     }
 
-    private int getElevatorPosition() {
+    public int getElevatorPosition() {
         return RobotMap.elevatorFront.getSelectedSensorPosition();
     }
 
-    private int getArmPosition() {
+    public int getArmPosition() {
         return RobotMap.armPivot.getSelectedSensorPosition();
     }
 
@@ -291,7 +292,7 @@ public class ElevatorAndArm {
     public boolean inTolerance(int physicalValue, int wantedValue, int tolerence) {
         return physicalValue <= wantedValue + tolerence &&
                 physicalValue >= wantedValue - tolerence;
-    } 
+    }
 
     public boolean isElevatorClearForArm() {
         return RobotMap.elevatorFront.getSelectedSensorPosition() > RobotMap.ELEVATOR_CLEAR_FOR_ARM_HEIGHT;
@@ -302,8 +303,16 @@ public class ElevatorAndArm {
                 RobotMap.armPivot.getSelectedSensorPosition() < RobotMap.BACK_ARM_DANGER_ZONE_POSITION;
     }
 
+    //manual mode
+    public boolean getManualMode() {
+      return manualMode;
+    }
+    public void toggleManualMode() {
+      this.manualMode = !this.manualMode;
+    }
+
     public void setFinalAndCurrentStates(ScoringPosition state) {
         finalState = state;
         currentState = state;
     }
-}
+  }

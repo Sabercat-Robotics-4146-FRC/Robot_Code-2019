@@ -11,14 +11,28 @@ public class TeleopControls {
     boolean hatchFlag = true;
     boolean buttonFlag = false;
     boolean armOffsetFlag = false;
+    boolean manualModeFlag = false;
 
     public void update() {
         // controlls for elevator
-        if ((RobotMap.pilotController.getButtonA() || RobotMap.pilotController.getButtonB() || 
-                RobotMap.pilotController.getButtonX() || RobotMap.pilotController.getButtonY() || 
-                RobotMap.pilotController.getButtonBack()) && !buttonFlag) {
+        if (!manualModeFlag && RobotMap.copilotController.getButtonA()) {
+          RobotMap.elevatorAndArm.toggleManualMode();
+          manualModeFlag = true;
+
+        }
+        if (!RobotMap.copilotController.getButtonA()) {
+          manualModeFlag = false;
+          if (RobotMap.elevatorAndArm.getManualMode()) {
+            RobotMap.elevatorAndArm.move(RobotMap.elevatorAndArm.getElevatorPosition() + (int)RobotMap.copilotController.getLeftYAxis(),
+            RobotMap.elevatorAndArm.getArmPosition() + (int)RobotMap.copilotController.getRightYAxis());
+          }
+        }
+
+        if ((RobotMap.pilotController.getButtonA() || RobotMap.pilotController.getButtonB() ||
+                RobotMap.pilotController.getButtonX() || RobotMap.pilotController.getButtonY() ||
+                RobotMap.pilotController.getButtonBack()) && !buttonFlag && !RobotMap.elevatorAndArm.getManualMode()) {
             buttonFlag = true;
-            
+
             if (RobotMap.pilotController.getRightBumper()) { // Switching Sides
                 if (RobotMap.pilotController.getLeftBumper()) { // Port Height
                     if (RobotMap.pilotController.getButtonY()) {
@@ -154,8 +168,8 @@ public class TeleopControls {
             }
         }
 
-        if (!RobotMap.pilotController.getButtonA() && !RobotMap.pilotController.getButtonB() && 
-                !RobotMap.pilotController.getButtonX() && !RobotMap.pilotController.getButtonY() && 
+        if (!RobotMap.pilotController.getButtonA() && !RobotMap.pilotController.getButtonB() &&
+                !RobotMap.pilotController.getButtonX() && !RobotMap.pilotController.getButtonY() &&
                 !RobotMap.pilotController.getButtonBack()) {
             buttonFlag = false;
         }
@@ -231,5 +245,4 @@ public class TeleopControls {
         // }
         // </editor-fold>
     }
-
-}
+  }
