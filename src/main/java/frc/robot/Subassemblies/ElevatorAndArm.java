@@ -82,6 +82,7 @@ public class ElevatorAndArm {
     ScoringPosition currentState;
 
     boolean limitSwitchPressedFlag;
+    boolean manualModeFlag = false;
     boolean manualMode = false;
 
     public ElevatorAndArm() {
@@ -92,6 +93,9 @@ public class ElevatorAndArm {
     }
 
     public void update() {
+      if (manualMode) {
+        manualMode();
+      }  else {
         switch(currentState) {
             case IDLE:
                 if (finalState == ScoringPosition.IDLE) {
@@ -160,7 +164,7 @@ public class ElevatorAndArm {
                 } else {
                     currentState = ScoringPosition.TRANSITION_BACK;
                 }
-
+            }
         }
 
         if (RobotMap.elevatorLimitSwitch.get() && !limitSwitchPressedFlag) {
@@ -220,7 +224,7 @@ public class ElevatorAndArm {
         RobotMap.armPivot.set(ControlMode.Position, position + RobotMap.armOffset);
     }
 
-    public void move(int elevatorPosition, int armPosition){
+    private void move(int elevatorPosition, int armPosition){
         moveElevator(elevatorPosition);
         moveArm(armPosition);
     }
@@ -248,11 +252,11 @@ public class ElevatorAndArm {
         RobotMap.armPivot.set(ControlMode.PercentOutput, 0);
     }
 
-    public int getElevatorPosition() {
+    private int getElevatorPosition() {
         return RobotMap.elevatorFront.getSelectedSensorPosition();
     }
 
-    public int getArmPosition() {
+    private int getArmPosition() {
         return RobotMap.armPivot.getSelectedSensorPosition();
     }
 
@@ -303,16 +307,23 @@ public class ElevatorAndArm {
                 RobotMap.armPivot.getSelectedSensorPosition() < RobotMap.BACK_ARM_DANGER_ZONE_POSITION;
     }
 
-    //manual mode
+    public void setFinalAndCurrentStates(ScoringPosition state) {
+        finalState = state;
+        currentState = state;
+    }
+
+    // manual mode
     public boolean getManualMode() {
       return manualMode;
     }
     public void toggleManualMode() {
-      this.manualMode = !this.manualMode;
+        manualMode = !manualMode;
     }
 
-    public void setFinalAndCurrentStates(ScoringPosition state) {
-        finalState = state;
-        currentState = state;
+    public void manualMode() {
+      if (manualMode) {
+        move(getElevatorPosition() + (int)RobotMap.copilotController.getLeftYAxis(),
+        getArmPosition() + (int)RobotMap.copilotController.getRightYAxis());
+      }
     }
   }

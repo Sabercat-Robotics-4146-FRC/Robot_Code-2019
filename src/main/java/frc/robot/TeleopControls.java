@@ -12,27 +12,24 @@ public class TeleopControls {
     boolean buttonFlag = false;
     boolean armOffsetFlag = false;
     boolean manualModeFlag = false;
-    boolean manualMode = false;
-
 
     public void update() {
-        // controlls for elevator
-        if (!manualModeFlag && RobotMap.copilotController.getButtonA()) {
-          manualMode = !manualMode;
-          manualModeFlag = true;
+      // controlls for elevator
 
-        }
-        if (!RobotMap.copilotController.getButtonA()) {
-          manualModeFlag = false;
-          if (manualMode) {
-            RobotMap.elevatorAndArm.move(RobotMap.elevatorAndArm.getElevatorPosition() + (int)RobotMap.copilotController.getLeftYAxis(),
-            RobotMap.elevatorAndArm.getArmPosition() + (int)RobotMap.copilotController.getRightYAxis());
-          }
-        }
+       //manualMode
+      if (!manualModeFlag && RobotMap.copilotController.getButtonA()) {
+        RobotMap.elevatorAndArm.toggleManualMode();
+        manualModeFlag = true;
+      }
 
+      if (!RobotMap.copilotController.getButtonA()) {
+        manualModeFlag = false;
+      }
+
+        // state machine
         if ((RobotMap.pilotController.getButtonA() || RobotMap.pilotController.getButtonB() ||
                 RobotMap.pilotController.getButtonX() || RobotMap.pilotController.getButtonY() ||
-                RobotMap.pilotController.getButtonBack()) && !buttonFlag && !manualMode) {
+                RobotMap.pilotController.getButtonBack()) && !buttonFlag) {
             buttonFlag = true;
 
             if (RobotMap.pilotController.getRightBumper()) { // Switching Sides
