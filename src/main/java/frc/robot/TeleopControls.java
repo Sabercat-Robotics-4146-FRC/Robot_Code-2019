@@ -29,7 +29,7 @@ public class TeleopControls {
         // state machine
         if ((RobotMap.pilotController.getButtonA() || RobotMap.pilotController.getButtonB() ||
                 RobotMap.pilotController.getButtonX() || RobotMap.pilotController.getButtonY() ||
-                RobotMap.pilotController.getButtonBack()) && !buttonFlag) {
+                RobotMap.pilotController.getButtonBack()) && !buttonFlag && !RobotMap.elevatorAndArm.getManualMode()) {
             buttonFlag = true;
 
             if (RobotMap.pilotController.getRightBumper()) { // Switching Sides

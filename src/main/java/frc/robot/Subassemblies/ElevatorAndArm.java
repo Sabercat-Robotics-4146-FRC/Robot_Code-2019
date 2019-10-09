@@ -95,7 +95,7 @@ public class ElevatorAndArm {
     public void update() {
       if (manualMode) {
         manualMode();
-      }  else {
+      } else {
         switch(currentState) {
             case IDLE:
                 if (finalState == ScoringPosition.IDLE) {
@@ -313,17 +313,16 @@ public class ElevatorAndArm {
     }
 
     // manual mode
-    public boolean getManualMode() {
-      return manualMode;
-    }
     public void toggleManualMode() {
         manualMode = !manualMode;
     }
 
+    public boolean getManualMode() {
+      return manualMode;
+    }
+
     public void manualMode() {
-      if (manualMode) {
-        move(getElevatorPosition() + (int)RobotMap.copilotController.getLeftYAxis(),
-        getArmPosition() + (int)RobotMap.copilotController.getRightYAxis());
-      }
+        moveElevator(getElevatorPosition() + (int)(-RobotMap.copilotController.getLeftYAxis() * 2100));
+        moveArm(getArmPosition() + (int)(-RobotMap.copilotController.getRightYAxis() * 5));
     }
   }
