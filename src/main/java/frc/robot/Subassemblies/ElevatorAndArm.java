@@ -115,44 +115,7 @@ public class ElevatorAndArm {
                     }
                 }
                 break;
-            case TRANSITION_FRONT:
-                // if (!isPhysicallyHere(currentState)) {
-                //     move(currentState);
-
-                if(!isArmPhysicallyHere(currentState.armSetpoint)
-                    || !isElevatorPhysicallyGreaterThan(RobotMap.ELEVATOR_CLEAR_FOR_ARM_HEIGHT)) {
-                    if (finalState.elevatorSetpoint > currentState.elevatorSetpoint) {
-                        move(finalState.elevatorSetpoint, currentState.armSetpoint);
-                    } else {
-                        move(currentState);
-                    }
-                } else if(finalState.isFrontSide()) {
-                    if (isArmClearForElevator() && isArmPhisicalyInFront()) {
-                        currentState = finalState;
-                    }
-                } else {
-                    currentState = ScoringPosition.TRANSITION_BACK;
-                }
-                break;
-            case TRANSITION_BACK:
-                // if (!isPhysicallyHere(currentState)) {
-                //     move(currentState);
-
-                if(!isArmPhysicallyHere(currentState.armSetpoint)
-                    || !isElevatorPhysicallyGreaterThan(RobotMap.ELEVATOR_CLEAR_FOR_ARM_HEIGHT)) {
-                    if (finalState.elevatorSetpoint > currentState.elevatorSetpoint) {
-                        move(finalState.elevatorSetpoint, currentState.armSetpoint);
-                    } else {
-                        move(currentState);
-                    }
-                } else if(finalState.isBackSide()) {
-                    if (isArmClearForElevator() && isArmPhisicalyInBack()) {
-                        currentState = finalState;
-                    }
-                } else {
-                    currentState = ScoringPosition.TRANSITION_FRONT;
-                }
-                break;
+            
             default: // State is an actual scoring position
                 if(currentState == finalState) {
                     move(currentState);
@@ -161,9 +124,7 @@ public class ElevatorAndArm {
                         move(currentState);
                 } else if(currentState.getSide() == ScoringPosition.Side.FRONT) {
                     currentState = ScoringPosition.TRANSITION_FRONT;
-                } else {
-                    currentState = ScoringPosition.TRANSITION_BACK;
-                }
+                } 
             }
         }
 

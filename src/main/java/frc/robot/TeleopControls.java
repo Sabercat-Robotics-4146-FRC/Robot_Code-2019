@@ -96,6 +96,7 @@ public class TeleopControls {
                         } else if (RobotMap.elevatorAndArm.isArmPhisicalyInBack()) {
                             RobotMap.elevatorAndArm.setScoringPosition(ScoringPosition.BACK_STORAGE);
                         }
+                    
                     }
                 }
         }
