@@ -273,11 +273,13 @@ public class ElevatorAndArm {
     }
 
     public boolean isArmPhisicalyInFront() {
-        return getArmPosition() > RobotMap.ARM_HALF_WAY_POSITION;
+        //return getArmPosition() > RobotMap.ARM_HALF_WAY_POSITION;
+        return true;
     }
 
     public boolean isArmPhisicalyInBack() {
-        return getArmPosition() <= RobotMap.ARM_HALF_WAY_POSITION;
+        //return getArmPosition() <= RobotMap.ARM_HALF_WAY_POSITION;
+        return false;
     }
 
     public boolean isPhysicallyHere(ScoringPosition state) {
@@ -322,7 +324,7 @@ public class ElevatorAndArm {
     }
 
     public void manualMode() {
-        moveElevator(getElevatorPosition() + (int)(-RobotMap.copilotController.getLeftYAxis() * 2100));
+        moveElevator(getElevatorPosition() + (int)(RobotMap.copilotController.getLeftYAxis() * 2100));
         moveArm(getArmPosition() + (int)(-RobotMap.copilotController.getRightYAxis() * 5));
     }
   }

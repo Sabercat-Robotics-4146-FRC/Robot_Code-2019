@@ -40,9 +40,9 @@ public class RobotMap {
 	public static final int LIMELIGHT_UPDATE_RATE = 90; // Htz
 	public static final double LIMELIGHT_BREAK_TOLERANCE = 0;
 	public static final double LIMELIGHT_VISION_CLAMP = 1.0;
-	public static final double LIMELIGHT_kP = 0.18; // 0.16;
+	public static final double LIMELIGHT_kP = 0.1; // 0.16,  0.18;
 	public static final double LIMELIGHT_kI = 0.0;
-	public static final double LIMELIGHT_kD = 0.0;
+	public static final double LIMELIGHT_kD = 0.009;
 
 	public static final int LED_ADDRESS = 0x55;
 
@@ -86,18 +86,18 @@ public class RobotMap {
     // Arm Constants
     public static int armOffset = 0;
 
-    public static final int ARM_FRONT_INTAKING_CARGO_POSITION = 651; // (Front only)
+    public static final int ARM_FRONT_INTAKING_CARGO_POSITION = 594; // (Front only)
 
-    public static final int ARM_FRONT_TOP_PORT_POSITION = ARM_FRONT_INTAKING_CARGO_POSITION - 74;
-	public static final int ARM_FRONT_TOP_HATCH_POSITION = ARM_FRONT_INTAKING_CARGO_POSITION - 10;
-	public static final int ARM_FRONT_MID_PORT_POSITION = ARM_FRONT_INTAKING_CARGO_POSITION - 60;
-	public static final int ARM_FRONT_MID_HATCH_POSITION = ARM_FRONT_INTAKING_CARGO_POSITION - 10;
-	public static final int ARM_FRONT_SHIP_PORT_POSITION = ARM_FRONT_INTAKING_CARGO_POSITION - 76;
-	public static final int ARM_FRONT_BOTTOM_PORT_POSITION = ARM_FRONT_INTAKING_CARGO_POSITION - 44;
-	public static final int ARM_FRONT_INTAKING_HATCH_POSITION = ARM_FRONT_INTAKING_CARGO_POSITION - 10;
-	public static final int ARM_FRONT_STORAGE_POSITION = ARM_FRONT_INTAKING_CARGO_POSITION - 112;
+    public static final int ARM_FRONT_TOP_PORT_POSITION = ARM_FRONT_INTAKING_CARGO_POSITION - 84;		// front arm positions ahve had 10 more subtracted from each one
+	public static final int ARM_FRONT_TOP_HATCH_POSITION = ARM_FRONT_INTAKING_CARGO_POSITION - 20; 
+	public static final int ARM_FRONT_MID_PORT_POSITION = ARM_FRONT_INTAKING_CARGO_POSITION - 70;
+	public static final int ARM_FRONT_MID_HATCH_POSITION = ARM_FRONT_INTAKING_CARGO_POSITION - 20;
+	public static final int ARM_FRONT_SHIP_PORT_POSITION = ARM_FRONT_INTAKING_CARGO_POSITION - 86;
+	public static final int ARM_FRONT_BOTTOM_PORT_POSITION = ARM_FRONT_INTAKING_CARGO_POSITION - 54;
+	public static final int ARM_FRONT_INTAKING_HATCH_POSITION = ARM_FRONT_INTAKING_CARGO_POSITION - 20;
+	public static final int ARM_FRONT_STORAGE_POSITION = ARM_FRONT_INTAKING_CARGO_POSITION - 122;
 
-	public static final int ARM_BACK_TOP_PORT_POSITION = ARM_FRONT_INTAKING_CARGO_POSITION - 280;
+	public static final int ARM_BACK_TOP_PORT_POSITION = ARM_FRONT_INTAKING_CARGO_POSITION - 280;		// haven't changed these arm positions yet, will probably be high
 	public static final int ARM_BACK_TOP_HATCH_POSITION = ARM_FRONT_INTAKING_CARGO_POSITION - 240;
 	public static final int ARM_BACK_MID_PORT_POSITION = ARM_FRONT_INTAKING_CARGO_POSITION - 280;
 	public static final int ARM_BACK_MID_HATCH_POSITION = ARM_FRONT_INTAKING_CARGO_POSITION - 240;
@@ -149,7 +149,7 @@ public class RobotMap {
 	public static TalonSRX elevatorBack;
 	public static TalonSRX armPivot;
 	public static TalonSRX cargoRoller;
-	public static TalonSRX intakeConveyor;
+	//public static TalonSRX intakeConveyor;
 
 	public static TalonSRX EGL_leftFront;
 	public static TalonSRX EGL_leftBack;
@@ -272,8 +272,8 @@ public class RobotMap {
 		cargoRoller.configFactoryDefault();
 		cargoRoller.setNeutralMode(NeutralMode.Brake);
 
-		intakeConveyor = new TalonSRX(9);
-		intakeConveyor.configFactoryDefault();
+		// intakeConveyor = new TalonSRX(9);
+		// intakeConveyor.configFactoryDefault();
 
 		EGL_leftFront = new TalonSRX(10);
 		EGL_leftBack = new TalonSRX(11);
